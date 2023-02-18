@@ -75,7 +75,6 @@ public class MySQLDBManager implements DBManager {
         hikariConfig.setMaximumPoolSize(Integer.parseInt(props.getProperty(Fields.DB_MAXIMUM_POOL_SIZE)));
 //        hikariConfig.setAutoCommit(Boolean.parseBoolean(props.getProperty(Fields.DB_AUTO_COMMIT)));
 //        hikariConfig.setIdleTimeout(Integer.parseInt(props.getProperty(Fields.DB_IDLE_TIMEOUT)) * 1000); //in sec.
-
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit",
                 props.getProperty(Fields.DB_CACHE_PREP_STMTS));
         hikariConfig.addDataSourceProperty("prepStmtCacheSize",
