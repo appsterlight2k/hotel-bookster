@@ -2,6 +2,7 @@ package com.appsterlight.db.entity;
 
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @NoArgsConstructor
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @ToString(exclude = {"id", "password"})
 @EqualsAndHashCode(exclude = {"id", "password"})
 public class User implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private long id;
     private String firstName;
@@ -20,5 +22,6 @@ public class User implements Serializable {
     private String phoneNumber;
     private transient String password;
     private String role;
+    private String description;
 
 }
