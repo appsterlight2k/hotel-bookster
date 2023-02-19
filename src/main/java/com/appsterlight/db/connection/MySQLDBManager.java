@@ -28,9 +28,13 @@ public class MySQLDBManager implements DBManager {
         if (dataSource == null) {
             Properties props = getProperties();
             HikariConfig config = getHikariConfig(props);
-            dataSource = new HikariDataSource(config);
+            try {
+                dataSource = new HikariDataSource(config);
+            } catch (Exception e) {
+                log.error("Can't get DataSource -> ", e.getMessage());
+            }
 
-            log.info("Hikari Pool was successfully configured and created");
+//            log.info("Hikari Pool was successfully configured and created");
         }
         return dataSource;
     }
@@ -82,7 +86,7 @@ public class MySQLDBManager implements DBManager {
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit",
                 props.getProperty(Fields.DB_PREP_STMT_CACHE_SQL_LIMIT));
 
-        log.info("Hikari Pool configuration was successfully created!");
+//        log.info("Hikari Pool configuration was successfully created!");
 
         return hikariConfig;
     }
