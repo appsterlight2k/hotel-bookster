@@ -15,7 +15,8 @@ import java.io.Serializable;
 public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private long id;
+
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
