@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface Dao<T> {
 
-    void add(T t) throws DaoException;
+    boolean add(T t) throws DaoException;
 
     Optional<T> get(Long id) throws DaoException;
 
-    void update(T t) throws DaoException;
+    boolean update(T t) throws DaoException;
 
-    void delete(Long id) throws DaoException;
+    boolean delete(Long id) throws DaoException;
 
     List<T> getAll() throws DaoException;
 
