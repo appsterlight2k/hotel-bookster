@@ -23,21 +23,23 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void add(User user) throws DaoException {
+    public boolean add(User user) throws DaoException {
+        boolean result = false;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_USER_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            setPrStParametersForUser(prst, user);
-
-            if (prst.executeUpdate() > 0) {
+            setPrStParametersForEntity(prst, user);
+            result = prst.executeUpdate() > 0;
+            if (result) {
                 ResultSet rs = prst.getGeneratedKeys();
                 if (rs.next()) {
-                    user.setId(rs.getInt(1));
+                    user.setId(rs.getLong(1));
                 }
             }
         } catch (SQLException e) {
             log.error(INSERT_ERROR, e);
             throw new DaoException(e);
         }
+        return result;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class UserDaoImpl implements UserDao {
             prst.setLong(1, id);
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
-                user = mapUser(rs);
+                user = mapEntity(rs);
             }
         } catch (SQLException e) {
             log.error(READ_ERROR, e);
@@ -58,27 +60,34 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(User user) throws DaoException {
+    public boolean update(User user) throws DaoException {
+        boolean result = false;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_USER_UPDATE)) {
-            setPrStParametersForUser(prst, user);
+            setPrStParametersForEntity(prst, user);
             prst.setLong(8, user.getId());
-            prst.executeUpdate();
+            result = prst.executeUpdate() > 0;
         } catch (SQLException e) {
             log.error(UPDATE_ERROR, e);
             throw new DaoException(e);
         }
+
+        return result;
     }
 
     @Override
-    public void delete(Long id) throws DaoException {
+    public boolean delete(Long id) throws DaoException {
+        boolean result = false;
+
         try (PreparedStatement prst = connection.prepareStatement(SQL_USER_DELETE)) {
             prst.setLong(1, id);
-            prst.executeUpdate();
+            result = prst.executeUpdate() > 0;
         } catch (SQLException e) {
             log.error(DELETE_ERROR, e);
             throw new DaoException(e);
         }
+
+        return result;
     }
 
     @Override
@@ -88,7 +97,7 @@ public class UserDaoImpl implements UserDao {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(SQL_USER_GET_ALL);
             while (rs.next()) {
-                users.add(mapUser(rs));
+                users.add(mapEntity(rs));
             }
         } catch (SQLException e) {
             log.error(READ_ERROR, e);
@@ -98,7 +107,7 @@ public class UserDaoImpl implements UserDao {
         return users;
     }
 
-    private User mapUser(ResultSet rs) throws SQLException {
+    private User mapEntity(ResultSet rs) throws SQLException {
         return  User.builder()
                 .id(rs.getLong(ID))
                 .firstName(rs.getString(USER_FIRST_NAME))
@@ -107,11 +116,11 @@ public class UserDaoImpl implements UserDao {
                 .phoneNumber(rs.getString(USER_PHONE_NUMBER))
                 .password(rs.getString(USER_PASSWORD))
                 .role(rs.getString(USER_ROLE))
-                .description(rs.getString(USER_DESCRIPTION))
+                .description(rs.getString(DESCRIPTION))
                 .build();
     }
 
-    private void setPrStParametersForUser(PreparedStatement prst, User user) throws SQLException {
+    private void setPrStParametersForEntity(PreparedStatement prst, User user) throws SQLException {
         int ind = 1;
         prst.setString(ind++, user.getFirstName());
         prst.setString(ind++, user.getLastName());
