@@ -33,15 +33,15 @@ public class Queries {
 
 
     /* QUERIES FOR APARTMENT TABLE */
-    public static final String SQL_APARTMENT_GET = "SELECT * FROM apartment WHERE id = ?";
-    public static final String SQL_APARTMENT_DELETE = "DELETE FROM apartment WHERE id = ?";
-    public static final String SQL_APARTMENT_GET_ALL = "SELECT * FROM apartment";
+    public static final String SQL_APARTMENT_GET = "SELECT * FROM apartments WHERE id = ?";
+    public static final String SQL_APARTMENT_DELETE = "DELETE FROM apartments WHERE id = ?";
+    public static final String SQL_APARTMENT_GET_ALL = "SELECT * FROM apartments";
     public static final String SQL_APARTMENT_INSERT =
-            "INSERT INTO apartment (apartment_number, rooms_count, class_id, adults_capacity, children_capacity, price, description) " +
+            "INSERT INTO apartments (apartment_number, rooms_count, class_id, adults_capacity, children_capacity, price, description) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     public static final String SQL_APARTMENT_UPDATE =
-            "UPDATE apartment SET " +
+            "UPDATE apartments SET " +
                     "apartment_number = ?, rooms_count = ?, class_id = ?, adults_capacity = ?, children_capacity = ?, price = ?, description = ? " +
                     "WHERE ID = ?";
 
