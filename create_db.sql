@@ -50,14 +50,16 @@ CREATE TABLE booking (
                          check_out DATE NOT NULL,
                          persons INT NOT NULL,
                          reservation_time TIMESTAMP NOT NULL,
-                         is_paid BOOLEAN NOT NULL,
-                         is_canceled BOOLEAN NOT NULL
+                         is_approved BOOLEAN NOT NULL DEFAULT false,
+                         is_booked BOOLEAN NOT NULL DEFAULT false,
+                         is_paid BOOLEAN NOT NULL DEFAULT false,
+                         is_canceled BOOLEAN NOT NULL DEFAULT false
 );
 
-INSERT INTO users (id, first_name, last_name, email, phone_number, password, role)
+INSERT INTO users (id, first_name, last_name, email, phone_number, password, role, description)
 VALUES
-    (1, 'Stephan', 'Rockwell', 'st@gmail.com', '+193520435634', 'LightFlairs', 'ROLE_ADMIN'),
-    (2, 'Andrew', 'Hetman', 'ah@gmail.com', '+380969826345', 'Tales', 'ROLE_USER'),
-    (3, 'Mary', 'Perry', 'marry.star@gmail.com', '+380988476264', 'WeatherCoat', 'ROLE_USER');
+    (1, 'Stephan', 'Rockwell', 'st@gmail.com', '+193520435634', 'LightFlairs', 'ROLE_ADMIN', 'SuperHero'),
+    (2, 'Andrew', 'Hetman', 'ah@gmail.com', '+380969826345', 'Tales', 'ROLE_USER', ''),
+    (3, 'Mary', 'Perry', 'marry.star@gmail.com', '+380988476264', 'WeatherCoat', 'ROLE_USER', '');
 
 
