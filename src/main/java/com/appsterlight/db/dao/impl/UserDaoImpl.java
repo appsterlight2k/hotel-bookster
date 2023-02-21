@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static com.appsterlight.db.Fields.*;
 import static com.appsterlight.db.Queries.*;
-import static com.appsterlight.controller.Messages.*;
+import static com.appsterlight.Messages.*;
 
 @Slf4j
 public class UserDaoImpl implements UserDao {
@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean add(User user) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_USER_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             setPrStParametersForEntity(prst, user);
@@ -61,7 +61,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean update(User user) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_USER_UPDATE)) {
             setPrStParametersForEntity(prst, user);
@@ -77,7 +77,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean delete(Long id) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_USER_DELETE)) {
             prst.setLong(1, id);
@@ -107,6 +107,23 @@ public class UserDaoImpl implements UserDao {
         return users;
     }
 
+    @Override
+    public Optional<User> getUserByEmail(String email) throws DaoException {
+        User user = null;
+
+        try (PreparedStatement prst = connection.prepareStatement(SQL_USER_GET_BY_EMAIL)) {
+            prst.setString(1, email);
+            ResultSet rs = prst.executeQuery();
+            if (rs.next()) {
+                user = mapEntity(rs);
+            }
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+        return Optional.ofNullable(user);
+    }
+
     private User mapEntity(ResultSet rs) throws SQLException {
         return  User.builder()
                 .id(rs.getLong(ID))
@@ -130,6 +147,7 @@ public class UserDaoImpl implements UserDao {
         prst.setString(ind++, user.getRole());
         prst.setString(ind++, user.getDescription());
     }
+
 
 
 }

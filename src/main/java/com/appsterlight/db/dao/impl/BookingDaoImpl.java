@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.appsterlight.controller.Messages.*;
+import static com.appsterlight.Messages.*;
 import static com.appsterlight.db.Fields.*;
 import static com.appsterlight.db.Queries.*;
 
@@ -24,7 +24,7 @@ public class BookingDaoImpl implements BookingDao {
 
     @Override
     public boolean add(Booking booking) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             setPrStParametersForEntity(prst, booking);
@@ -61,7 +61,7 @@ public class BookingDaoImpl implements BookingDao {
 
     @Override
     public boolean update(Booking booking) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_UPDATE)) {
             setPrStParametersForEntity(prst, booking);
@@ -77,7 +77,7 @@ public class BookingDaoImpl implements BookingDao {
 
     @Override
     public boolean delete(Long id) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_DELETE)) {
             prst.setLong(1, id);

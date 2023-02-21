@@ -31,7 +31,7 @@ public class MySQLDBManager implements DBManager {
             try {
                 dataSource = new HikariDataSource(config);
             } catch (Exception e) {
-                log.error("Can't get DataSource -> ", e.getMessage());
+                log.error("Can't get DataSource!", e.getMessage());
             }
 
 //            log.info("Hikari Pool was successfully configured and created");
@@ -54,7 +54,6 @@ public class MySQLDBManager implements DBManager {
             throw new DBException("Can't establish connection to database", e);
         }
     }
-
 
     private static Properties getProperties()  {
         try (InputStream propFile = Thread.currentThread().getContextClassLoader()
