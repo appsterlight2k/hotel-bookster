@@ -27,7 +27,7 @@ public class BookingDaoImpl implements BookingDao {
         boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            setPrStParametersForEntity(prst, booking);
+            setPrStParametersForEntity(prst, booking, false);
             result = prst.executeUpdate() > 0;
             if (result) {
                 ResultSet rs = prst.getGeneratedKeys();
@@ -64,8 +64,8 @@ public class BookingDaoImpl implements BookingDao {
         boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_UPDATE)) {
-            setPrStParametersForEntity(prst, booking);
-            prst.setLong(12, booking.getId());
+            setPrStParametersForEntity(prst, booking, true);
+
             result = prst.executeUpdate() > 0;
         } catch (SQLException e) {
             log.error(UPDATE_ERROR, e);
@@ -124,7 +124,7 @@ public class BookingDaoImpl implements BookingDao {
                 .build();
     }
 
-    private void setPrStParametersForEntity(PreparedStatement prst, Booking booking) throws SQLException {
+    private void setPrStParametersForEntity(PreparedStatement prst, Booking booking, boolean is_update) throws SQLException {
         int ind = 1;
         prst.setLong(ind++, booking.getUserId());
         prst.setLong(ind++, booking.getApartmentId());
@@ -137,5 +137,6 @@ public class BookingDaoImpl implements BookingDao {
         prst.setBoolean(ind++, booking.getIsBooked());
         prst.setBoolean(ind++, booking.getIsPaid());
         prst.setBoolean(ind++, booking.getIsCanceled());
+        if (is_update) prst.setLong(ind++, booking.getId());
     }
 }

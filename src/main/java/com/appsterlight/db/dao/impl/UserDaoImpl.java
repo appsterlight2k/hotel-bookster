@@ -27,7 +27,7 @@ public class UserDaoImpl implements UserDao {
         boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_USER_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            setPrStParametersForEntity(prst, user);
+            setPrStParametersForEntity(prst, user, false);
             result = prst.executeUpdate() > 0;
             if (result) {
                 ResultSet rs = prst.getGeneratedKeys();
@@ -64,8 +64,7 @@ public class UserDaoImpl implements UserDao {
         boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_USER_UPDATE)) {
-            setPrStParametersForEntity(prst, user);
-            prst.setLong(8, user.getId());
+            setPrStParametersForEntity(prst, user, true);
             result = prst.executeUpdate() > 0;
         } catch (SQLException e) {
             log.error(UPDATE_ERROR, e);
@@ -137,8 +136,9 @@ public class UserDaoImpl implements UserDao {
                 .build();
     }
 
-    private void setPrStParametersForEntity(PreparedStatement prst, User user) throws SQLException {
+    private void setPrStParametersForEntity(PreparedStatement prst, User user, boolean is_update) throws SQLException {
         int ind = 1;
+
         prst.setString(ind++, user.getFirstName());
         prst.setString(ind++, user.getLastName());
         prst.setString(ind++, user.getEmail());
@@ -146,6 +146,8 @@ public class UserDaoImpl implements UserDao {
         prst.setString(ind++, user.getPassword());
         prst.setString(ind++, user.getRole());
         prst.setString(ind++, user.getDescription());
+        if (is_update) prst.setLong(ind++, user.getId());
+
     }
 
 

@@ -27,7 +27,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
         boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            setPrStParametersForEntity(prst, apartment);
+            setPrStParametersForEntity(prst, apartment, false);
             result = prst.executeUpdate() > 0;
             if (result) {
                 ResultSet rs = prst.getGeneratedKeys();
@@ -64,8 +64,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
         boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_UPDATE)) {
-            setPrStParametersForEntity(prst, apartment);
-            prst.setLong(8, apartment.getId());
+            setPrStParametersForEntity(prst, apartment, true);
             result = prst.executeUpdate() > 0;
         } catch (SQLException e) {
             log.error(UPDATE_ERROR, e);
@@ -120,7 +119,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
                 .build();
     }
 
-    private void setPrStParametersForEntity(PreparedStatement prst, Apartment apartment) throws SQLException {
+    private void setPrStParametersForEntity(PreparedStatement prst, Apartment apartment, boolean is_update) throws SQLException {
         int ind = 1;
         prst.setString(ind++, apartment.getApartmentNumber());
         prst.setInt(ind++, apartment.getRoomsCount());
@@ -129,5 +128,6 @@ public class ApartmentDaoImpl implements ApartmentDao {
         prst.setInt(ind++, apartment.getChildrenCapacity());
         prst.setInt(ind++, apartment.getPrice());
         prst.setString(ind++, apartment.getDescription());
+        if (is_update) prst.setLong(ind++, apartment.getId());
     }
 }

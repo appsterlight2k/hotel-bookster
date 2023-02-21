@@ -28,7 +28,7 @@ public class ApartmentPhotosDaoImpl implements ApartmentPhotosDao {
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_PHOTOS_INSERT,
                                                                     Statement.RETURN_GENERATED_KEYS)) {
-            setPrStParametersForEntity(prst, apartment);
+            setPrStParametersForEntity(prst, apartment, false);
             result = prst.executeUpdate() > 0;
             if (result) {
                 ResultSet rs = prst.getGeneratedKeys();
@@ -65,8 +65,7 @@ public class ApartmentPhotosDaoImpl implements ApartmentPhotosDao {
         boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_PHOTOS_UPDATE)) {
-            setPrStParametersForEntity(prst, apartmentPhotos);
-            prst.setLong(8, apartmentPhotos.getId());
+            setPrStParametersForEntity(prst, apartmentPhotos, true);
             result = prst.executeUpdate() > 0;
         } catch (SQLException e) {
             log.error(UPDATE_ERROR, e);
@@ -144,10 +143,11 @@ public class ApartmentPhotosDaoImpl implements ApartmentPhotosDao {
                 .build();
     }
 
-    private void setPrStParametersForEntity(PreparedStatement prst, ApartmentPhotos apartmentPhotos) throws SQLException {
+    private void setPrStParametersForEntity(PreparedStatement prst, ApartmentPhotos apartmentPhotos, boolean is_update) throws SQLException {
         int ind = 1;
         prst.setLong(ind++, apartmentPhotos.getApartmentId());
         prst.setString(ind++, apartmentPhotos.getPath());
+        if (is_update) prst.setLong(ind++, apartmentPhotos.getId());
 
     }
 }
