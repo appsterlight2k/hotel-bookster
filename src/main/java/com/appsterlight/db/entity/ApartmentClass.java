@@ -3,6 +3,7 @@ package com.appsterlight.db.entity;
 import lombok.*;
 
 import java.io.Serial;
+import java.io.Serializable;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,12 +12,13 @@ import java.io.Serial;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class ApartmentClass {
+public class ApartmentClass implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private static Long id;
-    private static String name;
-    private static String description;
+    private Long id;
+    private String name;
+    private String description;
+
 
 }
