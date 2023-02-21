@@ -1,6 +1,8 @@
 package com.appsterlight.db.entity;
 
 import java.io.Serial;
+import java.io.Serializable;
+
 import lombok.*;
 
 @NoArgsConstructor
@@ -10,13 +12,13 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class ApartmentPhotos {
+public class ApartmentPhotos implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;
     private String path;
-
-    private Apartment apartment;
+    private Long apartmentId;
+//    private Apartment apartment;
 
 }

@@ -38,6 +38,10 @@ public class Fields {
     public static final String APARTMENT_PRICE = "price";
     //DESCRIPTION
 
+    /* SPECIFIC FIELDS FOR APARTMENT_PHOTOS TABLE */
+    public static final String APARTMENT_PHOTOS_APARTMENT_ID = "apartment_id";
+    public static final String APARTMENT_PHOTOS_PATH = "path";
+
 
     //                           *** CONNETCION ***
     /* CONNECTION PROPERTIES FIELDS */
