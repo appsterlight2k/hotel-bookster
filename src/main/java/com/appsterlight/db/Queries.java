@@ -15,6 +15,8 @@ public class Queries {
             "first_name = ?, last_name = ?, email = ?, phone_number = ?, password = ?, role = ?, description = ?  " +
             "WHERE ID = ?";
 
+    public static final String SQL_USER_GET_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
+
 
     /* QUERIES FOR BOOKING TABLE */
     public static final String SQL_BOOKING_GET = "SELECT * FROM booking WHERE id = ?";
@@ -37,12 +39,25 @@ public class Queries {
     public static final String SQL_APARTMENT_DELETE = "DELETE FROM apartments WHERE id = ?";
     public static final String SQL_APARTMENT_GET_ALL = "SELECT * FROM apartments";
     public static final String SQL_APARTMENT_INSERT =
-            "INSERT INTO apartments (apartment_number, rooms_count, class_id, adults_capacity, children_capacity, price, description) " +
+            "INSERT INTO apartments (apartment_number, rooms_count, class_id, adults_capacity, " +
+                    "children_capacity, price, description) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     public static final String SQL_APARTMENT_UPDATE =
             "UPDATE apartments SET " +
-                    "apartment_number = ?, rooms_count = ?, class_id = ?, adults_capacity = ?, children_capacity = ?, price = ?, description = ? " +
+                    "apartment_number = ?, rooms_count = ?, class_id = ?, adults_capacity = ?, " +
+                    "children_capacity = ?, price = ?, description = ? " +
                     "WHERE ID = ?";
+
+
+    /* QUERIES FOR APARTMENT_PHOTOS TABLE */
+    public static final String SQL_APARTMENT_PHOTOS_GET = "SELECT * FROM apartments_photos WHERE id = ?";
+    public static final String SQL_APARTMENT_PHOTOS_DELETE = "DELETE FROM apartments_photos WHERE id = ?";
+    public static final String SQL_APARTMENT_PHOTOS_GET_ALL = "SELECT * FROM apartments_photos";
+    public static final String SQL_APARTMENT_PHOTOS_INSERT = "INSERT INTO apartments_photos (apartment_id, path) VALUES (?, ?)";
+    public static final String SQL_APARTMENT_PHOTOS_UPDATE = "UPDATE apartments_photos SET apartment_id = ?, path = ? " +
+                                                                " WHERE ID = ?";
+
+    public static final String SQL_APARTMENT_PHOTOS_GET_ALL_PHOTOS_BY_ID = "SELECT * FROM apartments_photos WHERE apartment_id = ?";
 
 }
