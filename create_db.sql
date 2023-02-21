@@ -2,6 +2,10 @@ CREATE SCHEMA IF NOT EXISTS hotel DEFAULT CHARACTER SET utf8;
 
 use hotel;
 
+ALTER TABLE booking DROP FOREIGN KEY booking_ibfk_1;
+ALTER TABLE booking DROP FOREIGN KEY booking_ibfk_2;
+ALTER TABLE apartments_photos DROP FOREIGN KEY apartments_photos_ibfk_1;
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
                        id INT UNIQUE NOT NULL AUTO_INCREMENT,
@@ -39,8 +43,10 @@ DROP TABLE IF EXISTS apartments_photos;
 CREATE TABLE apartments_photos (
                                    id INT UNIQUE NOT NULL AUTO_INCREMENT,
                                    apartment_id INT NOT NULL,
-                                   path VARCHAR(1000)
+                                   path VARCHAR(1000),
+                                   FOREIGN KEY(apartment_id) REFERENCES apartments(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 DROP TABLE IF EXISTS booking;
 CREATE TABLE booking (
@@ -51,18 +57,22 @@ CREATE TABLE booking (
                          check_out DATE NOT NULL,
                          adults_number INT NOT NULL,
                          children_number INT NOT NULL DEFAULT 0,
-                         reservation_time TIMESTAMP,
+                         reservation_time DATETIME,
                          is_approved BOOLEAN NOT NULL DEFAULT false,
                          is_booked BOOLEAN NOT NULL DEFAULT false,
                          is_paid BOOLEAN NOT NULL DEFAULT false,
-                         is_canceled BOOLEAN NOT NULL DEFAULT false
+                         is_canceled BOOLEAN NOT NULL DEFAULT false,
+                         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                         FOREIGN KEY(apartment_id) REFERENCES apartments(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 INSERT INTO users (id, first_name, last_name, email, phone_number, password, role, description)
 VALUES
     (1, 'Stephan', 'Rockwell', 'st@gmail.com', '+193520435634', 'LightFlairs', 'ROLE_ADMIN', 'SuperHero'),
     (2, 'Andrew', 'Hetman', 'ah@gmail.com', '+380969826345', 'Tales', 'ROLE_USER', ''),
-    (3, 'Mary', 'Perry', 'marry.star@gmail.com', '+380988476264', 'WeatherCoat', 'ROLE_USER', '');
+    (3, 'Mary', 'Perry', 'marry.star@gmail.com', '+380988476264', 'WeatherCoat', 'ROLE_USER', ''),
+    (4, 'Nikola', 'Tesla', 'tesla@gmail.com', '+380953458323', 'Pasword', 'ROLE_USER', '');
 
 INSERT INTO apartment_class (id, name, description)
 VALUES
@@ -101,16 +111,19 @@ INSERT INTO booking (id, user_id, apartment_id, check_in, check_out, adults_numb
                      is_approved, is_booked, is_paid, is_canceled)
 VALUES
     (1, 2, 2, '2023-01-02', '2023-01-04', 1, 0, null, false, false, false, false),
-    (2, 3, 1, '2023-01-05', '2023-01-07', 2, 0, null, false, false, false, false),
-    (3, 4, 3, '2023-01-03', '2023-01-04', 1, 0, '2023-01-01 13:19:26', false, false, false, false);
+    (2, 2, 1, '2023-01-05', '2023-01-07', 2, 0, null, false, false, false, false),
+    (3, 4, 2, '2023-01-03', '2023-01-04', 1, 0, '2023-01-01 13:19:26', false, false, false, false);
 
-
-
-
-
-
-
-
-
-
+INSERT INTO apartments_photos (id, apartment_id, path)
+VALUES
+    (1, 1, "photos/Room-Type-Twin-Room.jpg"),
+    (2, 1, "photos/Room-Type-Triple-Room.jpg"),
+    (3, 2, "photos/Room-Type-studio-Room.jpg"),
+    (4, 2, "photos/Room-Type-Single-Room.jpg"),
+    (5, 3, "photos/Room-Type-Queen-Room.jpg"),
+    (6, 3, "photos/Room-Type-quad-Room.jpg"),
+    (7, 4, "photos/Room-Type-King-Room.jpg"),
+    (8, 4, "photos/Room-Type-Hollywood-Twin-Room.jpg"),
+    (9, 4, "photos/Room-Type-Double-Room.jpg"),
+    (10, 1, "photos/Room-Type-double-double-Room.jpg");
 
