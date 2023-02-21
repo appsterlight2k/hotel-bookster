@@ -1,4 +1,4 @@
-package com.appsterlight.controller;
+package com.appsterlight;
 
 public class Messages {
     public static final String INSERT_ERROR = "Can't insert record into table";

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.appsterlight.controller.Messages.*;
+import static com.appsterlight.Messages.*;
 import static com.appsterlight.db.Fields.*;
 import static com.appsterlight.db.Queries.*;
 
@@ -24,7 +24,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
 
     @Override
     public boolean add(Apartment apartment) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             setPrStParametersForEntity(prst, apartment);
@@ -61,7 +61,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
 
     @Override
     public boolean update(Apartment apartment) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_UPDATE)) {
             setPrStParametersForEntity(prst, apartment);
@@ -77,7 +77,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
 
     @Override
     public boolean delete(Long id) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_DELETE)) {
             prst.setLong(1, id);
