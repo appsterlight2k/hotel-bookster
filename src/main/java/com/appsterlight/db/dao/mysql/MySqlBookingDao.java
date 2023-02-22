@@ -20,7 +20,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
 
     @Override
     public String getSelectQuery() {
-        return null;
+        return SQL_BOOKING_GET;
     }
 
     @Override
@@ -41,6 +41,14 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
     @Override
     public String getSelectAllQuery() {
         return SQL_BOOKING_GET_ALL;
+    }
+
+    @Override
+    public Long add(Booking object) throws DaoException {
+        Long id = super.add(object);
+        object.setId(id);
+
+        return id;
     }
 
     @Override
