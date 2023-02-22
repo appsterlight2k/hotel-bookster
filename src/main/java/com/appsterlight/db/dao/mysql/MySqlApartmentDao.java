@@ -47,6 +47,14 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
     }
 
     @Override
+    public Long add(Apartment object) throws DaoException {
+        Long id = super.add(object);
+        object.setId(id);
+
+        return id;
+    }
+
+    @Override
     protected void setPreparedStatement(PreparedStatement statement, Apartment object, boolean isUpdate) throws DaoException {
         int ind = 1;
         try {

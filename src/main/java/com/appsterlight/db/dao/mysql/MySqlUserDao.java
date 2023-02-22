@@ -48,6 +48,15 @@ public class MySqlUserDao extends AbstractDao<User> implements UserDao {
         return SQL_USER_GET_ALL;
     }
 
+
+    @Override
+    public Long add(User object) throws DaoException {
+        Long id = super.add(object);
+        object.setId(id);
+
+        return id;
+    }
+
     @Override
     public Optional<User> getUserByEmail(String email, Connection con) throws DaoException {
         User user = null;

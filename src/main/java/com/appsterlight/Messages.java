@@ -8,6 +8,8 @@ public class Messages {
 
     public static final String STATEMENT_ERROR = "Can't set data into Statement!";
 
+    public static final String DAO_FACTORY_INSTANCE_CREATION_ERROR = "Can't create DAO instance";
+
 
 
 }

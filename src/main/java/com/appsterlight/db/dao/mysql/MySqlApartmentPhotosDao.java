@@ -49,6 +49,14 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implem
         return SQL_APARTMENT_PHOTOS_GET_ALL;
     }
 
+    @Override
+    public Long add(ApartmentPhotos object) throws DaoException {
+        Long id = super.add(object);
+        object.setId(id);
+
+        return id;
+    }
+
     public List<String> getAllUrlOfPhotosById(Long id, Connection con) throws DaoException {
         List<String> urls = new ArrayList<>();
 
