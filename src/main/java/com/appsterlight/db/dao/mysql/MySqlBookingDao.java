@@ -1,19 +1,20 @@
-package com.appsterlight.db.dao.impl;
+package com.appsterlight.db.dao.mysql;
 
 import com.appsterlight.db.dao.AbstractDao;
+import com.appsterlight.db.dao.BookingDao;
 import com.appsterlight.db.entity.Booking;
 import com.appsterlight.exceptions.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 
-import static com.appsterlight.Messages.READ_ERROR;
+import static com.appsterlight.Messages.*;
 import static com.appsterlight.db.Fields.*;
 import static com.appsterlight.db.Queries.*;
 
 @Slf4j
-public class BookingDaoImpl extends AbstractDao<Booking> {
-    public BookingDaoImpl(Connection connection) {
+public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao {
+    public MySqlBookingDao(Connection connection) {
         super(connection);
     }
 
@@ -59,7 +60,7 @@ public class BookingDaoImpl extends AbstractDao<Booking> {
             statement.setBoolean(ind++, object.getIsCanceled());
             if (isUpdate) statement.setLong(ind++, object.getId());
         } catch (SQLException e) {
-            log.error("Can't set data into Statement!", e.getMessage());
+            log.error(STATEMENT_ERROR, e.getMessage());
             throw new DaoException(e);
         }
     }

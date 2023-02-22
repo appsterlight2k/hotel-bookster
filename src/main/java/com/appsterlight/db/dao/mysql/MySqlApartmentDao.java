@@ -1,6 +1,7 @@
-package com.appsterlight.db.dao.impl;
+package com.appsterlight.db.dao.mysql;
 
 import com.appsterlight.db.dao.AbstractDao;
+import com.appsterlight.db.dao.ApartmentDao;
 import com.appsterlight.db.entity.Apartment;
 import com.appsterlight.exceptions.DaoException;
 import lombok.extern.slf4j.Slf4j;
@@ -10,13 +11,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.appsterlight.Messages.READ_ERROR;
+import static com.appsterlight.Messages.*;
 import static com.appsterlight.db.Fields.*;
 import static com.appsterlight.db.Queries.*;
 
 @Slf4j
-public class ApartmentDaoImpl extends AbstractDao<Apartment> {
-    public ApartmentDaoImpl(Connection connection) {
+public class MySqlApartmentDao extends AbstractDao<Apartment> implements ApartmentDao {
+    public MySqlApartmentDao(Connection connection) {
         super(connection);
     }
 
@@ -58,7 +59,7 @@ public class ApartmentDaoImpl extends AbstractDao<Apartment> {
             statement.setString(ind++, object.getDescription());
             if (isUpdate) statement.setLong(ind++, object.getId());
         } catch (SQLException e) {
-            log.error("Can't set data into Statement!", e.getMessage());
+            log.error(STATEMENT_ERROR, e.getMessage());
             throw new DaoException(e);
         }
 

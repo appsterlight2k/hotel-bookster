@@ -1,4 +1,4 @@
-package com.appsterlight.db.dao.impl;
+package com.appsterlight.db.dao.mysql;
 
 import com.appsterlight.db.dao.AbstractDao;
 import com.appsterlight.db.dao.ApartmentPhotosDao;
@@ -18,9 +18,9 @@ import static com.appsterlight.db.Fields.*;
 import static com.appsterlight.db.Queries.*;
 
 @Slf4j
-public class ApartmentPhotosDaoImpl extends AbstractDao<ApartmentPhotos> {
+public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implements ApartmentPhotosDao {
 
-    public ApartmentPhotosDaoImpl(Connection connection) {
+    public MySqlApartmentPhotosDao(Connection connection) {
         super(connection);
     }
 
@@ -77,7 +77,7 @@ public class ApartmentPhotosDaoImpl extends AbstractDao<ApartmentPhotos> {
             statement.setString(ind++, object.getPath());
             if (isUpdate) statement.setLong(ind++, object.getId());
         } catch (SQLException e) {
-            log.error("Can't set data into Statement!", e.getMessage());
+            log.error(STATEMENT_ERROR, e.getMessage());
             throw new DaoException(e);
         }
     }
