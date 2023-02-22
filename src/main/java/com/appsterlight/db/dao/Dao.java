@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface Dao<T> {
 
-    boolean add(T t) throws DaoException;
+    Long add(T t) throws DaoException;
 
     Optional<T> get(Long id) throws DaoException;
 

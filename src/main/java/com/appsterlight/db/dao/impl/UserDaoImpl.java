@@ -1,116 +1,58 @@
 package com.appsterlight.db.dao.impl;
 
-import com.appsterlight.db.dao.UserDao;
+import com.appsterlight.db.dao.AbstractDao;
 import com.appsterlight.db.entity.User;
 import com.appsterlight.exceptions.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
+import static com.appsterlight.Messages.READ_ERROR;
 import static com.appsterlight.db.Fields.*;
+import static com.appsterlight.db.Fields.DESCRIPTION;
 import static com.appsterlight.db.Queries.*;
-import static com.appsterlight.Messages.*;
 
 @Slf4j
-public class UserDaoImpl implements UserDao {
-    private final Connection connection;
+public class UserDaoImpl extends AbstractDao<User> {
 
     public UserDaoImpl(Connection connection) {
-        this.connection = connection;
+        super(connection);
     }
 
     @Override
-    public boolean add(User user) throws DaoException {
-        boolean result;
-
-        try (PreparedStatement prst = connection.prepareStatement(SQL_USER_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            setPrStParametersForEntity(prst, user, false);
-            result = prst.executeUpdate() > 0;
-            if (result) {
-                ResultSet rs = prst.getGeneratedKeys();
-                if (rs.next()) {
-                    user.setId(rs.getLong(1));
-                }
-            }
-        } catch (SQLException e) {
-            log.error(INSERT_ERROR, e);
-            throw new DaoException(e);
-        }
-        return result;
+    public String getSelectQuery() {
+        return SQL_USER_GET;
     }
 
     @Override
-    public Optional<User> get(Long id) throws DaoException {
+    public String getCreateQuery() {
+        return SQL_USER_INSERT;
+    }
+
+    @Override
+    public String getUpdateQuery() {
+        return SQL_USER_UPDATE;
+    }
+
+    @Override
+    public String getDeleteQuery() {
+        return SQL_USER_DELETE;
+    }
+
+    @Override
+    public String getSelectAllQuery() {
+        return SQL_USER_GET_ALL;
+    }
+
+
+    public Optional<User> getUserByEmail(String email, Connection con) throws DaoException {
         User user = null;
 
-        try (PreparedStatement prst = connection.prepareStatement(SQL_USER_GET)) {
-            prst.setLong(1, id);
-            ResultSet rs = prst.executeQuery();
-            if (rs.next()) {
-                user = mapEntity(rs);
-            }
-        } catch (SQLException e) {
-            log.error(READ_ERROR, e);
-            throw new DaoException(e);
-        }
-        return Optional.ofNullable(user);
-    }
-
-    @Override
-    public boolean update(User user) throws DaoException {
-        boolean result;
-
-        try (PreparedStatement prst = connection.prepareStatement(SQL_USER_UPDATE)) {
-            setPrStParametersForEntity(prst, user, true);
-            result = prst.executeUpdate() > 0;
-        } catch (SQLException e) {
-            log.error(UPDATE_ERROR, e);
-            throw new DaoException(e);
-        }
-
-        return result;
-    }
-
-    @Override
-    public boolean delete(Long id) throws DaoException {
-        boolean result;
-
-        try (PreparedStatement prst = connection.prepareStatement(SQL_USER_DELETE)) {
-            prst.setLong(1, id);
-            result = prst.executeUpdate() > 0;
-        } catch (SQLException e) {
-            log.error(DELETE_ERROR, e);
-            throw new DaoException(e);
-        }
-
-        return result;
-    }
-
-    @Override
-    public List<User> getAll() throws DaoException {
-        List<User> users = new ArrayList<>();
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(SQL_USER_GET_ALL);
-            while (rs.next()) {
-                users.add(mapEntity(rs));
-            }
-        } catch (SQLException e) {
-            log.error(READ_ERROR, e);
-            throw new DaoException(e);
-        }
-
-        return users;
-    }
-
-    @Override
-    public Optional<User> getUserByEmail(String email) throws DaoException {
-        User user = null;
-
-        try (PreparedStatement prst = connection.prepareStatement(SQL_USER_GET_BY_EMAIL)) {
+        try (PreparedStatement prst = con.prepareStatement(SQL_USER_GET_BY_EMAIL)) {
             prst.setString(1, email);
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
@@ -123,33 +65,40 @@ public class UserDaoImpl implements UserDao {
         return Optional.ofNullable(user);
     }
 
-    private User mapEntity(ResultSet rs) throws SQLException {
-        return  User.builder()
-                .id(rs.getLong(ID))
-                .firstName(rs.getString(USER_FIRST_NAME))
-                .lastName(rs.getString(USER_LAST_NAME))
-                .email(rs.getString(USER_EMAIL))
-                .phoneNumber(rs.getString(USER_PHONE_NUMBER))
-                .password(rs.getString(USER_PASSWORD))
-                .role(rs.getString(USER_ROLE))
-                .description(rs.getString(DESCRIPTION))
-                .build();
-    }
-
-    private void setPrStParametersForEntity(PreparedStatement prst, User user, boolean is_update) throws SQLException {
+    @Override
+    protected void setPreparedStatement(PreparedStatement statement, User user, boolean isUpdate) throws DaoException {
         int ind = 1;
-
-        prst.setString(ind++, user.getFirstName());
-        prst.setString(ind++, user.getLastName());
-        prst.setString(ind++, user.getEmail());
-        prst.setString(ind++, user.getPhoneNumber());
-        prst.setString(ind++, user.getPassword());
-        prst.setString(ind++, user.getRole());
-        prst.setString(ind++, user.getDescription());
-        if (is_update) prst.setLong(ind++, user.getId());
-
+        try {
+            statement.setString(ind++, user.getFirstName());
+            statement.setString(ind++, user.getLastName());
+            statement.setString(ind++, user.getEmail());
+            statement.setString(ind++, user.getPhoneNumber());
+            statement.setString(ind++, user.getPassword());
+            statement.setString(ind++, user.getRole());
+            statement.setString(ind++, user.getDescription());
+            if (isUpdate) statement.setLong(ind++, user.getId());
+        } catch (SQLException e) {
+            log.error("Can't set data into Statement!", e.getMessage());
+            throw new DaoException(e);
+        }
     }
 
-
-
+    @Override
+    protected User mapEntity(ResultSet rs) throws DaoException {
+        try {
+            return  User.builder()
+                    .id(rs.getLong(ID))
+                    .firstName(rs.getString(USER_FIRST_NAME))
+                    .lastName(rs.getString(USER_LAST_NAME))
+                    .email(rs.getString(USER_EMAIL))
+                    .phoneNumber(rs.getString(USER_PHONE_NUMBER))
+                    .password(rs.getString(USER_PASSWORD))
+                    .role(rs.getString(USER_ROLE))
+                    .description(rs.getString(DESCRIPTION))
+                    .build();
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+    }
 }
