@@ -1,7 +1,6 @@
 package com.appsterlight.db.dao;
 
-import com.appsterlight.db.dao.mysql.MySqlDaoFactory;
-import com.appsterlight.exceptions.DaoException;
+import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
