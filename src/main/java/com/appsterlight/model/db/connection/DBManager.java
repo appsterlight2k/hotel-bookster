@@ -1,4 +1,4 @@
-package com.appsterlight.db.connection;
+package com.appsterlight.model.db.connection;
 
 import java.sql.Connection;
 

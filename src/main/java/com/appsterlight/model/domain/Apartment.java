@@ -1,4 +1,4 @@
-package com.appsterlight.domain;
+package com.appsterlight.model.domain;
 
 import lombok.*;
 

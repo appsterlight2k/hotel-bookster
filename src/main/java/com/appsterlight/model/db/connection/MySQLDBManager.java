@@ -1,7 +1,7 @@
-package com.appsterlight.db.connection;
+package com.appsterlight.model.db.connection;
 
-import com.appsterlight.Constants;
-import com.appsterlight.db.constants.Fields;
+import com.appsterlight.model.db.constants.Constants;
+import com.appsterlight.model.db.constants.Fields;
 import com.appsterlight.exception.PropertiesException;
 import com.appsterlight.exception.DBException;
 import com.zaxxer.hikari.HikariConfig;
@@ -76,7 +76,6 @@ public class MySQLDBManager implements DBManager {
         hikariConfig.setPassword(props.getProperty(Fields.DB_PASSWORD));
         hikariConfig.setDriverClassName(props.getProperty(Fields.DB_DRIVER));
         hikariConfig.setMaximumPoolSize(Integer.parseInt(props.getProperty(Fields.DB_MAXIMUM_POOL_SIZE)));
-//        hikariConfig.setAutoCommit(Boolean.parseBoolean(props.getProperty(Fields.DB_AUTO_COMMIT)));
 //        hikariConfig.setIdleTimeout(Integer.parseInt(props.getProperty(Fields.DB_IDLE_TIMEOUT)) * 1000); //in sec.
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit",
                 props.getProperty(Fields.DB_CACHE_PREP_STMTS));
@@ -84,6 +83,7 @@ public class MySQLDBManager implements DBManager {
                 props.getProperty(Fields.DB_PREP_STMT_CACHE_SIZE));
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit",
                 props.getProperty(Fields.DB_PREP_STMT_CACHE_SQL_LIMIT));
+        hikariConfig.setLeakDetectionThreshold(3000); //#DELERE THIS IN FUTURE!!!
 
 //        log.info("Hikari Pool configuration was successfully created!");
 

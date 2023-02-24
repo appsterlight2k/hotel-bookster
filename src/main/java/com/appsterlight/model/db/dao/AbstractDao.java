@@ -1,6 +1,7 @@
-package com.appsterlight.db.dao;
+package com.appsterlight.model.db.dao;
 
 import com.appsterlight.exception.DaoException;
+import com.appsterlight.shared.Dao;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
@@ -9,10 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.appsterlight.Messages.*;
+import static com.appsterlight.model.db.constants.Messages.*;
 
 @Slf4j
-public abstract class AbstractDao<T> implements Dao<T>  {
+public abstract class AbstractDao<T> implements Dao<T> {
     public abstract String getSelectQuery();
     public abstract String getCreateQuery();
     public abstract String getUpdateQuery();

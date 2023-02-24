@@ -1,6 +1,6 @@
-package com.appsterlight.db.dao.mysql;
+package com.appsterlight.model.db.dao.mysql;
 
-import com.appsterlight.db.dao.*;
+import com.appsterlight.model.db.dao.*;
 
 import java.sql.Connection;
 
@@ -11,6 +11,7 @@ public class MySqlDaoFactory extends DaoFactory {
     private ApartmentPhotosDao apartmentPhotosDao;
 
     private Connection con;
+
 
     public MySqlDaoFactory(Connection con) {
         this.con = con;

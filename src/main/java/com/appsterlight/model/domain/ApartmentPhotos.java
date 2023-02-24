@@ -1,9 +1,9 @@
-package com.appsterlight.domain;
-
-import lombok.*;
+package com.appsterlight.model.domain;
 
 import java.io.Serial;
 import java.io.Serializable;
+
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,13 +12,13 @@ import java.io.Serializable;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class ApartmentClass implements Serializable {
+public class ApartmentPhotos implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private String name;
-    private String description;
-
+    private String path;
+    private Long apartmentId;
+//    private Apartment apartment;
 
 }

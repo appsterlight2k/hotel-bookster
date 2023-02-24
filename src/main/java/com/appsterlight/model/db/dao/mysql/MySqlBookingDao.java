@@ -1,16 +1,16 @@
-package com.appsterlight.db.dao.mysql;
+package com.appsterlight.model.db.dao.mysql;
 
-import com.appsterlight.db.dao.AbstractDao;
-import com.appsterlight.db.dao.BookingDao;
-import com.appsterlight.domain.Booking;
+import com.appsterlight.model.db.constants.Fields;
+import com.appsterlight.model.db.dao.AbstractDao;
+import com.appsterlight.model.db.dao.BookingDao;
+import com.appsterlight.model.domain.Booking;
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 
-import static com.appsterlight.Messages.*;
-import static com.appsterlight.db.constants.Fields.*;
-import static com.appsterlight.db.constants.Queries.*;
+import static com.appsterlight.model.db.constants.Messages.*;
+import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao {
@@ -76,18 +76,18 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
     protected Booking mapEntity(ResultSet rs) throws DaoException {
         try {
             return  Booking.builder()
-                    .id(rs.getLong(ID))
-                    .userId(rs.getLong(BOOKING_USER_ID))
-                    .apartmentId(rs.getLong(BOOKING_APARTMENT_ID))
-                    .checkIn(rs.getDate(BOOKING_CHECK_IN).toLocalDate())
-                    .checkOut(rs.getDate(BOOKING_CHECK_OUT).toLocalDate())
-                    .adultsNumber(rs.getInt(BOOKING_ADULTS_NUMBER))
-                    .childrenNumber(rs.getInt(BOOKING_CHILDREN_NUMBER))
-                    .reservationTime(rs.getTimestamp(BOOKING_RESERVATION_TIME))
-                    .isApproved(rs.getBoolean(BOOKING_IS_APPROVED))
-                    .isBooked(rs.getBoolean(BOOKING_IS_BOOKED))
-                    .isPaid(rs.getBoolean(BOOKING_IS_PAID))
-                    .isCanceled(rs.getBoolean(BOOKING_IS_CANCELED))
+                    .id(rs.getLong(Fields.ID))
+                    .userId(rs.getLong(Fields.BOOKING_USER_ID))
+                    .apartmentId(rs.getLong(Fields.BOOKING_APARTMENT_ID))
+                    .checkIn(rs.getDate(Fields.BOOKING_CHECK_IN).toLocalDate())
+                    .checkOut(rs.getDate(Fields.BOOKING_CHECK_OUT).toLocalDate())
+                    .adultsNumber(rs.getInt(Fields.BOOKING_ADULTS_NUMBER))
+                    .childrenNumber(rs.getInt(Fields.BOOKING_CHILDREN_NUMBER))
+                    .reservationTime(rs.getTimestamp(Fields.BOOKING_RESERVATION_TIME))
+                    .isApproved(rs.getBoolean(Fields.BOOKING_IS_APPROVED))
+                    .isBooked(rs.getBoolean(Fields.BOOKING_IS_BOOKED))
+                    .isPaid(rs.getBoolean(Fields.BOOKING_IS_PAID))
+                    .isCanceled(rs.getBoolean(Fields.BOOKING_IS_CANCELED))
                     .build();
         } catch (SQLException e) {
             log.error(READ_ERROR, e);

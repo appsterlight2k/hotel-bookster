@@ -1,4 +1,4 @@
-package com.appsterlight.db.constants;
+package com.appsterlight.model.db.constants;
 
 public class Fields {
     /* GENERAL FIELDS */
@@ -51,7 +51,6 @@ public class Fields {
     public static final String DB_DRIVER = "connection.driver";
     public static final String DB_MAXIMUM_POOL_SIZE = "connection.maximumPoolSize";
     public static final String DB_IDLE_TIMEOUT = "connection.idleTimeout";
-    public static final String DB_AUTO_COMMIT = "connection.autoCommit";
     public static final String DB_CACHE_PREP_STMTS = "dataSource.cachePrepStmts";
     public static final String DB_PREP_STMT_CACHE_SIZE = "dataSource.prepStmtCacheSize";
     public static final String DB_PREP_STMT_CACHE_SQL_LIMIT = "dataSource.prepStmtCacheSqlLimit";

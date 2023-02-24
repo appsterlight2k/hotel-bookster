@@ -1,11 +1,11 @@
-package com.appsterlight.db.dao;
+package com.appsterlight.model.db.dao;
 
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static com.appsterlight.Messages.DAO_FACTORY_INSTANCE_CREATION_ERROR;
+import static com.appsterlight.model.db.constants.Messages.DAO_FACTORY_INSTANCE_CREATION_ERROR;
 
 @Slf4j
 public abstract class DaoFactory {
@@ -13,7 +13,7 @@ public abstract class DaoFactory {
 
     protected DaoFactory() { }
 
-    public static synchronized DaoFactory getInstance() throws DaoException {
+    public static synchronized DaoFactory getInstance() {
         if (instance == null) {
 //           instance = new MySqlDaoFactory(con);
             Class<?> cl = null;
@@ -23,7 +23,6 @@ public abstract class DaoFactory {
             } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
                      IllegalAccessException e) {
                 log.error(DAO_FACTORY_INSTANCE_CREATION_ERROR, e.getMessage());
-                throw new DaoException(e.getMessage());
             }
         }
 

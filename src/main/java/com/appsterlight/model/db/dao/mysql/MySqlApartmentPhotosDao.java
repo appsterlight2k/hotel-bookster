@@ -1,8 +1,9 @@
-package com.appsterlight.db.dao.mysql;
+package com.appsterlight.model.db.dao.mysql;
 
-import com.appsterlight.db.dao.AbstractDao;
-import com.appsterlight.db.dao.ApartmentPhotosDao;
-import com.appsterlight.domain.ApartmentPhotos;
+import com.appsterlight.model.db.constants.Fields;
+import com.appsterlight.model.db.dao.AbstractDao;
+import com.appsterlight.model.db.dao.ApartmentPhotosDao;
+import com.appsterlight.model.domain.ApartmentPhotos;
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,9 +11,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.appsterlight.Messages.*;
-import static com.appsterlight.db.constants.Fields.*;
-import static com.appsterlight.db.constants.Queries.*;
+import static com.appsterlight.model.db.constants.Messages.*;
+import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implements ApartmentPhotosDao {
@@ -87,9 +87,9 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implem
     protected ApartmentPhotos mapEntity(ResultSet rs) throws DaoException {
         try {
             return  ApartmentPhotos.builder()
-                    .id(rs.getLong(ID))
-                    .apartmentId(rs.getLong(APARTMENT_PHOTOS_APARTMENT_ID))
-                    .path(rs.getString(APARTMENT_PHOTOS_PATH))
+                    .id(rs.getLong(Fields.ID))
+                    .apartmentId(rs.getLong(Fields.APARTMENT_PHOTOS_APARTMENT_ID))
+                    .path(rs.getString(Fields.APARTMENT_PHOTOS_PATH))
                     .build();
         } catch (SQLException e) {
             log.error(READ_ERROR, e);

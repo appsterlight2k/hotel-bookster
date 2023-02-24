@@ -1,16 +1,16 @@
-package com.appsterlight.db.dao.mysql;
+package com.appsterlight.model.db.dao.mysql;
 
-import com.appsterlight.db.dao.AbstractDao;
-import com.appsterlight.db.dao.ApartmentDao;
-import com.appsterlight.domain.Apartment;
+import com.appsterlight.model.db.constants.Fields;
+import com.appsterlight.model.db.dao.AbstractDao;
+import com.appsterlight.model.db.dao.ApartmentDao;
+import com.appsterlight.model.domain.Apartment;
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 
-import static com.appsterlight.Messages.*;
-import static com.appsterlight.db.constants.Fields.*;
-import static com.appsterlight.db.constants.Queries.*;
+import static com.appsterlight.model.db.constants.Messages.*;
+import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlApartmentDao extends AbstractDao<Apartment> implements ApartmentDao {
@@ -72,14 +72,14 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
     protected Apartment mapEntity(ResultSet rs) throws DaoException {
         try {
             return  Apartment.builder()
-                    .id(rs.getLong(ID))
-                    .apartmentNumber(rs.getString(APARTMENT_NUMBER))
-                    .roomsCount(rs.getInt(APARTMENT_ROOMS_COUNT))
-                    .classId(rs.getInt(APARTMENT_CLASS_ID))
-                    .adultsCapacity(rs.getInt(APARTMENT_ADULTS_CAPACITY))
-                    .childrenCapacity(rs.getInt(APARTMENT_CHILDREN_CAPACITY))
-                    .price(rs.getInt(APARTMENT_PRICE))
-                    .description(rs.getString(DESCRIPTION))
+                    .id(rs.getLong(Fields.ID))
+                    .apartmentNumber(rs.getString(Fields.APARTMENT_NUMBER))
+                    .roomsCount(rs.getInt(Fields.APARTMENT_ROOMS_COUNT))
+                    .classId(rs.getInt(Fields.APARTMENT_CLASS_ID))
+                    .adultsCapacity(rs.getInt(Fields.APARTMENT_ADULTS_CAPACITY))
+                    .childrenCapacity(rs.getInt(Fields.APARTMENT_CHILDREN_CAPACITY))
+                    .price(rs.getInt(Fields.APARTMENT_PRICE))
+                    .description(rs.getString(Fields.DESCRIPTION))
                     .build();
         } catch (SQLException e) {
             log.error(READ_ERROR, e);

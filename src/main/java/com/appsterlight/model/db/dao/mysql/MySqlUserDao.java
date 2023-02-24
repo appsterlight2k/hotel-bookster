@@ -1,8 +1,9 @@
-package com.appsterlight.db.dao.mysql;
+package com.appsterlight.model.db.dao.mysql;
 
-import com.appsterlight.db.dao.AbstractDao;
-import com.appsterlight.db.dao.UserDao;
-import com.appsterlight.domain.User;
+import com.appsterlight.model.db.constants.Fields;
+import com.appsterlight.model.db.dao.AbstractDao;
+import com.appsterlight.model.db.dao.UserDao;
+import com.appsterlight.model.domain.User;
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,9 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static com.appsterlight.Messages.*;
-import static com.appsterlight.db.constants.Fields.*;
-import static com.appsterlight.db.constants.Queries.*;
+import static com.appsterlight.model.db.constants.Messages.*;
+import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlUserDao extends AbstractDao<User> implements UserDao {
@@ -95,14 +95,14 @@ public class MySqlUserDao extends AbstractDao<User> implements UserDao {
     protected User mapEntity(ResultSet rs) throws DaoException {
         try {
             return  User.builder()
-                    .id(rs.getLong(ID))
-                    .firstName(rs.getString(USER_FIRST_NAME))
-                    .lastName(rs.getString(USER_LAST_NAME))
-                    .email(rs.getString(USER_EMAIL))
-                    .phoneNumber(rs.getString(USER_PHONE_NUMBER))
-                    .password(rs.getString(USER_PASSWORD))
-                    .role(rs.getString(USER_ROLE))
-                    .description(rs.getString(DESCRIPTION))
+                    .id(rs.getLong(Fields.ID))
+                    .firstName(rs.getString(Fields.USER_FIRST_NAME))
+                    .lastName(rs.getString(Fields.USER_LAST_NAME))
+                    .email(rs.getString(Fields.USER_EMAIL))
+                    .phoneNumber(rs.getString(Fields.USER_PHONE_NUMBER))
+                    .password(rs.getString(Fields.USER_PASSWORD))
+                    .role(rs.getString(Fields.USER_ROLE))
+                    .description(rs.getString(Fields.DESCRIPTION))
                     .build();
         } catch (SQLException e) {
             log.error(READ_ERROR, e);
