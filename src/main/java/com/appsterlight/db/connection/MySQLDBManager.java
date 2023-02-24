@@ -1,9 +1,9 @@
 package com.appsterlight.db.connection;
 
 import com.appsterlight.Constants;
-import com.appsterlight.db.Fields;
-import com.appsterlight.exceptions.PropertiesException;
-import com.appsterlight.exceptions.DBException;
+import com.appsterlight.db.constants.Fields;
+import com.appsterlight.exception.PropertiesException;
+import com.appsterlight.exception.DBException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AccessLevel;

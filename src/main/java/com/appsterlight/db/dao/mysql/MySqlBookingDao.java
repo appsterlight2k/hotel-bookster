@@ -2,15 +2,15 @@ package com.appsterlight.db.dao.mysql;
 
 import com.appsterlight.db.dao.AbstractDao;
 import com.appsterlight.db.dao.BookingDao;
-import com.appsterlight.db.entity.Booking;
-import com.appsterlight.exceptions.DaoException;
+import com.appsterlight.domain.Booking;
+import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 
 import static com.appsterlight.Messages.*;
-import static com.appsterlight.db.Fields.*;
-import static com.appsterlight.db.Queries.*;
+import static com.appsterlight.db.constants.Fields.*;
+import static com.appsterlight.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao {
@@ -43,6 +43,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         return SQL_BOOKING_GET_ALL;
     }
 
+
     @Override
     public Long add(Booking object) throws DaoException {
         Long id = super.add(object);
@@ -52,25 +53,23 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
     }
 
     @Override
-    protected void setPreparedStatement(PreparedStatement statement, Booking object, boolean isUpdate) throws DaoException {
-        int ind = 1;
-        try {
-            statement.setLong(ind++, object.getUserId());
-            statement.setLong(ind++, object.getApartmentId());
-            statement.setDate(ind++, Date.valueOf(object.getCheckIn()));
-            statement.setDate(ind++, Date.valueOf(object.getCheckOut()));
-            statement.setInt(ind++, object.getAdultsNumber());
-            statement.setInt(ind++, object.getChildrenNumber());
-            statement.setTimestamp(ind++, object.getReservationTime());
-            statement.setBoolean(ind++, object.getIsApproved());
-            statement.setBoolean(ind++, object.getIsBooked());
-            statement.setBoolean(ind++, object.getIsPaid());
-            statement.setBoolean(ind++, object.getIsCanceled());
-            if (isUpdate) statement.setLong(ind++, object.getId());
-        } catch (SQLException e) {
-            log.error(STATEMENT_ERROR, e.getMessage());
-            throw new DaoException(e);
-        }
+    protected Object[] getAllFieldsOfObject(Booking object) throws DaoException {
+        if (object == null) throw new DaoException("Booking object is null! Can't get fields!");
+
+        return new Object[]{
+                object.getUserId(),
+                object.getApartmentId(),
+                Date.valueOf(object.getCheckIn()),
+                Date.valueOf(object.getCheckOut()),
+                object.getAdultsNumber(),
+                object.getChildrenNumber(),
+                object.getReservationTime(),
+                object.getIsApproved(),
+                object.getIsBooked(),
+                object.getIsPaid(),
+                object.getIsCanceled(),
+                object.getId()
+        };
     }
 
     @Override

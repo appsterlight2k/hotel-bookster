@@ -1,6 +1,6 @@
 package com.appsterlight.db.dao;
 
-import com.appsterlight.db.entity.Booking;
+import com.appsterlight.domain.Booking;
 
 public interface BookingDao extends Dao<Booking> {
 }

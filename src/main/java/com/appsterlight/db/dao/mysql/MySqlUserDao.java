@@ -2,8 +2,8 @@ package com.appsterlight.db.dao.mysql;
 
 import com.appsterlight.db.dao.AbstractDao;
 import com.appsterlight.db.dao.UserDao;
-import com.appsterlight.db.entity.User;
-import com.appsterlight.exceptions.DaoException;
+import com.appsterlight.domain.User;
+import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -13,8 +13,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import static com.appsterlight.Messages.*;
-import static com.appsterlight.db.Fields.*;
-import static com.appsterlight.db.Queries.*;
+import static com.appsterlight.db.constants.Fields.*;
+import static com.appsterlight.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlUserDao extends AbstractDao<User> implements UserDao {
@@ -49,6 +49,7 @@ public class MySqlUserDao extends AbstractDao<User> implements UserDao {
     }
 
 
+
     @Override
     public Long add(User object) throws DaoException {
         Long id = super.add(object);
@@ -75,21 +76,19 @@ public class MySqlUserDao extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    protected void setPreparedStatement(PreparedStatement statement, User user, boolean isUpdate) throws DaoException {
-        int ind = 1;
-        try {
-            statement.setString(ind++, user.getFirstName());
-            statement.setString(ind++, user.getLastName());
-            statement.setString(ind++, user.getEmail());
-            statement.setString(ind++, user.getPhoneNumber());
-            statement.setString(ind++, user.getPassword());
-            statement.setString(ind++, user.getRole());
-            statement.setString(ind++, user.getDescription());
-            if (isUpdate) statement.setLong(ind++, user.getId());
-        } catch (SQLException e) {
-            log.error(STATEMENT_ERROR, e.getMessage());
-            throw new DaoException(e);
-        }
+    protected Object[] getAllFieldsOfObject(User user) throws DaoException {
+        if (user == null) throw new DaoException("User object is null! Can't get fields!");
+
+        return new Object[]{
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getPassword(),
+                user.getRole(),
+                user.getDescription(),
+                user.getId(),
+        };
     }
 
     @Override

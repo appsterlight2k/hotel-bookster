@@ -1,4 +1,4 @@
-package com.appsterlight.db;
+package com.appsterlight.db.constants;
 
 public class Queries {
 

@@ -1,7 +1,7 @@
 package com.appsterlight.db.dao;
 
-import com.appsterlight.db.entity.ApartmentPhotos;
-import com.appsterlight.exceptions.DaoException;
+import com.appsterlight.domain.ApartmentPhotos;
+import com.appsterlight.exception.DaoException;
 
 import java.sql.Connection;
 import java.util.List;

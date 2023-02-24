@@ -1,4 +1,4 @@
-package com.appsterlight.db.entity;
+package com.appsterlight.domain;
 
 import lombok.*;
 

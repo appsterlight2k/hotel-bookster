@@ -2,20 +2,17 @@ package com.appsterlight.db.dao.mysql;
 
 import com.appsterlight.db.dao.AbstractDao;
 import com.appsterlight.db.dao.ApartmentPhotosDao;
-import com.appsterlight.db.entity.ApartmentPhotos;
-import com.appsterlight.exceptions.DaoException;
+import com.appsterlight.domain.ApartmentPhotos;
+import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.appsterlight.Messages.*;
-import static com.appsterlight.db.Fields.*;
-import static com.appsterlight.db.Queries.*;
+import static com.appsterlight.db.constants.Fields.*;
+import static com.appsterlight.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implements ApartmentPhotosDao {
@@ -49,6 +46,7 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implem
         return SQL_APARTMENT_PHOTOS_GET_ALL;
     }
 
+
     @Override
     public Long add(ApartmentPhotos object) throws DaoException {
         Long id = super.add(object);
@@ -77,17 +75,12 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implem
         return urls;
     }
 
+
     @Override
-    protected void setPreparedStatement(PreparedStatement statement, ApartmentPhotos object, boolean isUpdate) throws DaoException {
-        int ind = 1;
-        try {
-            statement.setLong(ind++, object.getApartmentId());
-            statement.setString(ind++, object.getPath());
-            if (isUpdate) statement.setLong(ind++, object.getId());
-        } catch (SQLException e) {
-            log.error(STATEMENT_ERROR, e.getMessage());
-            throw new DaoException(e);
-        }
+    protected Object[] getAllFieldsOfObject(ApartmentPhotos object) throws DaoException {
+        if (object == null) throw new DaoException("Booking object is null! Can't get fields!");
+
+        return new Object[]{ object.getApartmentId(), object.getPath(), object.getId() };
     }
 
     @Override

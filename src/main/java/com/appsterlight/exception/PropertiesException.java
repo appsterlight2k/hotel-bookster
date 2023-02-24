@@ -1,4 +1,4 @@
-package com.appsterlight.exceptions;
+package com.appsterlight.exception;
 
 public class PropertiesException extends GeneralException {
     public PropertiesException(String message) {

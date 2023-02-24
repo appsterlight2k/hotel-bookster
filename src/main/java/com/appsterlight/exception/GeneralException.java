@@ -1,4 +1,4 @@
-package com.appsterlight.exceptions;
+package com.appsterlight.exception;
 
 public class GeneralException extends RuntimeException {
 

@@ -1,16 +1,15 @@
 package com.appsterlight.db.dao;
 
-import com.appsterlight.db.entity.User;
-import com.appsterlight.exceptions.DaoException;
+import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static com.appsterlight.Messages.*;
-import static com.appsterlight.db.Queries.*;
 
 @Slf4j
 public abstract class AbstractDao<T> implements Dao<T>  {
@@ -20,7 +19,7 @@ public abstract class AbstractDao<T> implements Dao<T>  {
     public abstract String getDeleteQuery();
     public abstract String getSelectAllQuery();
 
-    protected abstract void setPreparedStatement(PreparedStatement statement, T object, boolean isUpdate) throws DaoException;
+    protected abstract Object[] getAllFieldsOfObject(T object) throws DaoException;
     protected abstract T mapEntity(ResultSet rs) throws DaoException;
 
     private Connection connection;
@@ -34,8 +33,8 @@ public abstract class AbstractDao<T> implements Dao<T>  {
         Long result = -1L;
 
         String query = getCreateQuery();
-        try (PreparedStatement prst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            setPreparedStatement(prst, object, false);
+        try (PreparedStatement prst = prepareStatement(connection, query,true,
+                getFieldsForStatement(object, false));) {
             if (prst.executeUpdate() > 0) {
                 ResultSet rs = prst.getGeneratedKeys();
                 if (rs.next()) {
@@ -73,8 +72,8 @@ public abstract class AbstractDao<T> implements Dao<T>  {
         boolean result;
 
         String query = getUpdateQuery();
-        try (PreparedStatement prst = connection.prepareStatement(query)) {
-            setPreparedStatement(prst, object, true);
+        try (PreparedStatement prst = prepareStatement(connection, query,
+                false, getFieldsForStatement(object, true));)  {
             result = prst.executeUpdate() > 0;
         } catch (SQLException e) {
             log.error(UPDATE_ERROR, e);
@@ -119,6 +118,29 @@ public abstract class AbstractDao<T> implements Dao<T>  {
         return objects;
     }
 
+    protected Object[] getFieldsForStatement(T object, boolean isUpdate) throws DaoException {
+        Object[] allFields = getAllFieldsOfObject(object);
+        if (isUpdate) {
+            return allFields;
+        } else {
+            return Arrays.copyOf(allFields, allFields.length - 1);
+        }
+    }
 
+    public static PreparedStatement prepareStatement(Connection connection, String query, boolean returnGeneratedKeys,
+                                                     Object... values) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(query,
+                returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS);
+        setValuesInStatement(statement, values);
+
+        return statement;
+    }
+
+    public static void setValuesInStatement(PreparedStatement statement, Object... values) throws SQLException {
+        for (int i = 0; i < values.length; i++) {
+            statement.setObject(i + 1, values[i]);
+        }
+
+    }
 
 }

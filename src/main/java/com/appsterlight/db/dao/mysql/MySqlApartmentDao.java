@@ -2,18 +2,15 @@ package com.appsterlight.db.dao.mysql;
 
 import com.appsterlight.db.dao.AbstractDao;
 import com.appsterlight.db.dao.ApartmentDao;
-import com.appsterlight.db.entity.Apartment;
-import com.appsterlight.exceptions.DaoException;
+import com.appsterlight.domain.Apartment;
+import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 import static com.appsterlight.Messages.*;
-import static com.appsterlight.db.Fields.*;
-import static com.appsterlight.db.Queries.*;
+import static com.appsterlight.db.constants.Fields.*;
+import static com.appsterlight.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlApartmentDao extends AbstractDao<Apartment> implements ApartmentDao {
@@ -46,6 +43,7 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         return SQL_APARTMENT_GET_ALL;
     }
 
+
     @Override
     public Long add(Apartment object) throws DaoException {
         Long id = super.add(object);
@@ -55,22 +53,19 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
     }
 
     @Override
-    protected void setPreparedStatement(PreparedStatement statement, Apartment object, boolean isUpdate) throws DaoException {
-        int ind = 1;
-        try {
-            statement.setString(ind++, object.getApartmentNumber());
-            statement.setInt(ind++, object.getRoomsCount());
-            statement.setInt(ind++, object.getClassId());
-            statement.setInt(ind++, object.getAdultsCapacity());
-            statement.setInt(ind++, object.getChildrenCapacity());
-            statement.setInt(ind++, object.getPrice());
-            statement.setString(ind++, object.getDescription());
-            if (isUpdate) statement.setLong(ind++, object.getId());
-        } catch (SQLException e) {
-            log.error(STATEMENT_ERROR, e.getMessage());
-            throw new DaoException(e);
-        }
+    protected Object[] getAllFieldsOfObject(Apartment object) throws DaoException {
+        if (object == null) throw new DaoException("Booking object is null! Can't get fields!");
 
+        return new Object[]{
+                object.getApartmentNumber(),
+                object.getRoomsCount(),
+                object.getClassId(),
+                object.getAdultsCapacity(),
+                object.getChildrenCapacity(),
+                object.getPrice(),
+                object.getDescription(),
+                object.getId()
+        };
     }
 
     @Override

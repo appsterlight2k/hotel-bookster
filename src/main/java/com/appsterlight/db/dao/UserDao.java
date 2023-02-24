@@ -1,8 +1,7 @@
 package com.appsterlight.db.dao;
 
-import com.appsterlight.db.dao.Dao;
-import com.appsterlight.db.entity.User;
-import com.appsterlight.exceptions.DaoException;
+import com.appsterlight.domain.User;
+import com.appsterlight.exception.DaoException;
 
 import java.sql.Connection;
 import java.util.Optional;
