@@ -1,6 +1,6 @@
-package com.appsterlight.db.dao;
+package com.appsterlight.shared;
 
-import com.appsterlight.exceptions.DaoException;
+import com.appsterlight.exception.DaoException;
 
 import java.util.List;
 import java.util.Optional;
