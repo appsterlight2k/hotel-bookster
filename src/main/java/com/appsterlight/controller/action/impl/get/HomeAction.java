@@ -1,10 +1,10 @@
-package com.appsterlight.controller.command.impl.get;
+package com.appsterlight.controller.action.impl.get;
 
-import com.appsterlight.controller.command.FrontCommand;
+import com.appsterlight.controller.action.FrontAction;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class HomeCommand extends FrontCommand {
+public class HomeAction extends FrontAction {
 
     @Override
     public String process(HttpServletRequest req, HttpServletResponse resp) {
