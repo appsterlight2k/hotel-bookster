@@ -16,9 +16,11 @@ import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implements ApartmentPhotosDao {
+    private final Connection connection;
 
     public MySqlApartmentPhotosDao(Connection connection) {
         super(connection);
+        this.connection = connection;
     }
 
     @Override
@@ -55,10 +57,10 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implem
         return id;
     }
 
-    public List<String> getAllUrlOfPhotosById(Long id, Connection con) throws DaoException {
+    public List<String> getAllUrlOfPhotosById(Long id) throws DaoException {
         List<String> urls = new ArrayList<>();
 
-        try (PreparedStatement prst = con.prepareStatement(SQL_APARTMENT_PHOTOS_GET_ALL_PHOTOS_BY_ID)) {
+        try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_PHOTOS_GET_ALL_PHOTOS_BY_ID)) {
             prst.setLong(1, id);
             ResultSet rs = prst.executeQuery();
 
