@@ -8,7 +8,6 @@ public class HomeAction extends FrontAction {
 
     @Override
     public String process(HttpServletRequest req, HttpServletResponse resp) {
-        req.setAttribute("email", "my.test@mail.com");
 
         return "home.jsp";
     }
