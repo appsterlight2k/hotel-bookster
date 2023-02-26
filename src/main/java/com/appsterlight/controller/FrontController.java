@@ -1,46 +1,37 @@
 package com.appsterlight.controller;
 
-import com.appsterlight.controller.command.FrontCommand;
-import com.appsterlight.controller.command.factory.CommandFactory;
-import com.appsterlight.exception.DispatcherException;
+import com.appsterlight.controller.action.FrontAction;
+import com.appsterlight.controller.action.factory.ActionFactory;
+import com.appsterlight.exception.FrontControllerException;
 import jakarta.servlet.ServletException;
+import java.io.IOException;
+import java.util.Iterator;
+
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
+import com.appsterlight.utils.ConnectionUtils.*;
 
 @WebServlet("/controller")
 @Slf4j
 public class FrontController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String forward = null;
-        try {
-            forward = handleRequest(req, resp);
-        } catch (DispatcherException e) {
-            throw new RuntimeException(e);
-        }
-        req.getRequestDispatcher(forward).forward(req, resp);
+        req.getRequestDispatcher(handleRequest(req, resp)).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String redirect = null;
-        try {
-            redirect = handleRequest(req, resp);
-        } catch (DispatcherException e) {
-            throw new RuntimeException(e);
-        }
-        resp.sendRedirect(redirect);
+        resp.sendRedirect(handleRequest(req, resp));
     }
 
-    private String handleRequest(HttpServletRequest req, HttpServletResponse resp) throws DispatcherException {
-        FrontCommand command = CommandFactory.getCommand(req);
+    private String handleRequest(HttpServletRequest req, HttpServletResponse resp) {
+        FrontAction action = ActionFactory.getAction(req);
 
-        return command.process(req, resp);
+        return action.process(req, resp);
     }
 
 }
