@@ -8,5 +8,5 @@ import java.sql.Connection;
 import java.util.List;
 
 public interface ApartmentPhotosDao extends Dao<ApartmentPhotos> {
-    List<String> getAllUrlOfPhotosById(Long id, Connection con) throws DaoException;
+    List<String> getAllUrlOfPhotosById(Long id) throws DaoException;
 }

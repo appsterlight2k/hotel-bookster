@@ -20,9 +20,9 @@ public abstract class DaoFactory {
             try {
                 cl = Class.forName(DaoFactory.class.getName());
                 instance = (DaoFactory) cl.getDeclaredConstructor().newInstance();
-            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
-                     IllegalAccessException e) {
-                log.error(DAO_FACTORY_INSTANCE_CREATION_ERROR, e.getMessage());
+            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                     InstantiationException | IllegalAccessException e) {
+                log.error(String.format(DAO_FACTORY_INSTANCE_CREATION_ERROR + e.getMessage()));
             }
         }
 
