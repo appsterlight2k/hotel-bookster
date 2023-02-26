@@ -76,7 +76,7 @@ public class MySQLDBManager implements DBManager {
         hikariConfig.setPassword(props.getProperty(Fields.DB_PASSWORD));
         hikariConfig.setDriverClassName(props.getProperty(Fields.DB_DRIVER));
         hikariConfig.setMaximumPoolSize(Integer.parseInt(props.getProperty(Fields.DB_MAXIMUM_POOL_SIZE)));
-        hikariConfig.setLeakDetectionThreshold(Integer.parseInt(Fields.SET_LEAK_DETECTION_THRESHOLD)); //for testing purposes only
+        hikariConfig.setLeakDetectionThreshold(Integer.parseInt(props.getProperty(Fields.SET_LEAK_DETECTION_THRESHOLD))); //for testing purposes only
 
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit",
                 props.getProperty(Fields.DB_CACHE_PREP_STMTS));
