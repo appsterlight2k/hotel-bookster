@@ -69,7 +69,7 @@ CREATE TABLE booking (
 
 INSERT INTO users (id, first_name, last_name, email, phone_number, password, role, description)
 VALUES
-    (1, 'Stephan', 'Rockwell', 'st@gmail.com', '+193520435634', 'LightFlairs', 'ROLE_ADMIN', 'SuperHero'),
+    (1, 'Stephan', 'Rockwell', 'st@gmail.com', '+193520435634', 'LightFlairs', 'ROLE_MANAGER', 'SuperHero'),
     (2, 'Andrew', 'Hetman', 'ah@gmail.com', '+380969826345', 'Tales', 'ROLE_USER', ''),
     (3, 'Mary', 'Perry', 'marry.star@gmail.com', '+380988476264', 'WeatherCoat', 'ROLE_USER', ''),
     (4, 'Nikola', 'Tesla', 'tesla@gmail.com', '+380953458323', 'Pasword', 'ROLE_USER', '');
@@ -126,4 +126,3 @@ VALUES
     (8, 4, "photos/Room-Type-Hollywood-Twin-Room.jpg"),
     (9, 4, "photos/Room-Type-Double-Room.jpg"),
     (10, 1, "photos/Room-Type-double-double-Room.jpg");
-

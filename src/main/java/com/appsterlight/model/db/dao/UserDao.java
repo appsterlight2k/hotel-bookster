@@ -8,5 +8,5 @@ import java.sql.Connection;
 import java.util.Optional;
 
 public interface UserDao extends Dao<User> {
-    Optional<User> getUserByEmail(String email, Connection con) throws DaoException;
+    Optional<User> getUserByEmail(String email) throws DaoException;
 }
