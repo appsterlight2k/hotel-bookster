@@ -13,9 +13,10 @@ public class ContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         log.info("The Application was started");
         try {
-            AppContext.createAppContext(sce.getServletContext());
+            AppContext.createAppContext();
+            log.info("Application Context was created");
         } catch (Exception e) {
-            log.error("Can't create AppContext", e.getMessage());
+            log.error(String.format("Can't create Application Context! ", e.getMessage()));
         }
     }
 
