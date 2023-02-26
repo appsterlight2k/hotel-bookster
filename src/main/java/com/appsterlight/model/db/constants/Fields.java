@@ -50,7 +50,8 @@ public class Fields {
     public static final String DB_PASSWORD = "connection.password";
     public static final String DB_DRIVER = "connection.driver";
     public static final String DB_MAXIMUM_POOL_SIZE = "connection.maximumPoolSize";
-    public static final String DB_IDLE_TIMEOUT = "connection.idleTimeout";
+    //for testing purposes only:
+    public static final String SET_LEAK_DETECTION_THRESHOLD = "connection.setLeakDetectionThreshold";
     public static final String DB_CACHE_PREP_STMTS = "dataSource.cachePrepStmts";
     public static final String DB_PREP_STMT_CACHE_SIZE = "dataSource.prepStmtCacheSize";
     public static final String DB_PREP_STMT_CACHE_SQL_LIMIT = "dataSource.prepStmtCacheSqlLimit";

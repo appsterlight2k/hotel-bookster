@@ -31,7 +31,7 @@ public class MySQLDBManager implements DBManager {
             try {
                 dataSource = new HikariDataSource(config);
             } catch (Exception e) {
-                log.error("Can't get DataSource!", e.getMessage());
+                log.error(String.format("Can't get DataSource! %s", e.getMessage()));
             }
 
 //            log.info("Hikari Pool was successfully configured and created");
@@ -76,16 +76,17 @@ public class MySQLDBManager implements DBManager {
         hikariConfig.setPassword(props.getProperty(Fields.DB_PASSWORD));
         hikariConfig.setDriverClassName(props.getProperty(Fields.DB_DRIVER));
         hikariConfig.setMaximumPoolSize(Integer.parseInt(props.getProperty(Fields.DB_MAXIMUM_POOL_SIZE)));
-//        hikariConfig.setIdleTimeout(Integer.parseInt(props.getProperty(Fields.DB_IDLE_TIMEOUT)) * 1000); //in sec.
+        hikariConfig.setLeakDetectionThreshold(Integer.parseInt(Fields.SET_LEAK_DETECTION_THRESHOLD)); //for testing purposes only
+
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit",
                 props.getProperty(Fields.DB_CACHE_PREP_STMTS));
         hikariConfig.addDataSourceProperty("prepStmtCacheSize",
                 props.getProperty(Fields.DB_PREP_STMT_CACHE_SIZE));
+
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit",
                 props.getProperty(Fields.DB_PREP_STMT_CACHE_SQL_LIMIT));
-        hikariConfig.setLeakDetectionThreshold(3000); //#DELERE THIS IN FUTURE!!!
 
-//        log.info("Hikari Pool configuration was successfully created!");
+        log.info("Hikari Pool configuration was successfully created!");
 
         return hikariConfig;
     }
