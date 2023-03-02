@@ -2,6 +2,7 @@ package com.appsterlight.controller.action.impl.post;
 
 import com.appsterlight.controller.action.FrontAction;
 import com.appsterlight.controller.action.utils.SessionUtils;
+import com.appsterlight.controller.constants.PagesNames;
 import com.appsterlight.controller.context.AppContext;
 import com.appsterlight.exception.ServiceException;
 import com.appsterlight.model.domain.Role;
@@ -13,29 +14,30 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RegisterAction extends FrontAction {
+public class RegistrationAction extends FrontAction {
     private static final AppContext appContext = AppContext.getAppContext();
 
     @Override
     public String process(HttpServletRequest req, HttpServletResponse resp) {
-        System.out.println(appContext);
         HttpSession session = req.getSession();
 
         final String password = req.getParameter("password");
         final String confirmation = req.getParameter("confirm");
 
+        if (password == null || confirmation == null) return PagesNames.PAGE_REGISTRATION;
+
         if (password.equals(confirmation)) {
             try {
                 User user = createUserFromRequest(req);
-                return ResisterUserWithSignIn(user, req) ? "index.jsp" : "register.jsp";
+                return ResisterUserWithSignIn(user, req) ? PagesNames.PAGE_START : PagesNames.PAGE_REGISTRATION;
             } catch (ServiceException e) {
                 session.setAttribute("error", "Can't create user!");
-                log.error(String.format("Error adding user into database while register process! %s", e.getMessage()));
-                return "register.jsp";
+                log.error(String.format("Error adding user into database while registration process! %s", e.getMessage()));
+                return PagesNames.PAGE_REGISTRATION;
             }
         } else {
             session.setAttribute("error", "Password mismatch!");
-            return "register.jsp";
+            return PagesNames.PAGE_REGISTRATION;
         }
     }
 

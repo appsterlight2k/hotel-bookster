@@ -1,8 +1,9 @@
 package com.appsterlight.controller.action.impl.post;
 
 import com.appsterlight.controller.action.FrontAction;
+import com.appsterlight.controller.action.utils.ControllerUtils;
 import com.appsterlight.controller.action.utils.SessionUtils;
-import com.appsterlight.controller.action.utils.UserUtils;
+import com.appsterlight.controller.constants.PagesNames;
 import com.appsterlight.controller.context.AppContext;
 import com.appsterlight.exception.NoSuchUserException;
 import com.appsterlight.exception.ServiceException;
@@ -13,8 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Optional;
-
 //@RequiredArgsConstructor
 @Slf4j
 public class LoginAction extends FrontAction {
@@ -24,12 +23,18 @@ public class LoginAction extends FrontAction {
     public String process(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
 
-        if (session.getAttribute("loggedUser") != null) {
-            return "index.jsp";
+        String role = (String) session.getAttribute("loggedUser.role");
+        if (role != null) {
+            return ControllerUtils.getHomePageByRole(role);
         }
 
+        //reg process
         final String email = req.getParameter("email");
         final String password = req.getParameter("pass");
+
+        if (email == null || password == null) {
+            return PagesNames.PAGE_LOGIN;
+        }
 
         UserService userService = appContext.getUserService();
         try {
@@ -37,17 +42,21 @@ public class LoginAction extends FrontAction {
 
             if (user.getPassword().equals(password)) {
                 SessionUtils.SignInUserIntoSession(user, session);
-                return "index.jsp";
+                return ControllerUtils.getHomePageByRole(user.getRole());
             } else {
                 session.setAttribute("error", "Incorrect Password");
                 log.info(String.format("Incorrect password for user with email %s", email));
+
             }
         } catch (ServiceException e) {
             session.setAttribute("error", "No such user");
             log.error(String.format("* User with email %s doesn't exist", email));
         }
-        return "login.jsp";
+//        return ControllerUtils.getHomePageByRole(Role.ROLE_USER.toString());
+        return PagesNames.PAGE_LOGIN;
     }
+
+
 
   /*  private void SignInUserIntoSession(User user, HttpSession session) throws ServiceException {
         UserService userService = appContext.getUserService();

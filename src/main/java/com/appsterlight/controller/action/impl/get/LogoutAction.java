@@ -1,6 +1,7 @@
-package com.appsterlight.controller.action.impl.post;
+package com.appsterlight.controller.action.impl.get;
 
 import com.appsterlight.controller.action.FrontAction;
+import com.appsterlight.controller.constants.PagesNames;
 import com.appsterlight.controller.context.AppContext;
 import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.exception.NoSuchUserException;
@@ -25,10 +26,11 @@ public class LogoutAction extends FrontAction {
 
         UserDto user = (UserDto) session.getAttribute("loggedUser");
         if (user != null) {
+            session.removeAttribute("loggedUser");
             session.invalidate();
             log.info(String.format("User with email '%s' was signed out successfully!", user.getEmail()));
         }
 
-        return "index.jsp";
+        return PagesNames.PAGE_START;
     }
 }
