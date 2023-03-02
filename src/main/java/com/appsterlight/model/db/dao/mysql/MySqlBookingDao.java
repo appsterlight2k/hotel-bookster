@@ -8,6 +8,11 @@ import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.List;
+import java.util.Optional;
 
 import static com.appsterlight.model.db.constants.Messages.*;
 import static com.appsterlight.model.db.constants.Queries.*;
@@ -51,6 +56,102 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
 
         return id;
     }
+    public List<Optional<Booking>> getApprovedBookings(Long id, LocalDate checkIn, LocalDate checkOut, Connection connection) throws DaoException {
+        List<Optional<Booking>> list = new ArrayList<>();
+
+        try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_APPROVED)) {
+            prst.setLong(1, id);
+            prst.setDate(2, Date.valueOf(checkIn));
+            prst.setDate(2, Date.valueOf(checkOut));
+
+            ResultSet rs = prst.executeQuery();
+            if (rs.next()) {
+                list.add(Optional.of(mapEntity(rs)));
+            }
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+        return list;
+    }
+
+    public Optional<Booking> getBookedBookings(Long id, LocalDate checkIn, LocalDate checkOut, Connection connection) throws DaoException {
+        Booking object = null;
+
+        try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_BOOKED)) {
+            prst.setLong(1, id);
+            prst.setDate(2, Date.valueOf(checkIn));
+            prst.setDate(2, Date.valueOf(checkOut));
+
+            ResultSet rs = prst.executeQuery();
+            if (rs.next()) {
+                object = mapEntity(rs);
+            }
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+        return Optional.ofNullable(object);
+    }
+
+    public Optional<Booking> getPaidBookings(Long id, LocalDate checkIn, LocalDate checkOut, Connection connection) throws DaoException {
+        Booking object = null;
+
+        try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_PAID)) {
+            prst.setLong(1, id);
+            prst.setDate(2, Date.valueOf(checkIn));
+            prst.setDate(2, Date.valueOf(checkOut));
+
+            ResultSet rs = prst.executeQuery();
+            if (rs.next()) {
+                object = mapEntity(rs);
+            }
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+        return Optional.ofNullable(object);
+    }
+
+    public Optional<Booking> getCanceledBookings(Long id, LocalDate checkIn, LocalDate checkOut, Connection connection) throws DaoException {
+        Booking object = null;
+
+        try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_CANCELED)) {
+            prst.setLong(1, id);
+            prst.setDate(2, Date.valueOf(checkIn));
+            prst.setDate(2, Date.valueOf(checkOut));
+
+            ResultSet rs = prst.executeQuery();
+            if (rs.next()) {
+                object = mapEntity(rs);
+            }
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+        return Optional.ofNullable(object);
+    }
+
+
+    /* EVENTS */
+    @Override
+    public boolean createEventIsPaid(Long id, Connection connection) throws DaoException {
+        log.info("Query: " + SQL_BOOKING_CREATE_EVENT_IS_PAID);
+
+        Formatter formatter = new Formatter();
+        formatter.format(SQL_BOOKING_CREATE_EVENT_IS_PAID, "isPaidByUser" + id);
+
+        try (PreparedStatement stmt = connection.prepareStatement(formatter.toString()) ) {
+            stmt.setLong(1, id);
+
+            return stmt.execute();
+
+        } catch (SQLException e){
+            log.error(EVENT_OF_PAY_ERROR + ": " + e.getMessage());
+            throw new DaoException(EVENT_OF_PAY_ERROR, e);
+        }
+    }
+
 
     @Override
     protected Object[] getAllFieldsOfObject(Booking object) throws DaoException {
@@ -94,5 +195,6 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
             throw new DaoException(e);
         }
     }
+
 
 }
