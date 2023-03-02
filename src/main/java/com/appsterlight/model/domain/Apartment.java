@@ -22,10 +22,13 @@ public class Apartment implements Serializable {
     private Integer classId;
     private Integer adultsCapacity;
     private Integer childrenCapacity;
+    private String mainPhotoUrl;
     private Integer price;
+    private String className;
+    private String classDescription;
     private String description;
 
 //    ApartmentClass apartmentClass;
-//    ApartmentPhotos apartmentPhotos;
+
 
 }
