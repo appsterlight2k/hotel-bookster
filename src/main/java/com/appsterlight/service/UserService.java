@@ -15,7 +15,7 @@ public interface UserService {
     boolean updateUser(User user) throws ServiceException;
     boolean deleteUser(Long id) throws ServiceException;
     List<User> getAllUsers() throws ServiceException;
-    Optional<User> getUserByEmail(String email) throws ServiceException;
+    Optional<User> getUserByEmail(String email);
     boolean isUserExists(String email);
 
 }

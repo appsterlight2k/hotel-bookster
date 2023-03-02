@@ -1,6 +1,5 @@
 package com.appsterlight.service.impl;
 
-import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.exception.DaoException;
 import com.appsterlight.exception.ServiceException;
 import com.appsterlight.model.db.dao.UserDao;
@@ -68,23 +67,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) throws ServiceException {
+    public Optional<User> getUserByEmail(String email) {
         try {
             return userDao.getUserByEmail(email);
         } catch (DaoException e) {
             log.error(String.format("Can't get user with email %s", e.getMessage()));
-            throw new ServiceException(e);
+            return Optional.empty();
         }
     }
 
     @Override
     public boolean isUserExists(String email) {
-        try {
-            return getUserByEmail(email).isPresent();
-        } catch (ServiceException e) {
-            log.error(String.format("Can't get user with email %s", e.getMessage()));
-        }
-        return false;
+        return getUserByEmail(email).isPresent();
     }
 
 
