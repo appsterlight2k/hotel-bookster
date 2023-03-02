@@ -3,10 +3,7 @@ package com.appsterlight.controller.context;
 import com.appsterlight.model.db.connection.MySQLDBManager;
 import com.appsterlight.model.db.dao.DaoFactory;
 import com.appsterlight.model.db.dao.mysql.MySqlDaoFactory;
-import com.appsterlight.service.ApartmentService;
-import com.appsterlight.service.BookingService;
-import com.appsterlight.service.ServiceFactory;
-import com.appsterlight.service.UserService;
+import com.appsterlight.service.*;
 import jakarta.servlet.ServletContext;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +16,8 @@ public class AppContext {
     private final UserService userService;
     private final BookingService bookingService;
     private final ApartmentService apartmentService;
+    private final ApartmentPhotosService apartmentPhotosService;
+    private final ApartmentTagsService apartmentTagsService;
 
     private AppContext() {
         MySQLDBManager manager = MySQLDBManager.getInstance();
@@ -28,6 +27,8 @@ public class AppContext {
         userService = serviceFactory.getUserService();
         bookingService = serviceFactory.getBookingService();
         apartmentService = serviceFactory.getApartmentService();
+        apartmentPhotosService = serviceFactory.getApartmentPhotosService();
+        apartmentTagsService = serviceFactory.getApartmentTagsService();
     }
 
     public static AppContext getAppContext() {
