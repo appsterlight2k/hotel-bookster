@@ -1,57 +1,53 @@
 package com.appsterlight.controller.action.factory;
 
 import com.appsterlight.controller.action.FrontAction;
-import com.appsterlight.controller.action.impl.get.ErrorAction;
-import com.appsterlight.controller.action.impl.get.HomeAction;
+import com.appsterlight.controller.action.impl.get.*;
 import com.appsterlight.controller.action.impl.post.LoginAction;
-import com.appsterlight.controller.action.impl.post.LogoutAction;
-import com.appsterlight.controller.action.impl.post.RegisterAction;
-import com.appsterlight.controller.context.AppContext;
+import com.appsterlight.controller.action.impl.post.RegistrationAction;
+import static com.appsterlight.controller.action.factory.constants.ActionName.*;
+
+import com.appsterlight.controller.action.impl.post.RequestsAction;
+import com.appsterlight.controller.action.impl.post.ShowApartmentAction;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ActionFactory {
-    private static final AppContext appContext = AppContext.getAppContext();
+    @Getter
+    private static final ActionFactory actionFactory = new ActionFactory();
+    private static final Map<String, FrontAction> ACTIONS = new HashMap<>();
 
-
+    static {
+        ACTIONS.put(ACTION_BOOKING, new BookingAction());
+        ACTIONS.put(ACTION_HOME, new HomeAction());
+        ACTIONS.put(ACTION_LOGIN, new LoginAction());
+        ACTIONS.put(ACTION_LOGOUT, new LogoutAction());
+        ACTIONS.put(ACTION_REGISTRATION, new RegistrationAction());
+        ACTIONS.put(ACTION_MANAGER_HOME, new ManagerHomeAction());
+        ACTIONS.put(ACTION_MANAGER_REQUESTS, new RequestsAction());
+        ACTIONS.put(ACTION_APARTMENTS, new ApartmentsAction());
+        ACTIONS.put(ACTION_GET_APARTMENT, new ShowApartmentAction());
+        ACTIONS.put(ACTION_CABINET, new CabinetAction());
+        ACTIONS.put(ACTION_ERROR, new ErrorAction());
+    }
     public static FrontAction getAction(HttpServletRequest req) {
-        FrontAction action;
         String reqAction = req.getParameter("action");
 
-        try {
-            action = (reqAction != null) ?
-                    ActionEnum.valueOf(reqAction.toUpperCase()).getAction() :
-                    ActionEnum.ERROR.getAction();
-        } catch (IllegalArgumentException e) {
-            action = ActionEnum.ERROR.getAction();
-            log.error(String.format("Unexpected action from request: %s", e.getMessage()));
-        }
-
-        return action;
+        return getActionByName(reqAction);
     }
 
-      enum ActionEnum {
-        HOME(new HomeAction()),
-        LOGIN(new LoginAction()),
-        LOGOUT(new LogoutAction()),
-        REGISTER(new RegisterAction()),
-        DAFAULT(new HomeAction()),
-        ERROR(new ErrorAction());
-
-        private final FrontAction action;
-
-        ActionEnum(FrontAction action) {
-            this.action = action;
+    public static FrontAction getActionByName(String key) {
+        FrontAction action = null;
+        if (key != null) {
+            action = ACTIONS.get(key);
         }
-
-        public FrontAction getAction() {
-            return action;
-        }
-
+        return action != null ? action : ACTIONS.get(ACTION_ERROR);
     }
-
 }
