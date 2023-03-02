@@ -1,6 +1,6 @@
 package com.appsterlight.model.db.constants;
 
-public class Fields {
+public final class Fields {
     /* GENERAL FIELDS */
     public static final String ID = "id";
     public static final String DESCRIPTION = "description";
@@ -35,8 +35,23 @@ public class Fields {
     public static final String APARTMENT_CLASS_ID = "class_id";
     public static final String APARTMENT_ADULTS_CAPACITY = "adults_capacity";
     public static final String APARTMENT_CHILDREN_CAPACITY = "children_capacity";
+    public static final String APARTMENT_MAIN_PHOTO_URL = "main_photo_url";
+
     public static final String APARTMENT_PRICE = "price";
+    public static final String APARTMENT_IS_BUSY = "is_busy";
+    public static final String APARTMENT_CLASS_NAME = "class_name";
+    public static final String APARTMENT_CLASS_DESCRIPTION = "class_description";
+
+
     //DESCRIPTION
+
+    /* SPECIFIC FIELDS FOR TAGS TABLE */
+    public static final String TAGS_NAME = "name";
+
+    /* SPECIFIC FIELDS FOR APARTMENT_TAGS TABLE */
+    public static final String APARTMENT_TAGS_TAG_ID = "tag_id";
+    public static final String APARTMENT_TAGS_APARTMENT_ID = "apartment_id";
+
 
     /* SPECIFIC FIELDS FOR APARTMENT_PHOTOS TABLE */
     public static final String APARTMENT_PHOTOS_APARTMENT_ID = "apartment_id";
