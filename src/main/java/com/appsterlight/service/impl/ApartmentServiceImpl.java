@@ -62,7 +62,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         try {
             return apartmentDao.getAll();
         } catch (DaoException e) {
-            log.error(String.format("Can't get all apartment from table: %s", e.getMessage()));
+            log.error(String.format("Can't get all apartment from table. %s", e.getMessage()));
             throw new ServiceException(e);
         }
     }

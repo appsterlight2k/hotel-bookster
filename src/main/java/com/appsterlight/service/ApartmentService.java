@@ -12,4 +12,10 @@ public interface ApartmentService {
     boolean updateApartment(Apartment apartment) throws ServiceException;
     boolean deleteApartment(Long id) throws ServiceException;
     List<Apartment> getAllApartments() throws ServiceException;
+
+//    List<Apartment> getAllFreeApartments() throws ServiceException;
+
+
+
+
 }

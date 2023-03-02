@@ -23,7 +23,7 @@ public abstract class AbstractDao<T> implements Dao<T> {
     protected abstract Object[] getAllFieldsOfObject(T object) throws DaoException;
     protected abstract T mapEntity(ResultSet rs) throws DaoException;
 
-    private Connection connection;
+    private final Connection connection;
 
     public AbstractDao(Connection connection) {
         this.connection = connection;
@@ -31,11 +31,11 @@ public abstract class AbstractDao<T> implements Dao<T> {
 
     @Override
     public Long add(T object) throws DaoException {
-        Long result = -1L;
+        long result = -1;
 
         String query = getCreateQuery();
         try (PreparedStatement prst = prepareStatement(connection, query,true,
-                getFieldsForStatement(object, false));) {
+                getFieldsForStatement(object, false))) {
             if (prst.executeUpdate() > 0) {
                 ResultSet rs = prst.getGeneratedKeys();
                 if (rs.next()) {
@@ -74,7 +74,7 @@ public abstract class AbstractDao<T> implements Dao<T> {
 
         String query = getUpdateQuery();
         try (PreparedStatement prst = prepareStatement(connection, query,
-                false, getFieldsForStatement(object, true));)  {
+                false, getFieldsForStatement(object, true)))  {
             result = prst.executeUpdate() > 0;
         } catch (SQLException e) {
             log.error(UPDATE_ERROR, e);
@@ -118,6 +118,7 @@ public abstract class AbstractDao<T> implements Dao<T> {
 
         return objects;
     }
+
 
     protected Object[] getFieldsForStatement(T object, boolean isUpdate) throws DaoException {
         Object[] allFields = getAllFieldsOfObject(object);
