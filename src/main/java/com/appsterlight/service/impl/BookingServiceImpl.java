@@ -65,4 +65,45 @@ public class BookingServiceImpl implements BookingService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public void setIsApprovedState(boolean isApproved, Booking booking) throws ServiceException {
+        try {
+            booking.setIsApproved(isApproved);
+            updateBooking(booking);
+        } catch (ServiceException e) {
+            log.error("Exception while updating isApproved state of booking; " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+    @Override
+    public void setIsBooked(boolean isBooked, Booking booking) throws ServiceException {
+        try {
+            booking.setIsBooked(isBooked);
+            updateBooking(booking);
+        } catch (ServiceException e) {
+            log.error("Exception while updating isBooked state of booking; " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+    @Override
+    public void setIsPaid(boolean isPaid, Booking booking) throws ServiceException {
+        try {
+            booking.setIsPaid(isPaid);
+            updateBooking(booking);
+        } catch (ServiceException e) {
+            log.error("Exception while updating isPaid state of booking; " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+    @Override
+    public void setIsCanceled(boolean isCanceled, Booking booking) throws ServiceException {
+        try {
+            booking.setIsCanceled(isCanceled);
+            updateBooking(booking);
+        } catch (ServiceException e) {
+            log.error("Exception while updating isCanceled state of booking; " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
 }
