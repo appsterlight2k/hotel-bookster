@@ -12,13 +12,13 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class ApartmentPhotos implements Serializable {
+public class ApartmentPhoto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;
     private String path;
     private Long apartmentId;
-//    private Apartment apartment;
+
 
 }
