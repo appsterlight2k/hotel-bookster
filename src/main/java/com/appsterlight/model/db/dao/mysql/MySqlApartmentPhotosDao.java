@@ -3,7 +3,7 @@ package com.appsterlight.model.db.dao.mysql;
 import com.appsterlight.model.db.constants.Fields;
 import com.appsterlight.model.db.dao.AbstractDao;
 import com.appsterlight.model.db.dao.ApartmentPhotosDao;
-import com.appsterlight.model.domain.ApartmentPhotos;
+import com.appsterlight.model.domain.ApartmentPhoto;
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,7 @@ import static com.appsterlight.model.db.constants.Messages.*;
 import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
-public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implements ApartmentPhotosDao {
+public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhoto> implements ApartmentPhotosDao {
     private final Connection connection;
 
     public MySqlApartmentPhotosDao(Connection connection) {
@@ -50,7 +50,7 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implem
 
 
     @Override
-    public Long add(ApartmentPhotos object) throws DaoException {
+    public Long add(ApartmentPhoto object) throws DaoException {
         Long id = super.add(object);
         object.setId(id);
 
@@ -79,16 +79,16 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhotos> implem
 
 
     @Override
-    protected Object[] getAllFieldsOfObject(ApartmentPhotos object) throws DaoException {
+    protected Object[] getAllFieldsOfObject(ApartmentPhoto object) throws DaoException {
         if (object == null) throw new DaoException("Booking object is null! Can't get fields!");
 
         return new Object[]{ object.getApartmentId(), object.getPath(), object.getId() };
     }
 
     @Override
-    protected ApartmentPhotos mapEntity(ResultSet rs) throws DaoException {
+    protected ApartmentPhoto mapEntity(ResultSet rs) throws DaoException {
         try {
-            return  ApartmentPhotos.builder()
+            return  ApartmentPhoto.builder()
                     .id(rs.getLong(Fields.ID))
                     .apartmentId(rs.getLong(Fields.APARTMENT_PHOTOS_APARTMENT_ID))
                     .path(rs.getString(Fields.APARTMENT_PHOTOS_PATH))
