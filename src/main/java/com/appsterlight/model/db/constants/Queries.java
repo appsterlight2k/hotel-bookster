@@ -35,7 +35,8 @@ public final class Queries {
 
 
     /* QUERIES FOR APARTMENT TABLE */
-    public static final String SQL_APARTMENT_GET = "SELECT a.*, c.name as class_name, c.description as class_description " +
+    public static final String SQL_APARTMENT_GET =
+            "SELECT a.*, c.name as class_name, c.description as class_description " +
             "FROM apartments a INNER JOIN apartment_class c ON a.class_id = c.id WHERE a.id = ?";
 
     public static final String SQL_APARTMENT_GET_BY_APARTMENT_NUMBER =
@@ -55,11 +56,20 @@ public final class Queries {
                     "children_capacity = ?, main_photo_url = ?, price = ?, description = ? " +
                     "WHERE ID = ?";
 
-    //2nd parameter is check_out of user request, and th 3rd is check_in
-    public static final String SQL_APARTMENT_GET_ALL_FREE_WITH_CAPACITY =
-            "SELECT * FROM apartments WHERE adults_capacity <= ? AND id NOT IN " +
-                    "(SELECT apartment_id FROM booking WHERE check_in <= ? AND " +
-                    "check_out >= ?)";
+    //2nd parameter is check_in of user request, and th 3rd is check_out!
+    public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY =
+            "SELECT a.*, c.name as class_name, c.description as class_description " +
+            "FROM apartments a " +
+            "LEFT JOIN booking b ON a.id = b.apartment_id AND b.check_out >= ? AND b.check_in <= ? " +
+            "INNER JOIN apartment_class c ON a.class_id = c.id " +
+            "WHERE a.adults_capacity >= ? AND b.apartment_id IS NULL";
+
+    /*"SELECT a.*, " +
+            "(SELECT c.name FROM apartment_class c WHERE c.id = a.class_id) as class_name, " +
+            "(SELECT c.description FROM apartment_class c WHERE c.id = a.class_id) as class_description " +
+            "FROM apartments a " +
+            "WHERE a.adults_capacity >= ? AND a.id NOT IN " +
+            "(SELECT b.apartment_id FROM booking b WHERE b.check_out >= ? AND b.check_in <= ?)";*/
 
     //use QueryBuilder to add additional conditions
     public static final String SQL_APARTMENT_GET_ALL_APARTMENTS_BY_TAG_ID =
