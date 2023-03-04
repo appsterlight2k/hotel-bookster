@@ -72,7 +72,7 @@ DROP TABLE IF EXISTS booking;
 CREATE TABLE booking (
                          id INT UNIQUE NOT NULL AUTO_INCREMENT,
                          user_id INT NOT NULL,
-                         apartment_id INT, #if user didn't choose any apartments
+                         apartment_id INT, #null if user didn't choose any apartments
     check_in DATE NOT NULL,
     check_out DATE NOT NULL,
     adults_number INT NOT NULL,
@@ -166,8 +166,12 @@ VALUES
 (20, 3, 7, '2023-03-21', '2023-03-21', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
 
 (21, 3, 8, '2023-03-13', '2023-03-15', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(22, 3, 8, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', false, false, false, false);
-
+(22, 3, 8, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
+(23, 1, null, '2023-03-25', '2023-03-27', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
+(24, 1, 9, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
+(25, 1, 6, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
+(26, 1, 9, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
+(27, 1, 10, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', false, false, false, false);
 
 INSERT INTO tags (id, name, description)
 VALUES
