@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
-//@RequiredArgsConstructor
 @Slf4j
 public class LoginAction extends FrontAction {
     private static final AppContext appContext = AppContext.getAppContext();
@@ -50,13 +49,11 @@ public class LoginAction extends FrontAction {
             }
         } catch (ServiceException e) {
             session.setAttribute("error", "No such user");
-            log.error(String.format("* User with email %s doesn't exist", email));
+            log.error(String.format("* User with email %s doesn't exist", email) + "! " + e.getMessage());
         }
 //        return ControllerUtils.getHomePageByRole(Role.ROLE_USER.toString());
         return PagesNames.PAGE_LOGIN;
     }
-
-
 
   /*  private void SignInUserIntoSession(User user, HttpSession session) throws ServiceException {
         UserService userService = appContext.getUserService();

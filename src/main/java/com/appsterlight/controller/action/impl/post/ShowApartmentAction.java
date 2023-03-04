@@ -36,15 +36,15 @@ public class ShowApartmentAction extends FrontAction {
             try {
                 ApartmentDto apartment = DtoUtils.mapApartmentToDto(
                         apartmentService.getApartmentById(id));
-                session.setAttribute("apartment", apartment);
+                req.setAttribute("apartment", apartment);
 
                 ApartmentPhotosService apartmentPhotosService = appContext.getApartmentPhotosService();
                 List<String> photos = apartmentPhotosService.getAllUrlOfPhotosById(id);
-                session.setAttribute("photos", photos);
+                req.setAttribute("photos", photos);
 
                 ApartmentTagsService apartmentTagsService = appContext.getApartmentTagsService();
                 List<Tag> tags = apartmentTagsService.getAllTagsByApartmentId(id);
-                session.setAttribute("tags", tags);
+                req.setAttribute("tags", tags);
 
                 return PagesNames.PAGE_APARTMENT_SHOW;
             } catch (ServiceException e) {
