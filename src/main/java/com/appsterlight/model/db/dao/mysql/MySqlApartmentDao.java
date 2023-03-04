@@ -1,6 +1,7 @@
 package com.appsterlight.model.db.dao.mysql;
 
 
+import com.appsterlight.model.db.constants.Queries;
 import com.appsterlight.model.db.dao.AbstractDao;
 import com.appsterlight.model.db.dao.ApartmentDao;
 import com.appsterlight.model.domain.Apartment;
@@ -8,6 +9,7 @@ import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +50,7 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
     public String getSelectAllQuery() {
         return SQL_APARTMENT_GET_ALL;
     }
+    public String getSelectAllFreeByCapacityQuery() { return SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY; }
 
 
     @Override
@@ -83,27 +86,53 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         return Optional.ofNullable(object);
     }
 
-    @Override
-    public List<Apartment> getAll() throws DaoException {
-        List<Apartment> objects = new ArrayList<>();
-
-        String query = getSelectAllQuery();
+    private List<Apartment> getAllByQuery(String query, Object... parameters) throws DaoException {
+        List<Apartment> apartments = new ArrayList<>();
+        Apartment apartment;
+        ResultSet rs;
         try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(query);
-            Apartment apartment;
-            while (rs.next()) {
+            if (parameters.length > 0) {
+                PreparedStatement prst = connection.prepareStatement(query);
+                for (int i = 0; i < parameters.length; i++) {
+                    Object param = parameters[i];
+                    setParamsToStatementByType(i + 1, param, prst);
+                }
+                rs = prst.executeQuery();
+            } else {
+                Statement st = connection.createStatement();
+                rs = st.executeQuery(query);
+            }
+
+            while (rs. next()) {
                 apartment = mapEntity(rs);
                 apartment.setClassName(rs.getString(APARTMENT_CLASS_NAME));
                 apartment.setClassDescription(rs.getString(APARTMENT_CLASS_DESCRIPTION));
-                objects.add(apartment);
+                apartments.add(apartment);
             }
         } catch (SQLException e) {
             log.error(READ_ERROR, e);
             throw new DaoException(e);
         }
+        return apartments;
+    }
 
-        return objects;
+    public List<Apartment> getAllFreeByGuestsNumber(Integer guests,
+                                                    LocalDate checkIn, LocalDate checkOut) throws DaoException {
+        return getAllByQuery(getSelectAllFreeByCapacityQuery(), checkIn, checkOut, guests);
+    }
+
+    @Override
+    public List<Apartment> getAll() throws DaoException {
+        List<Apartment> apartments;
+
+        try {
+            apartments = getAllByQuery(getSelectAllQuery());
+        } catch (Exception e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+
+        return apartments;
     }
 
     @Override
@@ -121,6 +150,26 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
             throw new DaoException(e);
         }
         return Optional.ofNullable(object);
+    }
+
+
+    private void setParamsToStatementByType(Integer i, Object param, PreparedStatement prst) throws DaoException {
+        try {
+            if (param instanceof Integer) {
+                prst.setInt(i, (Integer) param);
+            } else if (param instanceof Long) {
+                prst.setLong(i, (Long) param);
+            } else if (param instanceof String) {
+                prst.setString(i, (String) param);
+            } else if (param instanceof Boolean) {
+                prst.setBoolean(i, (Boolean) param);
+            } else if (param instanceof LocalDate) {
+                prst.setDate(i, Date.valueOf((LocalDate) param));
+            }
+        } catch (Exception e) {
+            log.error("Cant set parameter to PreparedStatement by type! " + e.getMessage());
+            throw new DaoException(e.getMessage());
+        }
     }
 
     @Override
