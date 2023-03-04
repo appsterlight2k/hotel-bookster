@@ -8,16 +8,15 @@ import com.appsterlight.controller.context.AppContext;
 import com.appsterlight.controller.dto.ApartmentDto;
 import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.exception.ServiceException;
-import com.appsterlight.model.domain.Apartment;
 import com.appsterlight.service.ApartmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 public class ApartmentsAction extends FrontAction {
@@ -29,17 +28,44 @@ public class ApartmentsAction extends FrontAction {
 
         final HttpSession session = req.getSession();
         UserDto user = (UserDto) session.getAttribute("loggedUser");
+        if (user != null) {
+            try {
+                List<ApartmentDto> allApartments = new ArrayList<>();
 
-        try {
-            List<ApartmentDto> allApartments = DtoUtils.mapApartmentListToDtoList(
-                    apartmentService.getAllApartments());
-            session.setAttribute("apartments", allApartments);
-        } catch (ServiceException e) {
-            log.error("Cant's get all apartments!");
+                String range = req.getParameter("range");
+                Integer guests = (range != null) ? Integer.parseInt(range) : 1;
+
+                LocalDate checkIn = LocalDate.now(); //.plusDays(1);
+                LocalDate checkOut = checkIn;
+
+                String startDate = req.getParameter("startDate");
+                String endDate = req.getParameter("endDate");
+
+                if (startDate != null && endDate != null) {
+                    checkIn = LocalDate.parse(startDate);
+                    checkOut = LocalDate.parse(endDate);
+
+                    allApartments = DtoUtils.mapApartmentListToDtoList(
+                            apartmentService.getAllFreeApartments(guests, checkIn, checkOut));
+                    req.setAttribute("apartmentsCount", "Apartments found: " + allApartments.size());
+                }
+
+                req.setAttribute("startDate", checkIn.toString());
+                req.setAttribute("endDate", checkOut.toString());
+                req.setAttribute("guests", guests);
+                req.setAttribute("apartments", allApartments);
+
+                // req.setAttribute("apartments", allApartments);   change in all places
+            } catch (ServiceException e) {
+                log.error("Cant's get all apartments! " + e.getMessage());
+                throw new RuntimeException("Cant's get all apartments! " + e.getMessage());
+            } catch (Exception e) {
+                log.error("Can't parse date of checkin or checkout! " + e.getMessage());
+                throw new RuntimeException("Cant's get all apartments! " + e.getMessage());
+            }
+            return ControllerUtils.getApartmentsPageByRole(user.getRole());
         }
-
-        return  user != null ?
-                ControllerUtils.getApartmentsPageByRole(user.getRole()) :
-                PagesNames.PAGE_APARTMENTS_GUEST;
+        return PagesNames.PAGE_APARTMENTS_GUEST;
     }
+
 }
