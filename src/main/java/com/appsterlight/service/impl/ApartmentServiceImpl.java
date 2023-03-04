@@ -8,6 +8,7 @@ import com.appsterlight.service.ApartmentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,16 @@ public class ApartmentServiceImpl implements ApartmentService {
             return apartmentDao.delete(id);
         } catch (DaoException e) {
             log.error(String.format("Can't delete apartment with id = %s", id), e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut)
+            throws ServiceException {
+        try {
+            return apartmentDao.getAllFreeByGuestsNumber(guests, checkIn, checkOut);
+        } catch (DaoException e) {
+            log.error("Can't get all free Apartments by guests number, checkin and checkout date. " + e.getMessage());
             throw new ServiceException(e);
         }
     }
