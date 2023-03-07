@@ -20,6 +20,7 @@ public class DtoUtils {
         try {
             User obj = user.orElseThrow(ServiceException::new);
             return UserDto.builder()
+                    .id(obj.getId())
                     .firstName(obj.getFirstName())
                     .lastName(obj.getLastName())
                     .email(obj.getEmail())
@@ -46,8 +47,6 @@ public class DtoUtils {
                     .price(obj.getPrice())
                     .className(obj.getClassName())
                     .classDescription(obj.getClassDescription())
-                    .className("")
-                    .classDescription("")
                     .description(obj.getDescription())
                     .build();
         } catch (ServiceException e) {

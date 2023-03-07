@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -28,14 +29,16 @@ public class ShowApartmentAction extends FrontAction {
     public String process(HttpServletRequest req, HttpServletResponse resp) {
         ApartmentService apartmentService = appContext.getApartmentService();
         final HttpSession session = req.getSession();
+
         UserDto user = (UserDto) session.getAttribute("loggedUser");
         String apartmentId = req.getParameter("apartmentId");
-        Long id = Long.parseLong(apartmentId);
 
         if (user != null) {
             try {
+                Long id = Long.parseLong(apartmentId);
                 ApartmentDto apartment = DtoUtils.mapApartmentToDto(
                         apartmentService.getApartmentById(id));
+
                 req.setAttribute("apartment", apartment);
 
                 ApartmentPhotosService apartmentPhotosService = appContext.getApartmentPhotosService();
@@ -46,9 +49,20 @@ public class ShowApartmentAction extends FrontAction {
                 List<Tag> tags = apartmentTagsService.getAllTagsByApartmentId(id);
                 req.setAttribute("tags", tags);
 
+                Integer guests = (Integer) session.getAttribute("guests");
+                req.setAttribute("guests", guests);
+
+                String startDateStr = req.getParameter("startDateMain");
+                LocalDate startDate = LocalDate.parse(startDateStr);
+                req.setAttribute("startDate", startDate);
+
+                String endDateStr = req.getParameter("endDateMain");
+                LocalDate endDate = LocalDate.parse(endDateStr);
+                req.setAttribute("endDate", endDate);
+
                 return PagesNames.PAGE_APARTMENT_SHOW;
             } catch (ServiceException e) {
-                log.error("Cant's get apartment with id = " + id);
+                log.error("Can't get apartment! " + e.getMessage());
             }
         }
 

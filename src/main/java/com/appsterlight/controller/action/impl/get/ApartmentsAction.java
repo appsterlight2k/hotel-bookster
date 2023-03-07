@@ -21,6 +21,9 @@ import java.util.List;
 @Slf4j
 public class ApartmentsAction extends FrontAction {
     private static final AppContext appContext = AppContext.getAppContext();
+    private String chosenStartDate;
+    private String chosenEndDate;
+
 
     @Override
     public String process(HttpServletRequest req, HttpServletResponse resp) {
@@ -33,27 +36,56 @@ public class ApartmentsAction extends FrontAction {
                 List<ApartmentDto> allApartments = new ArrayList<>();
 
                 String range = req.getParameter("range");
-                Integer guests = (range != null) ? Integer.parseInt(range) : 1;
+                Integer guests = 1;
 
-                LocalDate checkIn = LocalDate.now(); //.plusDays(1);
-                LocalDate checkOut = checkIn;
-
-                String startDate = req.getParameter("startDate");
-                String endDate = req.getParameter("endDate");
-
-                if (startDate != null && endDate != null) {
-                    checkIn = LocalDate.parse(startDate);
-                    checkOut = LocalDate.parse(endDate);
-
-                    allApartments = DtoUtils.mapApartmentListToDtoList(
-                            apartmentService.getAllFreeApartments(guests, checkIn, checkOut));
-                    req.setAttribute("apartmentsCount", "Apartments found: " + allApartments.size());
+                if (range != null) {
+                    guests = Integer.parseInt(range);
+                } else {
+                    String guestsFromSession = (String) session.getAttribute("guests");
+                    if (guestsFromSession != null) {
+                        guests = Integer.parseInt(guestsFromSession);
+                    }
                 }
 
-                req.setAttribute("startDate", checkIn.toString());
-                req.setAttribute("endDate", checkOut.toString());
+                LocalDate currentDay = LocalDate.now();
+
+                String startDateReq = req.getParameter("startDate");
+                String endDateReq = req.getParameter("endDate");
+
+                if (startDateReq != null && endDateReq != null && !startDateReq.equals("")  && !endDateReq.equals("")) {
+                    chosenStartDate = startDateReq;
+                    chosenEndDate = endDateReq;
+                } else {
+                    if (chosenStartDate == null || chosenEndDate == null) {
+                        chosenStartDate = currentDay.toString();
+                        chosenEndDate = chosenStartDate;
+                    }
+                }
+
+                /*req.setAttribute("startDate", chosenStartDate);
+                req.setAttribute("endDate", chosenEndDate);*/
+                session.setAttribute("startDate", chosenStartDate);
+                session.setAttribute("endDate", chosenEndDate);
+
+//                ((checkInStr != null && checkOutStr != null) || (checkInStr != "" && checkOutStr != ""))  ||
+/*
+                if (startDate != null && endDate != null) {
+                    currentDay = LocalDate.parse(startDate);
+                    currentDay = LocalDate.parse(endDate);*/
+
+                    allApartments = DtoUtils.mapApartmentListToDtoList(
+                            apartmentService.getAllFreeApartments(guests, LocalDate.parse(chosenStartDate),
+                                    LocalDate.parse(chosenEndDate)));
+//                    req.setAttribute("apartmentsCount", "Apartments found: " + allApartments.size());
+//                }
+
+
+                /*req.setAttribute("guests", guests);
+                req.setAttribute("apartments", allApartments);*/
+//                session.setAttribute("guests", guests);
+                session.setAttribute("guests", guests);
                 req.setAttribute("guests", guests);
-                req.setAttribute("apartments", allApartments);
+                session.setAttribute("apartments", allApartments);
 
                 // req.setAttribute("apartments", allApartments);   change in all places
             } catch (ServiceException e) {

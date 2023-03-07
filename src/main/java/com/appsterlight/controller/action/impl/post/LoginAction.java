@@ -54,11 +54,4 @@ public class LoginAction extends FrontAction {
 //        return ControllerUtils.getHomePageByRole(Role.ROLE_USER.toString());
         return PagesNames.PAGE_LOGIN;
     }
-
-  /*  private void SignInUserIntoSession(User user, HttpSession session) throws ServiceException {
-        UserService userService = appContext.getUserService();
-        session.setAttribute("loggedUser", UserUtils.mapUserToDto(Optional.of(user)));
-        session.setAttribute("error", "");
-        log.info(String.format("* User with email %s logged in successfully!", user.getEmail()));
-    }*/
 }
