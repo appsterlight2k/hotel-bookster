@@ -59,24 +59,6 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
 
         return id;
     }
-    public List<Optional<Booking>> getApprovedBookings(Long id, LocalDate checkIn, LocalDate checkOut) throws DaoException {
-        List<Optional<Booking>> list = new ArrayList<>();
-
-        try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_APPROVED)) {
-            prst.setLong(1, id);
-            prst.setDate(2, Date.valueOf(checkIn));
-            prst.setDate(3, Date.valueOf(checkOut));
-
-            ResultSet rs = prst.executeQuery();
-            if (rs.next()) {
-                list.add(Optional.of(mapEntity(rs)));
-            }
-        } catch (SQLException e) {
-            log.error(READ_ERROR, e);
-            throw new DaoException(e);
-        }
-        return list;
-    }
 
     @Override
     public boolean isBookingExists(Long userId, Long apartmentId, LocalDate checkIn, LocalDate checkOut,
@@ -101,6 +83,24 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         return false;
     }
 
+    public List<Optional<Booking>> getApprovedBookings(Long id, LocalDate checkIn, LocalDate checkOut) throws DaoException {
+        List<Optional<Booking>> list = new ArrayList<>();
+
+        try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_APPROVED)) {
+            prst.setLong(1, id);
+            prst.setDate(2, Date.valueOf(checkIn));
+            prst.setDate(3, Date.valueOf(checkOut));
+
+            ResultSet rs = prst.executeQuery();
+            if (rs.next()) {
+                list.add(Optional.of(mapEntity(rs)));
+            }
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+        return list;
+    }
 
     public Optional<Booking> getBookedBookings(Long id, LocalDate checkIn, LocalDate checkOut) throws DaoException {
         Booking object = null;
@@ -192,6 +192,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
                 object.getAdultsNumber(),
                 object.getChildrenNumber(),
                 object.getReservationTime(),
+                object.getComments(),
                 object.getIsApproved(),
                 object.getIsBooked(),
                 object.getIsPaid(),
@@ -212,6 +213,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
                     .adultsNumber(rs.getInt(Fields.BOOKING_ADULTS_NUMBER))
                     .childrenNumber(rs.getInt(Fields.BOOKING_CHILDREN_NUMBER))
                     .reservationTime(rs.getTimestamp(Fields.BOOKING_RESERVATION_TIME))
+                    .comments(rs.getString(Fields.BOOKING_COMMENTS))
                     .isApproved(rs.getBoolean(Fields.BOOKING_IS_APPROVED))
                     .isBooked(rs.getBoolean(Fields.BOOKING_IS_BOOKED))
                     .isPaid(rs.getBoolean(Fields.BOOKING_IS_PAID))

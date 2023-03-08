@@ -32,7 +32,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             return bookingDao.get(id);
         } catch (DaoException e) {
-            log.error(String.format("Can't get booking with id = %s", id), e.getMessage());
+            log.error("Can't get booking with id = " + id + "! " + e.getMessage());
             throw new ServiceException(e);
         }
     }
@@ -42,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             return bookingDao.update(booking);
         } catch (DaoException e) {
-            log.error(String.format("Can't update user with id = %s", booking.getId()), e.getMessage());
+            log.error("Can't update user with id = " + booking.getId() + "! " + e.getMessage());
             throw new ServiceException(e);
         }
     }
@@ -52,7 +52,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             return bookingDao.delete(id);
         } catch (DaoException e) {
-            log.error(String.format("Can't delete booking with id = %s", id), e.getMessage());
+            log.error("Can't delete booking with id = " + id + "! " + e.getMessage());
             throw new ServiceException(e);
         }
     }
@@ -62,7 +62,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             return bookingDao.getAll();
         } catch (DaoException e) {
-            log.error(String.format("Can't get all bookings from table: %s", e.getMessage()));
+            log.error("Can't get all bookings from table: " + e.getMessage());
             throw new ServiceException(e);
         }
     }

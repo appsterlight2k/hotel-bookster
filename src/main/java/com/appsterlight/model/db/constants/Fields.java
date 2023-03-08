@@ -23,6 +23,7 @@ public final class Fields {
     public static final String BOOKING_ADULTS_NUMBER = "adults_number";
     public static final String BOOKING_CHILDREN_NUMBER = "children_number";
     public static final String BOOKING_RESERVATION_TIME = "reservation_time";
+    public static final String BOOKING_COMMENTS = "comments";
     public static final String BOOKING_IS_APPROVED = "is_approved";
     public static final String BOOKING_IS_BOOKED = "is_booked";
     public static final String BOOKING_IS_PAID = "is_paid";

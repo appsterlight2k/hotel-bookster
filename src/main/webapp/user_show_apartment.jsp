@@ -26,140 +26,12 @@
             width: 400px;
         }
 
-      /*  .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
 
-        .modal-content {
-            margin: auto;
-            display: block;
-            max-width: 80%;
-            max-height: 80%;
-        }
-
-        .modal-content img {
-            max-width: 100%;
-            max-height: 80vh;
-            margin: auto;
-            display: block;
-        }
-
-        !* Стилі для фону поза зображенням *!
-        .modal-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }*/
-        /* Модальне вікно */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        /* Вміст модального вікна */
-        .modal-content {
-            /*margin: auto;*/
-            display: flex;
-            /*flex-direction: column;*/
-            justify-content: center;
-            align-items: center;
-            /*align-self: center;*/
-            align-self: stretch;
-            /*max-width: 800px;*/
-            position: relative;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 4px;
-        }
-
-        /*.modal-content {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 4px;
-            margin: auto;
-            box-sizing: border-box;
-
-        }*/
-
-        /* Зображення в модальному вікні */
-        .modal-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            max-height: 80vh;
-        }
-
-        /*.modal-content {
-            margin-top: 150px;
-            max-width: 800px;
-            background-color: #fff;
-            opacity: 0.9;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }*/
-
-
-        .modal-image img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        /* Хрестик закриття модального вікна */
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 48px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        #myModal {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* кольоровий код фону з прозорістю 50% */
-            z-index: 9999;
-            display: none;
-            overflow: auto;
-        }
-        /*img {
-            max-width: 100%;
-        }*/
     </style>
 </head>
 <body>
     <jsp:include page="/common/navbar.jsp" />
 
-<%--    <div class="container mt-xl-4 mt-lg-3 mt-md-2 mt-sm-1">--%>
     <div class="container mt-5">
         <h5>Apartment details</h5> <br>
         <c:if test="${not empty apartment}">
@@ -169,7 +41,7 @@
                 </div>
 
                 <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
+                    <h5 class="card-title">Apartment</h5>
 
                     <div class="container d-flex">
                         <div class="container">
@@ -202,24 +74,15 @@
                                         </button>
                                     </div>
                                 </div>
-
-                                <div id="myModal" class="modal">
-                                    <span class="close">&times;</span>
-                                    <div class="modal-content">
-                                        <div class="modal-image">
-                                            <img id="modal-img" alt="">
-                                        </div>
-                                    </div>
-                                </div>
                             </c:if>
-                        </div> <%--container--%>
+                        </div>
 
                         <div class="container">
                             <c:forEach items="${tags}" var="tag">
                             <span class="check">✓<span> ${tag.name}<br>
                             </c:forEach>
                         </div>
-                    </div> <%--container d-flex--%>
+                    </div>
 
                     <br>
 
@@ -235,145 +98,47 @@
                     <br>
 
                     <form action="controller" method="get">
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Application</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h6 id="modal-summary">You make request for Apartment for ${guests} person(s) between ${startDate} and ${endDate} </h6>
+                                        <div class="mb-3">
+                                            <label for="comments" class="col-form-label">Comments:</label>
+                                            <textarea class="form-control" id="comments" name="comments"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Book it!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <input type="hidden" name="action" value="booking">
                         <input type="hidden" name="apartmentId" value="${apartment.id}">
                         <input type="hidden" name="range" value="${guests}">
                         <input type="hidden" name="startDate" value="${startDate}">
                         <input type="hidden" name="endDate" value="${endDate}">
-                        <button type="submit" class="btn btn-primary">Book it</button>
+                        <input type="hidden" name="isRequestOnly" value="false">
+
+                        <button type="button" id="button-request" class="btn btn-primary"
+                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">Confirm</button>
                     </form>
-                </div> <%--card body--%>
+                </div>
 
-            </div>  <%--card--%>
-        </c:if> <%--apartment--%>
-    </div> <%--container--%>
-
-    <%--<script>
-        // Отримання зображень каруселі
-        var carouselImages = document.querySelectorAll('#carouselInterval .carousel-item img');
-
-        // Отримання модального вікна та зображення
-        var modal = document.getElementById('myModal');
-        var modalImage = document.getElementById('modalImage');
-
-        // Додавання обробника подій до зображень каруселі
-        carouselImages.forEach(function(image) {
-            image.addEventListener('click', function() {
-                // Встановлення зображення модального вікна на основі клікнутого зображення
-                modalImage.src = this.src;
-                modalImage.alt = this.alt;
-
-                // Відкриття модального вікна
-                modal.classList.add('show');
-                modal.style.display = 'block';
-            });
-        });
-
-        // Додавання обробника подій до модального вікна
-        modal.addEventListener('click', function() {
-            // Закриття модального вікна при кліку на підложку або хрестик
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-        });
-    </script>--%>
+            </div>
+        </c:if>
+    </div>
 
     <script>
-        /*function openModal(img) {
-            var modal = document.getElementById("myModal");
-            var modalImg = document.getElementById("img01");
 
-            // Встановлюємо зображення в модальне вікно
-            modal.style.display = "block";
-            modalImg.src = img.src;
 
-            // Додаємо обробник події "click" до хрестика для закриття модального вікна
-            var span = document.getElementsByClassName("close")[0];
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            // Додаємо обробник події "click" до фону для закриття модального вікна
-            var modalContent = document.getElementsByClassName("modal-content")[0];
-            modalContent.onclick = function(event) {
-                if (event.target == modalContent) {
-                    modal.style.display = "none";
-                }
-            }
-        }*/
-       /* function openModal(img) {
-            var modal = document.getElementById("myModal");
-            var modalImg = document.getElementsByClassName("modal-image")[0];
-
-            // Встановлюємо зображення в модальне вікно
-            modal.style.display = "block";
-            modalImg.style.backgroundImage = "url('" + img.src + "')";
-
-            // Додаємо обробник події "click" до хрестика для закриття модального вікна
-            var span = document.getElementsByClassName("close")[0];
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            // Додаємо обробник події "click" до фону для закриття модального вікна
-            var modalContent = document.getElementsByClassName("modal-content")[0];
-            modalContent.onclick = function(event) {
-                if (event.target == modalContent) {
-                    modal.style.display = "none";
-                }
-            }
-        }*/
-        // Отримуємо всі елементи з класом "carousel-item"
-        var carouselItems = document.querySelectorAll(".carousel-item");
-
-        // Отримуємо модальне вікно
-        var modal = document.getElementById("myModal");
-
-        // Отримуємо зображення в модальному вікні
-        var modalImg = document.getElementById("modal-img");
-
-        // Отримуємо кнопку закриття модального вікна
-        var closeBtn = document.getElementsByClassName("close")[0];
-
-        // Перебираємо всі елементи з класом "carousel-item"
-        carouselItems.forEach(function(item) {
-            // Додаємо обробник події "click" до кожного елемента з класом "carousel-item"
-            item.addEventListener("click", function() {
-                // Встановлюємо зображення в модальне вікно
-                modalImg.src = this.getElementsByTagName("img")[0].src;
-
-                // Показуємо модальне вікно
-                modal.style.display = "block";
-            });
-        });
-
-        // Додаємо обробник події "click" до кнопки закриття модального вікна
-        closeBtn.addEventListener("click", function() {
-            // Ховаємо модальне вікно
-            modal.style.display = "none";
-        });
-
-        function openModal(img) {
-            var modal = document.getElementById("myModal");
-            var modalImg = document.getElementsByClassName("modal-image")[0];
-
-            // Встановлюємо зображення в модальне вікно
-            modal.style.display = "block";
-            modalImg.style.backgroundImage = "url('" + img.src + "')";
-
-            // Додаємо обробник події "click" до хрестика для закриття модального вікна
-            var span = document.getElementsByClassName("close")[0];
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            // Додаємо обробник події "click" до фону для закриття модального вікна
-            var modalContent = document.getElementsByClassName("modal-content")[0];
-            modalContent.onclick = function(event) {
-                if (event.target == modalContent) {
-                    modal.style.display = "none";
-                }
-            }
-        }
     </script>
 
 <%--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>--%>

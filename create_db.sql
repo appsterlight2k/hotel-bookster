@@ -78,6 +78,7 @@ CREATE TABLE booking (
     adults_number INT NOT NULL,
     children_number INT NOT NULL DEFAULT 0,
     reservation_time DATETIME NOT NULL,
+	comments VARCHAR(2000),
     is_approved BOOLEAN NOT NULL DEFAULT false,
     is_booked BOOLEAN NOT NULL DEFAULT false,
     is_paid BOOLEAN NOT NULL DEFAULT false,
@@ -135,43 +136,43 @@ VALUES
 (9, '405', 1, 1, 1, 1, 'photos/Room-Type-quad-Room.jpg', 150, 'regular room. Close to elevator'),
 (10, '410', 1, 1, 4, 1, 'photos/Room-Type-quad-Room.jpg', 150, 'regular room. Close to elevator');
 
-INSERT INTO booking (id, user_id, apartment_id, check_in, check_out, adults_number, children_number, reservation_time,
+INSERT INTO booking (id, user_id, apartment_id, check_in, check_out, adults_number, children_number, reservation_time, comments,
 					 is_approved, is_booked, is_paid, is_canceled)
 VALUES
-(1, 2, 1, '2023-03-12', '2023-03-14', 1, 0, '2023-03-01 13:19:26', true, false, false, false),
-(2, 4, 1, '2023-03-17', '2023-03-18', 1, 0, '2023-03-03 13:19:26', true, false, false, false),
-(3, 4, 1, '2023-03-21', '2023-03-21', 1, 0, '2023-03-03 13:19:26', true, false, false, false),
+(1, 2, 1, '2023-03-12', '2023-03-14', 1, 0, '2023-03-01 13:19:26', 'Comment1', true, false, false, false),
+(2, 4, 1, '2023-03-17', '2023-03-18', 1, 0, '2023-03-03 13:19:26', 'Comment2', true, false, false, false),
+(3, 4, 1, '2023-03-21', '2023-03-21', 1, 0, '2023-03-03 13:19:26', 'Comment3', true, false, false, false),
 
-(4, 2, 2, '2023-03-13', '2023-03-16', 2, 0, '2023-03-05 13:19:26', true, true, false, false),
-(5, 3, 2, '2023-03-18', '2023-03-20', 2, 0, '2023-03-01 13:19:26', true, true, false, false),
+(4, 2, 2, '2023-03-13', '2023-03-16', 2, 0, '2023-03-05 13:19:26', 'Comment4', true, true, false, false),
+(5, 3, 2, '2023-03-18', '2023-03-20', 2, 0, '2023-03-01 13:19:26', null, true, true, false, false),
 
-(6, 4, 3, '2023-03-12', '2023-03-12', 2, 0, '2023-03-02 13:19:26', true, true, true, false),
-(7, 2, 3, '2023-03-15', '2023-03-15', 2, 0, '2023-03-08 13:19:26', true, true, true, false),
-(8, 2, 3, '2023-03-18', '2023-03-19', 2, 0, '2023-03-08 13:19:26', true, true, true, false),
-(9, 2, 3, '2023-03-21', '2023-03-21', 2, 0, '2023-03-08 13:19:26', true, true, true, false),
+(6, 4, 3, '2023-03-12', '2023-03-12', 2, 0, '2023-03-02 13:19:26', 'Comment6', true, true, true, false),
+(7, 2, 3, '2023-03-15', '2023-03-15', 2, 0, '2023-03-08 13:19:26', 'Comment7', true, true, true, false),
+(8, 2, 3, '2023-03-18', '2023-03-19', 2, 0, '2023-03-08 13:19:26', null, true, true, true, false),
+(9, 2, 3, '2023-03-21', '2023-03-21', 2, 0, '2023-03-08 13:19:26', 'Comment9', true, true, true, false),
 
-(10, 2, 4, '2023-03-11', '2023-03-13', 2, 0, '2023-02-11 13:19:26', true, true, true, true),
-(11, 3, 4, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
+(10, 2, 4, '2023-03-11', '2023-03-13', 2, 0, '2023-02-11 13:19:26', 'Comment10', true, true, true, true),
+(11, 3, 4, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment11', false, false, false, false),
 
-(12, 2, 5, '2023-03-14', '2023-03-15', 2, 0, '2023-02-11 13:19:26', false, true, true, true),
-(13, 3, 5, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(14, 3, 5, '2023-03-20', '2023-03-21', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
+(12, 2, 5, '2023-03-14', '2023-03-15', 2, 0, '2023-02-11 13:19:26', 'Comment12', false, true, true, true),
+(13, 3, 5, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment13', false, false, false, false),
+(14, 3, 5, '2023-03-20', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment14', false, false, false, false),
 
-(15, 2, 6, '2023-03-15', '2023-03-15', 2, 0, '2023-02-11 13:19:26', true, true, true, true),
-(16, 3, 6, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(17, 3, 6, '2023-03-20', '2023-03-21', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
+(15, 2, 6, '2023-03-15', '2023-03-15', 2, 0, '2023-02-11 13:19:26', 'Comment15', true, true, true, true),
+(16, 3, 6, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment16', false, false, false, false),
+(17, 3, 6, '2023-03-20', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment17', false, false, false, false),
 
-(18, 3, 7, '2023-03-12', '2023-03-13', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(19, 3, 7, '2023-03-17', '2023-03-18', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(20, 3, 7, '2023-03-21', '2023-03-21', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
+(18, 3, 7, '2023-03-12', '2023-03-13', 1, 0, '2023-02-11 13:19:26', 'Comment18', false, false, false, false),
+(19, 3, 7, '2023-03-17', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment19', false, false, false, false),
+(20, 3, 7, '2023-03-21', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment20', false, false, false, false),
 
-(21, 3, 8, '2023-03-13', '2023-03-15', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(22, 3, 8, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(23, 1, null, '2023-03-25', '2023-03-27', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(24, 1, 9, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(25, 1, 6, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(26, 1, 9, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', false, false, false, false),
-(27, 1, 10, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', false, false, false, false);
+(21, 3, 8, '2023-03-13', '2023-03-15', 1, 0, '2023-02-11 13:19:26', 'Comment21', false, false, false, false),
+(22, 3, 8, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment22', false, false, false, false),
+(23, 1, null, '2023-03-25', '2023-03-27', 1, 0, '2023-02-11 13:19:26', 'Comment23', false, false, false, false),
+(24, 1, 9, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', 'Comment24', false, false, false, false),
+(25, 1, 6, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', 'Comment25', false, false, false, false),
+(26, 1, 9, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment26', false, false, false, false),
+(27, 1, 10, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment27', false, false, false, false);
 
 INSERT INTO tags (id, name, description)
 VALUES

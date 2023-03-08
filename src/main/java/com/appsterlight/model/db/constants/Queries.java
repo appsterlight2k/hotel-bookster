@@ -27,13 +27,13 @@ public final class Queries {
     public static final String SQL_BOOKING_GET_ALL = "SELECT * FROM booking";
     public static final String SQL_BOOKING_INSERT =
             "INSERT INTO booking (user_id, apartment_id, check_in, check_out, adults_number, children_number, " +
-                    "reservation_time, is_approved, is_booked, is_paid, is_canceled) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "reservation_time, comments, is_approved, is_booked, is_paid, is_canceled) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String SQL_BOOKING_UPDATE =
             "UPDATE booking SET " +
                     "user_id = ?, apartment_id = ?, check_in = ?, check_out = ?, adults_number = ?, children_number = ?, " +
-                    "reservation_time = ?, is_approved = ?, is_booked = ?, is_paid = ?, is_canceled = ? " +
+                    "reservation_time = ?, comments= ?, is_approved = ?, is_booked = ?, is_paid = ?, is_canceled = ? " +
                     "WHERE ID = ?";
 
 

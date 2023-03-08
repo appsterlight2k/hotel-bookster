@@ -1,14 +1,12 @@
 package com.appsterlight.controller.action.impl.post;
 
 import com.appsterlight.controller.action.FrontAction;
-import com.appsterlight.controller.action.utils.ControllerUtils;
 import com.appsterlight.controller.action.utils.DtoUtils;
 import com.appsterlight.controller.constants.PagesNames;
 import com.appsterlight.controller.context.AppContext;
 import com.appsterlight.controller.dto.ApartmentDto;
 import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.exception.ServiceException;
-import com.appsterlight.model.domain.Apartment;
 import com.appsterlight.model.domain.Tag;
 import com.appsterlight.service.ApartmentPhotosService;
 import com.appsterlight.service.ApartmentService;
@@ -49,14 +47,14 @@ public class ShowApartmentAction extends FrontAction {
                 List<Tag> tags = apartmentTagsService.getAllTagsByApartmentId(id);
                 req.setAttribute("tags", tags);
 
-                String guests = req.getParameter("guests");
+                String guests = req.getParameter("range");
                 req.setAttribute("guests", guests);
 
-                String startDateStr = req.getParameter("startDateMain");
+                String startDateStr = req.getParameter("startDate");
                 LocalDate startDate = LocalDate.parse(startDateStr);
                 req.setAttribute("startDate", startDate);
 
-                String endDateStr = req.getParameter("endDateMain");
+                String endDateStr = req.getParameter("endDate");
                 LocalDate endDate = LocalDate.parse(endDateStr);
                 req.setAttribute("endDate", endDate);
 
@@ -67,7 +65,6 @@ public class ShowApartmentAction extends FrontAction {
         }
 
         return PagesNames.PAGE_HOME_GUEST;
-
     }
 
 }
