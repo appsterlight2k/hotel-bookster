@@ -19,8 +19,11 @@ import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao {
+    private final Connection connection;
     public MySqlBookingDao(Connection connection) {
+
         super(connection);
+        this.connection = connection;
     }
 
     @Override
@@ -56,13 +59,13 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
 
         return id;
     }
-    public List<Optional<Booking>> getApprovedBookings(Long id, LocalDate checkIn, LocalDate checkOut, Connection connection) throws DaoException {
+    public List<Optional<Booking>> getApprovedBookings(Long id, LocalDate checkIn, LocalDate checkOut) throws DaoException {
         List<Optional<Booking>> list = new ArrayList<>();
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_APPROVED)) {
             prst.setLong(1, id);
             prst.setDate(2, Date.valueOf(checkIn));
-            prst.setDate(2, Date.valueOf(checkOut));
+            prst.setDate(3, Date.valueOf(checkOut));
 
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
@@ -75,13 +78,37 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         return list;
     }
 
-    public Optional<Booking> getBookedBookings(Long id, LocalDate checkIn, LocalDate checkOut, Connection connection) throws DaoException {
+    @Override
+    public boolean isBookingExists(Long userId, Long apartmentId, LocalDate checkIn, LocalDate checkOut,
+                                   Integer guests) throws DaoException {
+        Integer count;
+
+        try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_BOOKING_COUNT)) {
+            prst.setLong(1, userId);
+            prst.setLong(2, apartmentId);
+            prst.setDate(3, Date.valueOf(checkIn));
+            prst.setDate(4, Date.valueOf(checkOut));
+            prst.setInt(5, guests);
+
+            ResultSet rs = prst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+        return false;
+    }
+
+
+    public Optional<Booking> getBookedBookings(Long id, LocalDate checkIn, LocalDate checkOut) throws DaoException {
         Booking object = null;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_BOOKED)) {
             prst.setLong(1, id);
             prst.setDate(2, Date.valueOf(checkIn));
-            prst.setDate(2, Date.valueOf(checkOut));
+            prst.setDate(3, Date.valueOf(checkOut));
 
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
@@ -94,13 +121,13 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         return Optional.ofNullable(object);
     }
 
-    public Optional<Booking> getPaidBookings(Long id, LocalDate checkIn, LocalDate checkOut, Connection connection) throws DaoException {
+    public Optional<Booking> getPaidBookings(Long id, LocalDate checkIn, LocalDate checkOut) throws DaoException {
         Booking object = null;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_PAID)) {
             prst.setLong(1, id);
             prst.setDate(2, Date.valueOf(checkIn));
-            prst.setDate(2, Date.valueOf(checkOut));
+            prst.setDate(3, Date.valueOf(checkOut));
 
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
@@ -113,13 +140,13 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         return Optional.ofNullable(object);
     }
 
-    public Optional<Booking> getCanceledBookings(Long id, LocalDate checkIn, LocalDate checkOut, Connection connection) throws DaoException {
+    public Optional<Booking> getCanceledBookings(Long id, LocalDate checkIn, LocalDate checkOut) throws DaoException {
         Booking object = null;
 
         try (PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_IS_CANCELED)) {
             prst.setLong(1, id);
             prst.setDate(2, Date.valueOf(checkIn));
-            prst.setDate(2, Date.valueOf(checkOut));
+            prst.setDate(3, Date.valueOf(checkOut));
 
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
@@ -135,7 +162,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
 
     /* EVENTS */
     @Override
-    public boolean createEventIsPaid(Long id, Connection connection) throws DaoException {
+    public boolean createEventIsPaid(Long id) throws DaoException {
         log.info("Query: " + SQL_BOOKING_CREATE_EVENT_IS_PAID);
 
         Formatter formatter = new Formatter();
