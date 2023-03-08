@@ -20,6 +20,9 @@ public final class Queries {
 
     /* QUERIES FOR BOOKING TABLE */
     public static final String SQL_BOOKING_GET = "SELECT * FROM booking WHERE id = ?";
+    public static final String SQL_BOOKING_GET_BOOKING_COUNT = "SELECT COUNT(*) FROM booking WHERE " +
+            "user_id = ? AND apartment_id = ? AND check_in = ? AND check_out = ? AND adults_number = ?";
+
     public static final String SQL_BOOKING_DELETE = "DELETE FROM booking WHERE id = ?";
     public static final String SQL_BOOKING_GET_ALL = "SELECT * FROM booking";
     public static final String SQL_BOOKING_INSERT =
@@ -64,23 +67,14 @@ public final class Queries {
             "INNER JOIN apartment_class c ON a.class_id = c.id " +
             "WHERE a.adults_capacity >= ? AND b.apartment_id IS NULL";
 
-    /*"SELECT a.*, " +
-            "(SELECT c.name FROM apartment_class c WHERE c.id = a.class_id) as class_name, " +
-            "(SELECT c.description FROM apartment_class c WHERE c.id = a.class_id) as class_description " +
-            "FROM apartments a " +
-            "WHERE a.adults_capacity >= ? AND a.id NOT IN " +
-            "(SELECT b.apartment_id FROM booking b WHERE b.check_out >= ? AND b.check_in <= ?)";*/
-
     //use QueryBuilder to add additional conditions
     public static final String SQL_APARTMENT_GET_ALL_APARTMENTS_BY_TAG_ID =
             "SELECT a.* FROM apartments a JOIN apartments_tags ON " +
                     "apartments.id = apartments_tags.apartment_id WHERE apartments_tags.tag_id = ? %s";
 
-
-
-    /*public static final String SQL_BOOKING_GET_ALL_FREE_ = "SELECT * FROM booking WHERE id = ? " +
+    public static final String SQL_BOOKING_GET_ALL_FREE_ = "SELECT * FROM booking WHERE id = ? " +
             "AND check_in > ? AND check_out < ? AND is_approved = false AND is_booked = false " +
-            "AND is_paid = false AND is_canceled = false";*/
+            "AND is_paid = false AND is_canceled = false";
     public static final String SQL_BOOKING_GET_IS_APPROVED = "SELECT * FROM booking WHERE id = ? " +
             "AND check_in > ? AND check_out < ? AND is_approved = ?";
     public static final String SQL_BOOKING_GET_IS_BOOKED = "SELECT * FROM booking WHERE id = ? " +
