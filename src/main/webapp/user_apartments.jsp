@@ -57,7 +57,7 @@
                         </li>
                         <li>
                             <button type="button" id="button-request" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#staticBackdrop">Book Request</button>
+                                    data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="onRequestClick()">Book Request</button>
                         </li>
                     </ul>
 
@@ -71,7 +71,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <h6 id="modal-summary">You make request for Apartment for ${guests} person(s) between ${startDate} and ${endDate} </h6>
+                                        <h6><p id="modal-summary"></p></h6>
                                         <div class="mb-3">
                                             <label for="comments" class="col-form-label">Comments:</label>
                                             <textarea class="form-control" id="comments" name="comments"></textarea>
@@ -79,7 +79,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="onRequestClick()">Request</button>
+                                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" <%--onclick="onRequestClick()"--%>>Request</button>
                                     </div>
                                     <input type="hidden" id="is-request-only" name="isRequestOnly" value="true">
                                 </div>
@@ -175,15 +175,30 @@
 
         function onRequestClick() {
             action.value = 'booking';
-            /*var modal = document.getElementById('modal-summary');
-            modal.innerHTML = "sdfsdfsdfs";*/
+            var modal = document.getElementById('modal-summary');
+            modal.innerText = 'You make a request for Apartment for ' + getGuestsCount() + ' person(s) for ' +
+                (getStartDate() === getEndDate() ? getStartDate() : 'period of ' + getStartDate() + ' and ' + getEndDate());
         }
+
         function onSearchClick() {
             action.value = 'apartments';
         }
+
         function onShowApartmentClick() {
             action.value = 'get-apartment';
         }
+
+        function getGuestsCount() {
+            return document.getElementById('range').value;
+        }
+
+        function getStartDate() {
+            return document.getElementById("startDate").value;
+        }
+        function getEndDate() {
+            return document.getElementById("endDate").value;
+        }
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
