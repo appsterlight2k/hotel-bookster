@@ -8,6 +8,7 @@ import com.appsterlight.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +63,27 @@ public class BookingServiceImpl implements BookingService {
             return bookingDao.getAll();
         } catch (DaoException e) {
             log.error(String.format("Can't get all bookings from table: %s", e.getMessage()));
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean isBookingWithParametersExists(Long userId, Long apartmentId, LocalDate checkIn, LocalDate checkOut, Integer guests) throws ServiceException {
+        try {
+            return bookingDao.isBookingExists(userId, apartmentId, checkIn, checkOut, guests);
+        } catch (DaoException e) {
+            log.error("Can't get booking from table! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean isBookingExists(Booking booking) throws ServiceException {
+        try {
+            return bookingDao.isBookingExists(booking.getUserId(), booking.getApartmentId(), booking.getCheckIn(),
+                    booking.getCheckOut(), booking.getAdultsNumber());
+        } catch (DaoException e) {
+            log.error("Can't get booking from table! " + e.getMessage());
             throw new ServiceException(e);
         }
     }

@@ -235,9 +235,9 @@
                     <br>
 
                     <form action="controller" method="get">
-                        <input type="hidden" name="action" value="book">
+                        <input type="hidden" name="action" value="booking">
                         <input type="hidden" name="apartmentId" value="${apartment.id}">
-                        <input type="hidden" name="guests" value="${guests}">
+                        <input type="hidden" name="range" value="${guests}">
                         <input type="hidden" name="startDate" value="${startDate}">
                         <input type="hidden" name="endDate" value="${endDate}">
                         <button type="submit" class="btn btn-primary">Book it</button>

@@ -3,7 +3,7 @@ package com.appsterlight.service;
 import com.appsterlight.exception.ServiceException;
 import com.appsterlight.model.domain.Booking;
 
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +13,9 @@ public interface BookingService {
     boolean updateBooking(Booking booking) throws ServiceException;
     boolean deleteBooking(Long id) throws ServiceException;
     List<Booking> getAllBookings() throws ServiceException;
-
+    boolean isBookingWithParametersExists(Long userId, Long apartmentId, LocalDate checkIn, LocalDate checkOut,
+                                          Integer guests) throws ServiceException;
+    boolean isBookingExists(Booking booking) throws ServiceException;
     void setIsApprovedState(boolean isApproved, Booking booking) throws ServiceException;
     void setIsBooked(boolean isBooked, Booking booking) throws ServiceException;
     void setIsPaid(boolean isPaid, Booking booking) throws ServiceException;

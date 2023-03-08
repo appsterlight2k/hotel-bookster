@@ -21,6 +21,9 @@
     <div class="container mt-5">
         <h5> Welcome to personal cabinet, ${sessionScope.loggedUser.firstName}</h5>
         <br>
+        <h3>${requestScope.result}</h3>
+
+        ${requestScope.error}
         <%--
         <div style="align: auto;">
             <form id="form-home" method="POST" action="controller">

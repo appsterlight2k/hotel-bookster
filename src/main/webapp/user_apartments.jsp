@@ -44,19 +44,51 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <input type="hidden" name="action" value="apartments">
-                            <input type="hidden" id="startDate" name="startDate">
-                            <input type="hidden" id="endDate" name="endDate">
-                            <button type="submit" id="button-search" class="btn btn-primary">Search</button>
+                            <input type="hidden" id="search-action" name="action" value="apartments">
+                            <input type="hidden" id="startDate" name="startDate" value="${startDate}">
+                            <input type="hidden" id="endDate" name="endDate" value="${endDate}">
+                            <button type="submit" id="button-search" class="btn btn-primary" onclick="onSearchClick()">Search</button>
                         </li>
                         <li class="nav-item">
                             <c:if test="${not empty apartments}">
                                 <p>   Apartments found: ${apartments.size()}</p>
                             </c:if>
                         </li>
-
+                        <li>
+                            <!-- Button trigger modal -->
+                            <button type="button" id="button-request" class="btn btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#staticBackdrop">Book Request</button>
+                        </li>
                     </ul>
 
+                    <c:if test="${not empty loggedUser}">
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Application</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h6 id="modal-summary">You make request for Apartment for ${guests} person(s) between ${startDate} and ${endDate} </h6>
+
+                                            <form>
+                                                <div class="mb-3">
+                                                    <label for="comments" class="col-form-label">Comments:</label>
+                                                    <textarea class="form-control" id="comments" name="comments"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="onRequestClick()">Request</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </c:if>
                 </div>
             </form>
         </div> <%-- search-form --%>
@@ -80,7 +112,7 @@
                             <b>Description:</b> <p class="card-text">${currentApartment.description}.</p>
 
                             <form action="controller" method="get" id="form-apartment">
-                                <input type="hidden" name="action" value="get-apartment">
+                                <input type="hidden" id="apartment-action" name="action" value="get-apartment">
                                 <input type="hidden" name="apartmentId" value="${currentApartment.id}">
                                 <input type="hidden" id="startDateMain" name="startDateMain" value="${startDate}">
                                 <input type="hidden" id="endDateMain" name="endDateMain" value="${endDate}">
@@ -90,7 +122,6 @@
                         </div> <%-- card-body --%>
                     </div> <%--card --%>
                 </c:forEach>
-
             </c:if>
         </div> <%-- form-search --%>
 
@@ -99,14 +130,16 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
-        const today = Date.now();
+        var today = parseDateInputValue(new Date());
+        console.log("today: " + today);
+
         flatpickr("#myFlatpickr", {
             mode: "range",
             dateFormat: "Y-m-d",
             defaultDate: [config.startDate, config.endDate],
             locale: "en",
             theme: "airbnb",
-            minDate:  config.startDate,
+            minDate:  today,
             disableMobile: true,
             /*maxDate: new Date().fp_incr(30)*/
             onChange: function(selectedDates, dateStr, instance) {
@@ -122,8 +155,10 @@
 
                     var startDateMainInput = document.getElementById("startDateMain");
                     var endDateMainInput = document.getElementById("endDateMain");
+
                     startDateMainInput.value = parseDateInputValue(startDate);
                     endDateMainInput.value = parseDateInputValue(endDate);
+
                 }
             }
         });
@@ -148,6 +183,29 @@
             guests.value = range.value;
         });
 
+        function getRange() {
+            return range.value;
+        }
+    </script>
+
+    <script>
+        function onRequestClick() {
+            var action = document.getElementById('search-action');
+            action.value = 'booking';
+
+            var modal = document.getElementById('modal-summary');
+            modal.innerHTML = "sdfsdfsdfs";
+        }
+        function onSearchClick() {
+            var action = document.getElementById('search-action');
+            action.value = 'apartments';
+
+        }
+        function onShowApartmentClick() {
+            var action = document.getElementById('search-action');
+            action.value = 'get-apartment';
+
+        }
 
     </script>
 
