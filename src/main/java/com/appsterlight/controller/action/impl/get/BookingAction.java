@@ -14,12 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 import java.awt.print.Book;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Slf4j
 public class BookingAction extends FrontAction {
 
     @Override
     public String process(HttpServletRequest req, HttpServletResponse resp) {
+
 
         UserDto user = (UserDto) req.getSession().getAttribute("loggedUser");
         if (user != null) {

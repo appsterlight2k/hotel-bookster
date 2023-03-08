@@ -12,8 +12,9 @@
     <title>Register User</title>
     <style>
         .error { color: red; }
+
         .container {
-            width: 500px; margin: auto; align-self: center;
+            width: 700px;
         }
     </style>
 
@@ -21,49 +22,68 @@
 <body>
     <jsp:include page="/common/navbar.jsp" />
 
-    <div class="container mt-5">
-        <form id="form-logout" action="controller" method="get">
-            <input type="submit" class="button_active" value="Logout" style="align: right;">
-            <input type="hidden" name="action" value="logout">
-            <button type="submit" class="btn" form="form-logout" value="Submit">Submit</button>
-        </form>
+    <div class="container d-flex justify-content-center align-items-center vh-100 text-center">
 
+        <form class="login-form" method="post" action="controller">
+            <div class="form-floating flex-grow-1 mb-3">
+                <h4>Registration form</h4>
+            </div>
+            <input type="hidden" name="action" value="registration">
 
-        <div class="container" id="div-registration" >
-            <form class="login-form" method="post" action="controller">
-                <input type="hidden" name="action" value="registration">
+            <div class="form-floating flex-grow-1 mb-3">
+                <input type="text" class="form-control" id="firstname" name="firstname"
+                       placeholder="John" required>
+                <label for="firstname">First name:</label>
+            </div>
 
-                <label class="form-label" for="firstname">First name:</label>
-                <input class="form-control" type="text" name="firstname" id="firstname" required>
+            <div class="form-floating flex-grow-1 mb-3">
+                <input type="text" class="form-control" id="lastname" name="lastname"
+                       placeholder="Brown" required>
+                <label for="lastname">Last name:</label>
+            </div>
 
-                <label class="form-label" for="lastname">Last name:</label>
-                <input class="form-control" type="text" name="lastname" id="lastname" required>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" name="email"
+                       placeholder="example@mail.com" required>
+                <label for="email">Email:</label>
+            </div>
 
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="phone_number" name="phone_number"
+                       placeholder="+18937411243">
+                <label for="phone_number">Phone number:</label>
+            </div>
 
-                <label class="form-label" for="email">Email:</label>
-                <input class="form-control" type="email" name="email" id="email" required>
-
-                <label class="form-label" for="phone_number">Phone number:</label>
-                <input class="form-control" type="text" name="phone_number" id="phone_number">
-                <div style=" display: inline-flex; flex-wrap: wrap">
-                    <div>
-                        <label class="form-label" for="password"><b>Password:</b></label>
-                        <input class="form-control" type="password" placeholder="Password" id="password" name="password" required>
-                    </div>
-                    <div>
-                        <label for="confirm"><b>Confirm:</b></label>
-                        <input class="form-control" type="password" placeholder="Confirm" id="confirm" name="confirm" required>
-                    </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+                <div class="form-floating me-2">
+                    <input type="password" class="form-control" id="password" placeholder="Password"
+                           name="password" required>
+                    <label for="password">Password:</label>
                 </div>
-                <br>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
-        <p class="error">${sessionScope.error}</p>
+                <div class="form-floating ms-2">
+                    <input type="password" class="form-control" id="confirm" placeholder="Password"
+                           name="confirm" required>
+                    <label for="confirm">Confirm:</label>
+                </div>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+       <p class="error">${error}</p>
     </div>
 
-
+    <script>
+        function validatePassword() {
+            const password = document.getElementById("password").value;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+            if (!passwordRegex.test(password)) {
+                alert("Password must be at least 6 characters long, and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 
 <%--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>--%>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

@@ -29,16 +29,13 @@
         <h5>${sessionScope.loggedUser.firstName}, Please choose and Apartment</h5> <br>
 
         <div class="container" id="main-form">
-            <form method="post" action="controller" id="form-search" >
+            <form method="get" action="controller" id="form-search" >
                 <div class="container">
                     <ul class="nav justify-content-center">
                         <li class="nav-item">
-<%--                                <div class="container d-flex">--%>
                             <div class="container-sm" style="width: 250px;">
                                 <input type="text" id="myFlatpickr" placeholder="Select Date Range" data-input>
-                                <%--                        <a class="nav-link" href="controller?action=apartments">Search...</a>--%>
                             </div>
-<%--                                </div>--%>
                         </li>
                         <li class="nav-item">
                             <div class="container-sm" style="width: 180px;">
@@ -51,13 +48,11 @@
                             <input type="hidden" id="startDate" name="startDate">
                             <input type="hidden" id="endDate" name="endDate">
                             <button type="submit" id="button-search" class="btn btn-primary">Search</button>
-<%--                            <a class="btn btn-primary" type="submit" href="controller?action=apartments">Search...</a>--%>
                         </li>
                         <li class="nav-item">
                             <c:if test="${not empty apartments}">
                                 <p>   Apartments found: ${apartments.size()}</p>
                             </c:if>
-                            <%--<p>${apartmentsCount}</p>--%>
                         </li>
 
                     </ul>
@@ -67,11 +62,11 @@
         </div> <%-- search-form --%>
 
 
-        <div class="container form-apartments">
+        <div class="container form-apartments" >
             <c:if test="${not empty apartments}">
                 <c:forEach items="${apartments}" var="currentApartment">
 
-                    <div class="card text-center">
+                    <div class="card text-center" style="padding-bottom: 20px;">
                         <div class="card-header">
                                 ${currentApartment.className}
                         </div>
@@ -83,18 +78,19 @@
                             <b>childrenCapacity:</b> ${currentApartment.childrenCapacity} <br>
                             <b>price:</b> ${currentApartment.price} <br><br>
                             <b>Description:</b> <p class="card-text">${currentApartment.description}.</p>
-    <%--                    <a href="/controller?action=get-apartment" class="btn btn-primary" type="submit">Details...</a>--%>
--                           <form action="controller" method="post" id="form-apartment">
+
+                            <form action="controller" method="get" id="form-apartment">
                                 <input type="hidden" name="action" value="get-apartment">
                                 <input type="hidden" name="apartmentId" value="${currentApartment.id}">
+                                <input type="hidden" id="startDateMain" name="startDateMain" value="${startDate}">
+                                <input type="hidden" id="endDateMain" name="endDateMain" value="${endDate}">
+                                <input type="hidden" id="guests" name="guests" value="${guests}">
                                <button type="submit" id="button-get-apartment" class="btn btn-primary">Details...</button>
                             </form>
                         </div> <%-- card-body --%>
                     </div> <%--card --%>
                 </c:forEach>
-                <input type="hidden" id="startDateMain" name="startDateMain" form="form-apartment" value="${startDate}">
-                <input type="hidden" id="endDateMain" name="endDateMain" form="form-apartment" value="${endDate}">
-                <input type="hidden" id="guests" name="guests" form="form-apartment" value="${guests}">
+
             </c:if>
         </div> <%-- form-search --%>
 
@@ -103,29 +99,17 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
-        /*
-                var startDateValue = startDateInput.value;
-                var endDateValue = endDateInput.value;
-
-                // перетворення значень полів в об'єкти дат
-                var defaultStartDate = startDateValue ? new Date(startDateValue) : null;
-                var defaultEndDate = endDateValue ? new Date(endDateValue) : null;*/
-
-        /*startDateInput.value = parseDateInputValue(startDate);
-        endDateInput.value = parseDateInputValue(endDate);*/
-
+        const today = Date.now();
         flatpickr("#myFlatpickr", {
             mode: "range",
             dateFormat: "Y-m-d",
             defaultDate: [config.startDate, config.endDate],
-
-            // locale: "en",
-            // theme: "airbnb",
-            // minDate: config.startDate,
-            // disableMobile: true,
+            locale: "en",
+            theme: "airbnb",
+            minDate:  config.startDate,
+            disableMobile: true,
             /*maxDate: new Date().fp_incr(30)*/
             onChange: function(selectedDates, dateStr, instance) {
-               /* console.log(selectedDates.length );*/
                 if (selectedDates.length === 2) {
                     var startDate = selectedDates[0];
                     var endDate = selectedDates[1];
@@ -140,7 +124,6 @@
                     var endDateMainInput = document.getElementById("endDateMain");
                     startDateMainInput.value = parseDateInputValue(startDate);
                     endDateMainInput.value = parseDateInputValue(endDate);
-
                 }
             }
         });

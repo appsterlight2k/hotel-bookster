@@ -49,7 +49,7 @@ public class ShowApartmentAction extends FrontAction {
                 List<Tag> tags = apartmentTagsService.getAllTagsByApartmentId(id);
                 req.setAttribute("tags", tags);
 
-                Integer guests = (Integer) session.getAttribute("guests");
+                String guests = req.getParameter("guests");
                 req.setAttribute("guests", guests);
 
                 String startDateStr = req.getParameter("startDateMain");

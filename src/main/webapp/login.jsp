@@ -1,4 +1,6 @@
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%--<%@ taglib prefix="c" uri="jakarta.tags.core" %>--%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
@@ -18,57 +20,48 @@
 
     <style>
         .error { color: red; }
-        .div-login {
-            width: 500px; margin: auto; align-self: center;
+
+        .form-floating {
+            width: 400px;
         }
     </style>
-    <link href="/css/signin.css" rel="stylesheet">
 </head>
 <body>
+
     <jsp:include page="/common/navbar.jsp" />
 
-    <a href="index.jsp">home</a> <br>
-    <input type="hidden" name="action" value="logout">
-
-    <div class="container-sm d-flex justify-content-center align-items-center mt-5">
+    <div class="container d-flex justify-content-center align-items-center vh-100 text-center">
         <form class="login-form mb-3" method="post" action="controller">
-            <input type="hidden" name="action" value="login">
+            <div class="form-floating flex-grow-1 mb-3">
+                <h4>Enter you email and password</h4>
+            </div>
 
+            <input type="hidden" name="action" value="login">
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
                 <label for="email">Email:</label>
             </div>
-
-            <%--<label for="pass"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" id="pass" name="pass" required>--%>
 
             <div class="form-floating mb-3">
                 <input type="password" class="form-control" id="pass" placeholder="Password" name="pass" required>
                 <label for="pass">Password</label>
             </div>
 
-            <button type="submit" class="btn btn-primary">Login</button>
-
-            <%--<div class="container" style="background-color:#f1f1f1">
-                <button type="button" class="cancelbtn">Cancel</button>
-                <span class="pass">Forgot <a href="#">password?</a></span>
-            </div>--%>
-
+            <button type="submit" class="btn btn-primary">SignIn</button>
         </form>
-        <p class="error">${sessionScope.error}</p>
+        <p class="error">${error}</p>
     </div>
 
-    <div class="container">
-        <h1>Bootstrap 5 Datepicker Example</h1>
-        <input type="text" id="myDatepicker" class="form-control" placeholder="Select Date">
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        flatpickr("#myDatepicker", {
-            dateFormat: "Y-m-d",
-            disableMobile: true
-        });
+        function validatePassword() {
+            const password = document.getElementById("password").value;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+            if (!passwordRegex.test(password)) {
+                alert("Password must be at least 6 characters long, and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+                return false;
+            }
+            return true;
+        }
     </script>
 
 <%--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>--%>
