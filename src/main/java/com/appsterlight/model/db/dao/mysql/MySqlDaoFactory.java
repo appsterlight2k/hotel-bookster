@@ -7,6 +7,7 @@ import java.sql.Connection;
 public class MySqlDaoFactory extends DaoFactory {
     private UserDao userDao;
     private ApartmentDao apartmentDao;
+    private ApartmentClassDao apartmentClassDao;
     private BookingDao bookingDao;
     private ApartmentPhotosDao apartmentPhotosDao;
     private ApartmentTagsDao apartmentTagsDao;
@@ -34,6 +35,15 @@ public class MySqlDaoFactory extends DaoFactory {
         }
 
         return apartmentDao;
+    }
+
+    @Override
+    public ApartmentClassDao getApartmentClassDao() {
+        if (apartmentClassDao == null) {
+            apartmentClassDao = new MySqlApartmentClassDao(con);
+        }
+
+        return apartmentClassDao;
     }
 
     @Override

@@ -67,6 +67,23 @@ public final class Queries {
             "INNER JOIN apartment_class c ON a.class_id = c.id " +
             "WHERE a.adults_capacity >= ? AND b.apartment_id IS NULL";
 
+    public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS =
+            "SELECT a.*, c.name as class_name, c.description as class_description " +
+                    "FROM apartments a " +
+                    "LEFT JOIN booking b ON a.id = b.apartment_id AND b.check_out >= ? AND b.check_in <= ? " +
+                    "INNER JOIN apartment_class c ON a.class_id = c.id " +
+                    "WHERE a.adults_capacity >= ? AND a.class_id = ? AND b.apartment_id IS NULL";
+
+    /* QUERIES FOR APARTMENT_CLASS TABLE */
+    public static final String SQL_APARTMENT_CLASS_GET = "SELECT * FROM apartment_class WHERE id = ?";
+    public static final String SQL_APARTMENT_CLASS_DELETE = "DELETE FROM apartment_class WHERE id = ?";
+    public static final String SQL_APARTMENT_CLASS_GET_ALL = "SELECT * FROM apartment_class";
+    public static final String SQL_APARTMENT_CLASS_INSERT =
+            "INSERT INTO apartment_class (name, description) VALUES (?, ?)";
+    public static final String SQL_APARTMENT_CLASS_UPDATE =
+            "UPDATE apartment_class SET name = ?, description = ? WHERE ID = ?";
+
+    
     //use QueryBuilder to add additional conditions
     public static final String SQL_APARTMENT_GET_ALL_APARTMENTS_BY_TAG_ID =
             "SELECT a.* FROM apartments a JOIN apartments_tags ON " +

@@ -1,6 +1,5 @@
 package com.appsterlight.model.db.dao;
 
-import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +15,7 @@ public abstract class DaoFactory {
     public static synchronized DaoFactory getInstance() {
         if (instance == null) {
 //           instance = new MySqlDaoFactory(con);
-            Class<?> cl = null;
+            Class<?> cl;
             try {
                 cl = Class.forName(DaoFactory.class.getName());
                 instance = (DaoFactory) cl.getDeclaredConstructor().newInstance();
@@ -31,6 +30,7 @@ public abstract class DaoFactory {
 
     public abstract UserDao getUserDao();
     public abstract ApartmentDao getApartmentDao();
+    public abstract ApartmentClassDao getApartmentClassDao();
     public abstract BookingDao getBookingDao();
     public abstract ApartmentPhotosDao getApartmentPhotosDao();
     public abstract ApartmentTagsDao getApartmentTagsDao();

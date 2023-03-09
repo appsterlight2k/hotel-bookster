@@ -1,12 +1,12 @@
 package com.appsterlight.controller.action.utils;
 
-import com.appsterlight.controller.context.AppContext;
+import com.appsterlight.controller.dto.ApartmentClassDto;
 import com.appsterlight.controller.dto.ApartmentDto;
 import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.exception.ServiceException;
 import com.appsterlight.model.domain.Apartment;
+import com.appsterlight.model.domain.ApartmentClass;
 import com.appsterlight.model.domain.User;
-import com.appsterlight.service.ApartmentPhotosService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -62,9 +62,39 @@ public class DtoUtils {
                 apartments.add(mapApartmentToDto(Optional.of(ap)));
             }
         } catch (ServiceException e) {
+            log.error("Can't map Apartment list to DTO list! " + e.getMessage());
             throw new RuntimeException(e);
         }
 
         return apartments;
+    }
+
+    public static ApartmentClassDto mapApartmentClassToDto(Optional<ApartmentClass> apartmentClass) throws ServiceException {
+        try {
+            ApartmentClass obj = apartmentClass.orElseThrow(ServiceException::new);
+
+            return ApartmentClassDto.builder()
+                    .id(obj.getId())
+                    .name(obj.getName())
+                    .description(obj.getDescription())
+                    .build();
+        } catch (ServiceException e) {
+            log.error("Exception in mapApartmentToDto: The apartment is null!");
+            throw new ServiceException(e);
+        }
+    }
+
+    public static List<ApartmentClassDto> mapApartmentClassListToDtoList(List<ApartmentClass> list) {
+        List<ApartmentClassDto> apartmentClasses = new ArrayList<>();
+        try {
+            for (ApartmentClass ap : list) {
+                apartmentClasses.add(mapApartmentClassToDto(Optional.of(ap)));
+            }
+        } catch (ServiceException e) {
+            log.error("Can't map Apartment Class list to DTO list! " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        return apartmentClasses;
     }
 }
