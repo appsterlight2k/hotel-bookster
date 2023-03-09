@@ -1,7 +1,5 @@
 package com.appsterlight.model.db.dao.mysql;
 
-
-import com.appsterlight.model.db.constants.Queries;
 import com.appsterlight.model.db.dao.AbstractDao;
 import com.appsterlight.model.db.dao.ApartmentDao;
 import com.appsterlight.model.domain.Apartment;
@@ -27,13 +25,13 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
     }
 
     @Override
-    public String getSelectQuery() {
-        return SQL_APARTMENT_GET;
+    public String getCreateQuery() {
+        return SQL_APARTMENT_INSERT;
     }
 
     @Override
-    public String getCreateQuery() {
-        return SQL_APARTMENT_INSERT;
+    public String getSelectQuery() {
+        return SQL_APARTMENT_GET;
     }
 
     @Override
@@ -51,6 +49,7 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         return SQL_APARTMENT_GET_ALL;
     }
     public String getSelectAllFreeByCapacityQuery() { return SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY; }
+    public String getSelectAllFreeByCapacityAndClassQuery() { return SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS; }
 
 
     @Override
@@ -116,9 +115,15 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         return apartments;
     }
 
-    public List<Apartment> getAllFreeByGuestsNumber(Integer guests,
-                                                    LocalDate checkIn, LocalDate checkOut) throws DaoException {
+    public List<Apartment> getAllFreeByGuestsNumber(Integer guests, LocalDate checkIn, LocalDate checkOut)
+            throws DaoException {
         return getAllByQuery(getSelectAllFreeByCapacityQuery(), checkIn, checkOut, guests);
+    }
+
+    @Override
+    public List<Apartment> getAllFreeByGuestsNumberAndClass(Integer guests, LocalDate checkIn, LocalDate checkOut,
+                                                            Integer classId) throws DaoException {
+        return getAllByQuery(getSelectAllFreeByCapacityAndClassQuery(), checkIn, checkOut, guests, classId);
     }
 
     @Override

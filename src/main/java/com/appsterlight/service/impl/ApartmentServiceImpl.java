@@ -69,6 +69,16 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
+    public List<Apartment> getAllFreeApartmentsByClass(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId) throws ServiceException {
+        try {
+            return apartmentDao.getAllFreeByGuestsNumberAndClass(guests, checkIn, checkOut, classId);
+        } catch (DaoException e) {
+            log.error("Can't get all free Apartments by guests number, checkin-checkout date and class. " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public List<Apartment> getAllApartments() throws ServiceException {
         try {
             return apartmentDao.getAll();

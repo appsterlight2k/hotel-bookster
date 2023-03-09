@@ -15,6 +15,7 @@ public interface ApartmentService {
     List<Apartment> getAllApartments() throws ServiceException;
 
     List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut) throws ServiceException;
+    List<Apartment> getAllFreeApartmentsByClass(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId) throws ServiceException;
 
 
 

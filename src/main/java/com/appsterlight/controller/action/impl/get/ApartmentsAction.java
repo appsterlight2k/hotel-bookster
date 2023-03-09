@@ -5,9 +5,12 @@ import com.appsterlight.controller.action.utils.ControllerUtils;
 import com.appsterlight.controller.action.utils.DtoUtils;
 import com.appsterlight.controller.constants.PagesNames;
 import com.appsterlight.controller.context.AppContext;
+import com.appsterlight.controller.dto.ApartmentClassDto;
 import com.appsterlight.controller.dto.ApartmentDto;
 import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.exception.ServiceException;
+import com.appsterlight.model.domain.ApartmentClass;
+import com.appsterlight.service.ApartmentClassService;
 import com.appsterlight.service.ApartmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +18,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -28,6 +30,7 @@ public class ApartmentsAction extends FrontAction {
     @Override
     public String process(HttpServletRequest req, HttpServletResponse resp) {
         ApartmentService apartmentService = appContext.getApartmentService();
+        ApartmentClassService apartmentClassService = appContext.getApartmentClassService();
 
         final HttpSession session = req.getSession();
         UserDto user = (UserDto) session.getAttribute("loggedUser");
@@ -64,17 +67,28 @@ public class ApartmentsAction extends FrontAction {
                 req.setAttribute("startDate", chosenStartDate);
                 req.setAttribute("endDate", chosenEndDate);
 
-                allApartments = DtoUtils.mapApartmentListToDtoList(
-                        apartmentService.getAllFreeApartments(guests, LocalDate.parse(chosenStartDate),
-                                LocalDate.parse(chosenEndDate)));
+                String apartmentClass = req.getParameter("apartmentClass");
+                if (apartmentClass == null || apartmentClass.equalsIgnoreCase("All Classes")) {
+                    allApartments = DtoUtils.mapApartmentListToDtoList(
+                            apartmentService.getAllFreeApartments(guests, LocalDate.parse(chosenStartDate),
+                                    LocalDate.parse(chosenEndDate)));
+                } else {
+                    allApartments = DtoUtils.mapApartmentListToDtoList(
+                            apartmentService.getAllFreeApartmentsByClass(guests, LocalDate.parse(chosenStartDate),
+                                    LocalDate.parse(chosenEndDate), Integer.parseInt(apartmentClass)));
+                }
 
                 req.setAttribute("guests", guests);
                 req.setAttribute("apartments", allApartments);
+
+                List<ApartmentClass> allClasses = apartmentClassService.getAllApartmentClasses();
+                List<ApartmentClassDto> allApartmentClasses = DtoUtils.mapApartmentClassListToDtoList(allClasses);
+                req.setAttribute("apartmentClasses", allApartmentClasses);
             } catch (ServiceException e) {
                 log.error("Cant's get all apartments! " + e.getMessage());
                 throw new RuntimeException("Cant's get all apartments! " + e.getMessage());
             } catch (Exception e) {
-                log.error("Can't parse date of checkin or checkout! " + e.getMessage());
+                log.error("Can't parse date of Checkin date, Checkout date or Apartment Class! " + e.getMessage());
                 throw new RuntimeException("Cant's get all apartments! " + e.getMessage());
             }
             return ControllerUtils.getApartmentsPageByRole(user.getRole());

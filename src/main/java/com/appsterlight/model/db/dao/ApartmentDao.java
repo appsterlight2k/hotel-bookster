@@ -12,5 +12,7 @@ public interface ApartmentDao extends Dao<Apartment> {
     Optional<Apartment> getApartmentByApartmentNumber(String number) throws DaoException;
     List<Apartment> getAllFreeByGuestsNumber(Integer guests,
                                              LocalDate checkIn, LocalDate checkOut) throws DaoException;
+    List<Apartment> getAllFreeByGuestsNumberAndClass(Integer guests,
+                                             LocalDate checkIn, LocalDate checkOut, Integer classId) throws DaoException;
 
 }
