@@ -23,9 +23,6 @@ private String className;
 private String classDescription;
 private String description;
 
-    public Long getId() {
-        return id;
-    }
 }
 
 

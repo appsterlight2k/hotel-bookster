@@ -3,7 +3,6 @@ package com.appsterlight.model.db.dao.mysql;
 import com.appsterlight.model.db.constants.Fields;
 import com.appsterlight.model.db.dao.AbstractDao;
 import com.appsterlight.model.db.dao.UserDao;
-import com.appsterlight.model.domain.Role;
 import com.appsterlight.model.domain.User;
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;

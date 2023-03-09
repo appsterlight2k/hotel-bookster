@@ -1,10 +1,7 @@
 package com.appsterlight.service.impl;
 
-import com.appsterlight.exception.DaoException;
 import com.appsterlight.exception.ServiceException;
-import com.appsterlight.model.db.dao.ApartmentDao;
 import com.appsterlight.model.db.dao.ApartmentTagsDao;
-import com.appsterlight.model.domain.Apartment;
 import com.appsterlight.model.domain.Tag;
 import com.appsterlight.service.ApartmentTagsService;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,8 @@
 package com.appsterlight.service;
 
-import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.exception.ServiceException;
 import com.appsterlight.model.domain.User;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
