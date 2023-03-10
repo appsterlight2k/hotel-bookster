@@ -14,5 +14,5 @@ public interface ApartmentDao extends Dao<Apartment> {
                                              LocalDate checkIn, LocalDate checkOut) throws DaoException;
     List<Apartment> getAllFreeByGuestsNumberAndClass(Integer guests,
                                              LocalDate checkIn, LocalDate checkOut, Integer classId) throws DaoException;
-
+    Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId) throws DaoException;
 }

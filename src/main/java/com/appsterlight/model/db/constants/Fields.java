@@ -19,6 +19,7 @@ public final class Fields {
     /* SPECIFIC FIELDS FOR BOOKING TABLE */
     public static final String BOOKING_USER_ID = "user_id";
     public static final String BOOKING_APARTMENT_ID = "apartment_id";
+    public static final String BOOKING_REQUEST_CLASS_ID = "request_class_id";
     public static final String BOOKING_CHECK_IN = "check_out";
     public static final String BOOKING_CHECK_OUT = "check_in";
     public static final String BOOKING_ADULTS_NUMBER = "adults_number";

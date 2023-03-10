@@ -187,6 +187,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         return new Object[]{
                 object.getUserId(),
                 object.getApartmentId(),
+                object.getRequestClassId(),
                 Date.valueOf(object.getCheckIn()),
                 Date.valueOf(object.getCheckOut()),
                 object.getAdultsNumber(),
@@ -208,6 +209,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
                     .id(rs.getLong(Fields.ID))
                     .userId(rs.getLong(Fields.BOOKING_USER_ID))
                     .apartmentId(rs.getLong(Fields.BOOKING_APARTMENT_ID))
+                    .requestClassId(rs.getInt(Fields.BOOKING_REQUEST_CLASS_ID))
                     .checkIn(rs.getDate(Fields.BOOKING_CHECK_IN).toLocalDate())
                     .checkOut(rs.getDate(Fields.BOOKING_CHECK_OUT).toLocalDate())
                     .adultsNumber(rs.getInt(Fields.BOOKING_ADULTS_NUMBER))

@@ -26,13 +26,13 @@ public final class Queries {
     public static final String SQL_BOOKING_DELETE = "DELETE FROM booking WHERE id = ?";
     public static final String SQL_BOOKING_GET_ALL = "SELECT * FROM booking";
     public static final String SQL_BOOKING_INSERT =
-            "INSERT INTO booking (user_id, apartment_id, check_in, check_out, adults_number, children_number, " +
+            "INSERT INTO booking (user_id, apartment_id, request_class_id, check_in, check_out, adults_number, children_number, " +
                     "reservation_time, comments, is_approved, is_booked, is_paid, is_canceled) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String SQL_BOOKING_UPDATE =
             "UPDATE booking SET " +
-                    "user_id = ?, apartment_id = ?, check_in = ?, check_out = ?, adults_number = ?, children_number = ?, " +
+                    "user_id = ?, apartment_id = ?, request_class_id = ?, check_in = ?, check_out = ?, adults_number = ?, children_number = ?, " +
                     "reservation_time = ?, comments= ?, is_approved = ?, is_booked = ?, is_paid = ?, is_canceled = ? " +
                     "WHERE ID = ?";
 
@@ -72,6 +72,12 @@ public final class Queries {
                     "FROM apartments a " +
                     "LEFT JOIN booking b ON a.id = b.apartment_id AND b.check_out >= ? AND b.check_in <= ? " +
                     "INNER JOIN apartment_class c ON a.class_id = c.id " +
+                    "WHERE a.adults_capacity >= ? AND a.class_id = ? AND b.apartment_id IS NULL";
+
+    public static final String SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY_AND_CLASS =
+            "SELECT COUNT(*)" +
+                    "FROM apartments a " +
+                    "LEFT JOIN booking b ON a.id = b.apartment_id AND b.check_out >= ? AND b.check_in <= ? " +
                     "WHERE a.adults_capacity >= ? AND a.class_id = ? AND b.apartment_id IS NULL";
 
     /* QUERIES FOR APARTMENT_CLASS TABLE */

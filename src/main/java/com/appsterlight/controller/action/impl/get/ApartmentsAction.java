@@ -68,7 +68,8 @@ public class ApartmentsAction extends FrontAction {
                 req.setAttribute("endDate", chosenEndDate);
 
                 String apartmentClass = req.getParameter("apartmentClass");
-                if (apartmentClass == null || apartmentClass.equalsIgnoreCase("All Classes")) {
+                if ((apartmentClass == null) || apartmentClass.equals("0") || apartmentClass.equalsIgnoreCase("All Classes")) {
+                    apartmentClass = "0";
                     allApartments = DtoUtils.mapApartmentListToDtoList(
                             apartmentService.getAllFreeApartments(guests, LocalDate.parse(chosenStartDate),
                                     LocalDate.parse(chosenEndDate)));
@@ -84,6 +85,7 @@ public class ApartmentsAction extends FrontAction {
                 List<ApartmentClass> allClasses = apartmentClassService.getAllApartmentClasses();
                 List<ApartmentClassDto> allApartmentClasses = DtoUtils.mapApartmentClassListToDtoList(allClasses);
                 req.setAttribute("apartmentClasses", allApartmentClasses);
+                req.setAttribute("chosenClass", apartmentClass);
             } catch (ServiceException e) {
                 log.error("Cant's get all apartments! " + e.getMessage());
                 throw new RuntimeException("Cant's get all apartments! " + e.getMessage());

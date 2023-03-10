@@ -21,6 +21,7 @@ public class Booking implements Serializable {
     private Long id;
     private Long userId;
     private Long apartmentId;
+    private Integer requestClassId;
     private LocalDate checkIn;
     private LocalDate checkOut;
     private Integer adultsNumber;

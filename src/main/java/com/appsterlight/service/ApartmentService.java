@@ -1,5 +1,6 @@
 package com.appsterlight.service;
 
+import com.appsterlight.exception.DaoException;
 import com.appsterlight.exception.ServiceException;
 import com.appsterlight.model.domain.Apartment;
 
@@ -15,8 +16,9 @@ public interface ApartmentService {
     List<Apartment> getAllApartments() throws ServiceException;
 
     List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut) throws ServiceException;
-    List<Apartment> getAllFreeApartmentsByClass(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId) throws ServiceException;
-
+    List<Apartment> getAllFreeApartmentsByClass(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId)
+            throws ServiceException;
+    Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId) throws ServiceException;
 
 
 

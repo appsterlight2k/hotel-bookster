@@ -18,10 +18,9 @@ public class BookingAction extends FrontAction {
 
     @Override
     public String process(HttpServletRequest req, HttpServletResponse resp) {
-
+        String result;
         UserDto user = (UserDto) req.getSession().getAttribute("loggedUser");
         if (user != null) {
-
             String isRequestOnly = req.getParameter("isRequestOnly");
 
             String apartmentId = isRequestOnly.equalsIgnoreCase("true") ? null : req.getParameter("apartmentId");
@@ -44,8 +43,13 @@ public class BookingAction extends FrontAction {
 
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-                    String result;
-                    Booking booking = buildBooking(user, id, checkIn, checkOut, guests, timestamp, comments);
+
+                    String apartmentClass = req.getParameter("apartmentClass");
+                    Integer requestClassId = ((apartmentClass == null) || apartmentClass.equals("0") ||
+                            apartmentClass.equalsIgnoreCase("All Classes")) ?
+                            null : Integer.parseInt(apartmentClass);
+
+                    Booking booking = buildBooking(user, id, requestClassId, checkIn, checkOut, guests, timestamp, comments);
                     if (id != null) {
                         if (!bookingService.isBookingExists(booking)) {
                             bookingService.addBooking(booking);
@@ -70,11 +74,12 @@ public class BookingAction extends FrontAction {
         return PagesNames.PAGE_CABINET;
     }
 
-    private Booking buildBooking(UserDto user, Long apartmentId, LocalDate checkIn, LocalDate checkOut,
+    private Booking buildBooking(UserDto user, Long apartmentId, Integer requestClassId, LocalDate checkIn, LocalDate checkOut,
                                  Integer guests, Timestamp timeStamp, String comments) {
         return Booking.builder()
                 .userId(user.getId())
                 .apartmentId(apartmentId)
+                .requestClassId(requestClassId)
                 .checkIn(checkIn)
                 .checkOut(checkOut)
                 .adultsNumber(guests)
