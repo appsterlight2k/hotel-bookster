@@ -113,7 +113,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Book it!</button>
+                                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Confirm</button>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                     </div>
                                 </div>
@@ -122,13 +122,13 @@
 
                         <input type="hidden" name="action" value="booking">
                         <input type="hidden" name="apartmentId" value="${apartment.id}">
-                        <input type="hidden" name="range" value="${guests}">
+                        <input type="hidden" name="guests" value="${guests}">
                         <input type="hidden" name="startDate" value="${startDate}">
                         <input type="hidden" name="endDate" value="${endDate}">
                         <input type="hidden" name="isRequestOnly" value="false">
 
                         <button type="button" id="button-request" class="btn btn-primary"
-                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">Confirm</button>
+                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">Book it!</button>
                     </form>
                 </div>
 

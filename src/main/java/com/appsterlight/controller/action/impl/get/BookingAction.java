@@ -38,7 +38,7 @@ public class BookingAction extends FrontAction {
                     LocalDate checkIn = LocalDate.parse(startDate);
                     LocalDate checkOut = LocalDate.parse(endDate);
 
-                    String guestsCount = req.getParameter("range");
+                    String guestsCount = req.getParameter("guests");
                     Integer guests = Integer.parseInt(guestsCount);
 
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -54,14 +54,14 @@ public class BookingAction extends FrontAction {
                         if (!bookingService.isBookingExists(booking)) {
                             bookingService.addBooking(booking);
                             result = "You have booked this Apartment successfully.\n " +
-                                    "After Manage approved your Application you should confirm the reservation in Bookings!";
+                                    "After Manage approves your Application you should confirm the reservation in Bookings!";
                         } else {
                             result = "You have already book this Apartment. Please check your booking list";
                         }
                     } else {
                         bookingService.addBooking(booking);
                         result = "You have send an request Application successfully.\n " +
-                                "After Manager approve your Application you should confirm the reservation in Bookings!";
+                                "After Manager approves your Application you should confirm the reservation in Bookings!";
                     }
                     req.setAttribute("result", result);
                 } catch (Exception e) {

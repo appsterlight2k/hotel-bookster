@@ -112,7 +112,7 @@
                         <li class="nav-item">
                             <div class="container-sm" style="width: 160px; height: 100%">
                                 <label for="range" class="form-label" id="rangeValue" style="margin-bottom: 0px;">Guests number: ${guests}</label>
-                                <input type="range" class="form-range" min="1" max="10" id="range" name="range" value="${guests}">
+                                <input type="range" class="form-range" min="1" max="10" id="range" name="guests" value="${guests}">
                             </div>
                         </li>
                         <li>
@@ -173,23 +173,31 @@
                 <div class="container form-apartments" >
                     <c:if test="${not empty apartments}">
                         <c:forEach items="${apartments}" var="currentApartment">
-                            <div class="card text-center card-container">
-                                <div class="card-header" style="border-radius: 22px 22px 0 0;">
-                                        ${currentApartment.className}
-                                </div>
-                                <div class="card-body">
-                                    <img src="${currentApartment.mainPhotoUrl}" alt="image" height="200" ><br>
-                                    <b>roomsCount:</b>  ${currentApartment.roomsCount} <br>
-                                    <b>adults capacity:</b> ${currentApartment.adultsCapacity} <br>
-                                    <b>childrenCapacity:</b> ${currentApartment.childrenCapacity} <br>
-                                    <b>price:</b> ${currentApartment.price} <br><br>
-                                    <b>Description:</b> <p class="card-text">${currentApartment.description}.</p>
+                            <form method="get" action="controller" id="form-details">
+                                <div class="card text-center card-container">
+                                    <div class="card-header" style="border-radius: 22px 22px 0 0; background-color: #569ff752;">
+                                            ${currentApartment.className}
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="${currentApartment.mainPhotoUrl}" alt="image" height="200" ><br>
+                                        <b>roomsCount:</b>  ${currentApartment.roomsCount} <br>
+                                        <b>adults capacity:</b> ${currentApartment.adultsCapacity} <br>
+                                        <b>childrenCapacity:</b> ${currentApartment.childrenCapacity} <br>
+                                        <b>price:</b> ${currentApartment.price} <br><br>
+                                        <b>Description:</b> <p class="card-text">${currentApartment.description}.</p>
 
-                                    <input type="hidden" form="form-search" name="apartmentId" value="${currentApartment.id}">
-                                    <button type="submit" id="button-get-apartment" class="btn btn-primary" form="form-search"
-                                            onclick="onShowApartmentClick()">Details...</button>
+                                        <input type="hidden" form="form-details" name="action" value="get-apartment">
+                                        <input type="hidden" form="form-details" name="apartmentId" value="${currentApartment.id}">
+                                        <input type="hidden" form="form-details" id="startDateForDetails" name="startDateForDetails" value="${startDate}">
+                                        <input type="hidden" form="form-details" id="endDateForDetails" name="endDateForDetails" value="${endDate}">
+                                        <input type="hidden" form="form-details" id="guestsForDetails" name="guests" value="${guests}">
+
+                                        <button type="submit" id="button-get-apartment" class="btn btn-primary" form="form-details">Details...</button>
+                                    </div>
                                 </div>
-                            </div>
+
+                            </form>
+
                         </c:forEach>
                     </c:if>
                 </div>
@@ -247,6 +255,12 @@
 
                     startDateInput.value = parseDateInputValue(startDate);
                     endDateInput.value = parseDateInputValue(endDate);
+
+                    var startDateForDetailsInput = document.getElementById("startDateForDetails");
+                    var endDateForDetailsInput = document.getElementById("endDateForDetails");
+                    startDateForDetailsInput.value = parseDateInputValue(startDate);
+                    endDateForDetailsInput.value = parseDateInputValue(endDate);
+
                     SubmitSearch();
                 }
             }
@@ -268,9 +282,11 @@
         range.addEventListener("input", function() {
             range.setAttribute('value', range.value);
             rangeValue.innerHTML = "Guests number: " + range.value;
-            var guests = document.getElementById('guests');
-            guests.value = range.value;
+            /*var guests = document.getElementById('guests');
+            guests.value = range.value;*/
 
+            var guestsForDetails = document.getElementById('guestsForDetails');
+            guestsForDetails.value = range.value;
         });
 
         range.addEventListener("change", function() {
@@ -309,10 +325,6 @@
 
         function onSearchClick() {
             action.value = 'apartments';
-        }
-
-        function onShowApartmentClick() {
-            action.value = 'get-apartment';
         }
 
         function getGuestsCount() {

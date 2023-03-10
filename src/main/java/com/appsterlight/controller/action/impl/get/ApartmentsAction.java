@@ -40,10 +40,10 @@ public class ApartmentsAction extends FrontAction {
                 LocalDate currentDay = LocalDate.now();
                 Integer guests = 1;
 
-                String range = req.getParameter("range");
+                String guestsStr = req.getParameter("guests");
 
-                if (range != null) {
-                    guests = Integer.parseInt(range);
+                if (guestsStr != null) {
+                    guests = Integer.parseInt(guestsStr);
                 } else {
                     String guestsFromRequest = (String) req.getAttribute("guests");
                     if (guestsFromRequest != null) {

@@ -47,14 +47,14 @@ public class ShowApartmentAction extends FrontAction {
                 List<Tag> tags = apartmentTagsService.getAllTagsByApartmentId(id);
                 req.setAttribute("tags", tags);
 
-                String guests = req.getParameter("range");
+                String guests = req.getParameter("guests");
                 req.setAttribute("guests", guests);
 
-                String startDateStr = req.getParameter("startDate");
+                String startDateStr = req.getParameter("startDateForDetails");
                 LocalDate startDate = LocalDate.parse(startDateStr);
                 req.setAttribute("startDate", startDate);
 
-                String endDateStr = req.getParameter("endDate");
+                String endDateStr = req.getParameter("endDateForDetails");
                 LocalDate endDate = LocalDate.parse(endDateStr);
                 req.setAttribute("endDate", endDate);
 
