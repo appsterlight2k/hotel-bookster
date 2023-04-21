@@ -8,6 +8,7 @@ import com.appsterlight.model.domain.ApartmentTag;
 import com.appsterlight.model.domain.Tag;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,11 +21,11 @@ import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlApartmentTagsDao extends AbstractDao<ApartmentTag> implements ApartmentTagsDao {
-    private final Connection connection;
+    private final DataSource dataSource;
 
-    public MySqlApartmentTagsDao(Connection connection) {
-        super(connection);
-        this.connection = connection;
+    public MySqlApartmentTagsDao(DataSource dataSource) {
+        super(dataSource);
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -66,7 +67,8 @@ public class MySqlApartmentTagsDao extends AbstractDao<ApartmentTag> implements 
     public List<Tag> getAllTagsByApartmentId(Long id) throws DaoException {
         List<Tag> tags = new ArrayList<>();
 
-        try (PreparedStatement prst = connection.prepareStatement(
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement prst = connection.prepareStatement(
                 SQL_APARTMENT_TAGS_GET_ALL_TAGS_BY_APARTMENT_ID)) {
             prst.setLong(1, id);
             ResultSet rs = prst.executeQuery();
@@ -81,12 +83,35 @@ public class MySqlApartmentTagsDao extends AbstractDao<ApartmentTag> implements 
         return tags;
     }
 
+    @Override
+    public List<Tag> getAllTagsByApartmentId(Long id, Boolean isBasic) throws DaoException {
+        List<Tag> tags = new ArrayList<>();
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement prst = connection.prepareStatement(
+                     SQL_APARTMENT_TAGS_GET_ALL_TAGS_BY_TYPE_AND_APARTMENT_ID)) {
+            prst.setLong(1, id);
+            prst.setBoolean(2, isBasic);
+            ResultSet rs = prst.executeQuery();
+
+            while (rs.next()) {
+                tags.add(mapTag(rs));
+            }
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+
+        return tags;
+    }
+
     //get all apartment tags which have some tag
     @Override
     public List<ApartmentTag> getAllApartmentTagsByTagId(Long id) throws DaoException {
         List<ApartmentTag> tags = new ArrayList<>();
 
-        try (PreparedStatement prst = connection.prepareStatement(
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement prst = connection.prepareStatement(
                 SQL_APARTMENT_TAGS_GET_ALL_APARTMENT_TAGS_BY_TAG_ID)) {
             prst.setLong(1, id);
             ResultSet rs = prst.executeQuery();
@@ -132,7 +157,7 @@ public class MySqlApartmentTagsDao extends AbstractDao<ApartmentTag> implements 
         try {
             return  ApartmentTag.builder()
                     .id(rs.getLong(Fields.ID))
-                    .tagId(rs.getString(Fields.APARTMENT_TAGS_TAG_ID))
+                    .tagId(rs.getLong(Fields.APARTMENT_TAGS_TAG_ID))
                     .apartmentId(rs.getLong(Fields.APARTMENT_TAGS_APARTMENT_ID))
                     .build();
         } catch (SQLException e) {

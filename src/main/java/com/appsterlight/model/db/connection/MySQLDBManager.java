@@ -24,7 +24,7 @@ public class MySQLDBManager implements DBManager {
     private static HikariDataSource dataSource;
     private static MySQLDBManager instance = null;
 
-    public static DataSource getDataSource() {
+    public DataSource getDataSource() {
         if (dataSource == null) {
             Properties props = getProperties();
             HikariConfig config = getHikariConfig(props);
@@ -34,8 +34,9 @@ public class MySQLDBManager implements DBManager {
                 log.error(String.format("Can't get DataSource! %s", e.getMessage()));
             }
 
-//            log.info("Hikari Pool was successfully configured and created");
+            log.info("Hikari Pool was successfully configured and created");
         }
+
         return dataSource;
     }
 

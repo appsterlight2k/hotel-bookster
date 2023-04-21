@@ -6,6 +6,7 @@ import com.appsterlight.model.domain.Apartment;
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,10 +19,10 @@ import static com.appsterlight.model.db.constants.Fields.*;
 
 @Slf4j
 public class MySqlApartmentDao extends AbstractDao<Apartment> implements ApartmentDao {
-    private final Connection connection;
-    public MySqlApartmentDao(Connection connection) {
-        super(connection);
-        this.connection = connection;
+    private final DataSource dataSource;
+    public MySqlApartmentDao(DataSource dataSource) {
+        super(dataSource);
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -48,11 +49,6 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
     public String getSelectAllQuery() {
         return SQL_APARTMENT_GET_ALL;
     }
-    public String getSelectAllFreeByCapacityQuery() { return SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY; }
-    public String getSelectAllFreeByCapacityAndClassQuery() { return SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS; }
-    public String getSelectCountOfAllFree()
-        { return SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY_AND_CLASS; }
-
 
     @Override
     public Long add(Apartment apartment) throws DaoException {
@@ -72,7 +68,8 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         Apartment object = null;
 
         String query = getSelectQuery();
-        try (PreparedStatement prst = connection.prepareStatement(query)) {
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement prst = connection.prepareStatement(query)) {
             prst.setLong(1, id);
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
@@ -91,7 +88,7 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         List<Apartment> apartments = new ArrayList<>();
         Apartment apartment;
         ResultSet rs;
-        try {
+        try (Connection connection = dataSource.getConnection();) {
             if (parameters.length > 0) {
                 PreparedStatement prst = connection.prepareStatement(query);
                 for (int i = 0; i < parameters.length; i++) {
@@ -117,29 +114,71 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         return apartments;
     }
 
-    public List<Apartment> getAllFreeByGuestsNumber(Integer guests, LocalDate checkIn, LocalDate checkOut)
-            throws DaoException {
-        return getAllByQuery(getSelectAllFreeByCapacityQuery(), checkIn, checkOut, guests);
+    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut)
+                                                                                  throws DaoException {
+        String query = SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY;
+        return getAllByQuery(query, checkIn, checkOut, guests);
     }
 
     @Override
-    public List<Apartment> getAllFreeByGuestsNumberAndClass(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                                            Integer classId) throws DaoException {
-        String query = getSelectAllFreeByCapacityAndClassQuery();
+    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
+                                                                     Integer classId) throws DaoException {
+        String query = SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS;
 
         return getAllByQuery(query, checkIn, checkOut, guests, classId);
     }
 
     @Override
-    public Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId) throws DaoException {
-        String query = getSelectCountOfAllFree();
+    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
+                                                Integer classId, Integer offset, Integer recordsPerPage) throws DaoException {
+        String query = SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS_WITH_PAGINATION;
+
+        return getAllByQuery(query, checkIn, checkOut, guests, classId, offset, recordsPerPage);
+    }
+
+    @Override
+    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
+                                                Integer offset, Integer recordsPerPage) throws DaoException {
+        String query = SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_WITH_PAGINATION;
+
+        return getAllByQuery(query, checkIn, checkOut, guests, offset, recordsPerPage);
+    }
+
+    @Override
+    public Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId)
+                                                                                        throws DaoException {
+        String query = SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY_AND_CLASS;
         Integer count = -1;
 
-        try (PreparedStatement prst = connection.prepareStatement(query)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement prst = connection.prepareStatement(query)) {
             prst.setDate(1, Date.valueOf(checkIn));
             prst.setDate(2, Date.valueOf(checkOut));
             prst.setInt(3, guests);
             prst.setInt(4, classId);
+
+            ResultSet rs = prst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+
+        return count;
+    }
+
+    @Override
+    public Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut) throws DaoException {
+        String query = SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY;
+        Integer count = -1;
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement prst = connection.prepareStatement(query)) {
+            prst.setDate(1, Date.valueOf(checkIn));
+            prst.setDate(2, Date.valueOf(checkOut));
+            prst.setInt(3, guests);
 
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
@@ -170,7 +209,8 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
     public Optional<Apartment> getApartmentByApartmentNumber(String number) throws DaoException {
         Apartment object = null;
 
-        try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_GET_BY_APARTMENT_NUMBER)) {
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_GET_BY_APARTMENT_NUMBER)) {
             prst.setString(1, number);
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {

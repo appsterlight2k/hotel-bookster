@@ -2,6 +2,7 @@ package com.appsterlight.model.db.dao.mysql;
 
 import com.appsterlight.model.db.dao.*;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 
 public class MySqlDaoFactory extends DaoFactory {
@@ -12,17 +13,17 @@ public class MySqlDaoFactory extends DaoFactory {
     private ApartmentPhotosDao apartmentPhotosDao;
     private ApartmentTagsDao apartmentTagsDao;
 
-    private final Connection con;
+    private final DataSource dataSource;
 
 
-    public MySqlDaoFactory(Connection con) {
-        this.con = con;
+    public MySqlDaoFactory(DataSource dataSource) {
+        this.dataSource= dataSource;
     }
 
     @Override
     public UserDao getUserDao() {
         if (userDao == null) {
-            userDao = new MySqlUserDao(con);
+            userDao = new MySqlUserDao(dataSource);
         }
 
         return userDao;
@@ -31,7 +32,7 @@ public class MySqlDaoFactory extends DaoFactory {
     @Override
     public ApartmentDao getApartmentDao() {
         if (apartmentDao == null) {
-            apartmentDao = new MySqlApartmentDao(con);
+            apartmentDao = new MySqlApartmentDao(dataSource);
         }
 
         return apartmentDao;
@@ -40,7 +41,7 @@ public class MySqlDaoFactory extends DaoFactory {
     @Override
     public ApartmentClassDao getApartmentClassDao() {
         if (apartmentClassDao == null) {
-            apartmentClassDao = new MySqlApartmentClassDao(con);
+            apartmentClassDao = new MySqlApartmentClassDao(dataSource);
         }
 
         return apartmentClassDao;
@@ -49,7 +50,7 @@ public class MySqlDaoFactory extends DaoFactory {
     @Override
     public BookingDao getBookingDao() {
         if (bookingDao == null) {
-            bookingDao = new MySqlBookingDao(con);
+            bookingDao = new MySqlBookingDao(dataSource);
         }
 
         return bookingDao;
@@ -58,7 +59,7 @@ public class MySqlDaoFactory extends DaoFactory {
     @Override
     public ApartmentPhotosDao getApartmentPhotosDao() {
         if (apartmentPhotosDao == null) {
-            apartmentPhotosDao = new MySqlApartmentPhotosDao(con);
+            apartmentPhotosDao = new MySqlApartmentPhotosDao(dataSource);
         }
 
         return apartmentPhotosDao;
@@ -67,7 +68,7 @@ public class MySqlDaoFactory extends DaoFactory {
     @Override
     public ApartmentTagsDao getApartmentTagsDao() {
         if (apartmentTagsDao == null) {
-            apartmentTagsDao = new MySqlApartmentTagsDao(con);
+            apartmentTagsDao = new MySqlApartmentTagsDao(dataSource);
         }
 
         return apartmentTagsDao;

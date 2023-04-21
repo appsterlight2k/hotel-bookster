@@ -7,6 +7,7 @@ import com.appsterlight.model.domain.User;
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,11 +19,11 @@ import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlUserDao extends AbstractDao<User> implements UserDao {
-    private final Connection connection;
+    private final DataSource dataSource;
 
-    public MySqlUserDao(Connection connection) {
-        super(connection);
-        this.connection = connection;
+    public MySqlUserDao(DataSource dataSource) {
+        super(dataSource);
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -64,7 +65,8 @@ public class MySqlUserDao extends AbstractDao<User> implements UserDao {
     public Optional<User> getUserByEmail(String email) throws DaoException {
         User user = null;
 
-        try (PreparedStatement prst = connection.prepareStatement(SQL_USER_GET_BY_EMAIL)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement prst = connection.prepareStatement(SQL_USER_GET_BY_EMAIL)) {
             prst.setString(1, email);
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {

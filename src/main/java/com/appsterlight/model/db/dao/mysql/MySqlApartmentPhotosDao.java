@@ -7,6 +7,7 @@ import com.appsterlight.model.domain.ApartmentPhoto;
 import com.appsterlight.exception.DaoException;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,11 @@ import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhoto> implements ApartmentPhotosDao {
-    private final Connection connection;
+    private final DataSource dataSource;
 
-    public MySqlApartmentPhotosDao(Connection connection) {
-        super(connection);
-        this.connection = connection;
+    public MySqlApartmentPhotosDao(DataSource dataSource) {
+        super(dataSource);
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -60,7 +61,8 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhoto> impleme
     public List<String> getAllUrlOfPhotosById(Long id) throws DaoException {
         List<String> urls = new ArrayList<>();
 
-        try (PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_PHOTOS_GET_ALL_PHOTOS_BY_ID)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement prst = connection.prepareStatement(SQL_APARTMENT_PHOTOS_GET_ALL_PHOTOS_BY_ID)) {
             prst.setLong(1, id);
             ResultSet rs = prst.executeQuery();
 

@@ -7,6 +7,7 @@ import com.appsterlight.model.db.dao.ApartmentClassDao;
 import com.appsterlight.model.domain.ApartmentClass;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 import static com.appsterlight.model.db.constants.Fields.*;
@@ -15,9 +16,10 @@ import static com.appsterlight.model.db.constants.Queries.*;
 
 @Slf4j
 public class MySqlApartmentClassDao extends AbstractDao<ApartmentClass> implements ApartmentClassDao {
-
-    public MySqlApartmentClassDao(Connection connection) {
-        super(connection);
+    private final DataSource dataSource;
+    public MySqlApartmentClassDao(DataSource dataSource) {
+        super(dataSource);
+        this.dataSource = dataSource;
     }
 
     @Override
