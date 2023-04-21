@@ -3,11 +3,12 @@ package com.appsterlight.controller.action.factory;
 import com.appsterlight.controller.action.FrontAction;
 import com.appsterlight.controller.action.impl.get.*;
 import com.appsterlight.controller.action.impl.post.LoginAction;
+import com.appsterlight.controller.action.impl.get.ManagerBookedAction;
 import com.appsterlight.controller.action.impl.post.RegistrationAction;
 import static com.appsterlight.controller.action.factory.constants.ActionName.*;
 
-import com.appsterlight.controller.action.impl.post.RequestsAction;
-import com.appsterlight.controller.action.impl.post.ShowApartmentAction;
+import com.appsterlight.controller.action.impl.get.ManagerRequestsAction;
+import com.appsterlight.controller.action.impl.get.ShowApartmentAction;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,7 +32,15 @@ public final class ActionFactory {
         ACTIONS.put(ACTION_LOGOUT, new LogoutAction());
         ACTIONS.put(ACTION_REGISTRATION, new RegistrationAction());
         ACTIONS.put(ACTION_MANAGER_HOME, new ManagerHomeAction());
-        ACTIONS.put(ACTION_MANAGER_REQUESTS, new RequestsAction());
+
+        ACTIONS.put(ACTION_MANAGER_ALL_APARTMENTS, new ManagerApartmentsAction());
+        ACTIONS.put(ACTION_MANAGER_ALL_REQUESTS, new ManagerRequestsAction());
+        ACTIONS.put(ACTION_MANAGER_BOOKING_REQUESTS, new ManagerBookingRequestsAction(true));
+        ACTIONS.put(ACTION_MANAGER_REQUESTS_FOR_BOOKING, new ManagerBookingRequestsAction(false));
+
+        ACTIONS.put(ACTION_MANAGER_OFFER_APARTMENTS, new ManagerOfferApartmentsAction());
+        ACTIONS.put(ACTION_MANAGER_BOOKED, new ManagerBookedAction());
+
         ACTIONS.put(ACTION_APARTMENTS, new ApartmentsAction());
         ACTIONS.put(ACTION_GET_APARTMENT, new ShowApartmentAction());
         ACTIONS.put(ACTION_CABINET, new CabinetAction());
