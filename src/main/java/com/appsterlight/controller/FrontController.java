@@ -2,8 +2,6 @@ package com.appsterlight.controller;
 
 import com.appsterlight.controller.action.FrontAction;
 import com.appsterlight.controller.action.factory.ActionFactory;
-import com.appsterlight.utils.ConnectionUtils;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
 
@@ -31,7 +29,7 @@ public class FrontController extends HttpServlet {
         String target = action.process(req, resp);
 
         try {
-           if (ConnectionUtils.isGetMethod(req)) {
+           if (isGetMethod(req)) {
                req.getRequestDispatcher(target).forward(req, resp);
            } else {
                resp.sendRedirect(target);
@@ -40,6 +38,10 @@ public class FrontController extends HttpServlet {
             log.error("Exception in handleRequest method: can't handle request! " + e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean isGetMethod(HttpServletRequest req) {
+        return req.getMethod().equalsIgnoreCase("GET");
     }
 
 }
