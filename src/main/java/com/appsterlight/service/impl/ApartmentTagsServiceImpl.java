@@ -25,4 +25,14 @@ public class ApartmentTagsServiceImpl implements ApartmentTagsService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public List<Tag> getAllTagsByApartmentId(Long id, Boolean isBasic) throws ServiceException {
+        try {
+            return apartmentTagsDao.getAllTagsByApartmentId(id, isBasic);
+        } catch (Exception e) {
+            log.error("Exception while retrieving tags of Apartment." + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
 }

@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface ApartmentTagsDao extends Dao<ApartmentTag> {
     List<Tag> getAllTagsByApartmentId(Long id) throws DaoException;
+    List<Tag> getAllTagsByApartmentId(Long id, Boolean isBasic) throws DaoException;
     List<ApartmentTag> getAllApartmentTagsByTagId(Long id) throws DaoException;
 }
