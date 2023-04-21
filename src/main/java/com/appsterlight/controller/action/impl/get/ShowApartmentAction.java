@@ -1,4 +1,4 @@
-package com.appsterlight.controller.action.impl.post;
+package com.appsterlight.controller.action.impl.get;
 
 import com.appsterlight.controller.action.FrontAction;
 import com.appsterlight.controller.action.utils.DtoUtils;
@@ -29,42 +29,44 @@ public class ShowApartmentAction extends FrontAction {
         final HttpSession session = req.getSession();
 
         UserDto user = (UserDto) session.getAttribute("loggedUser");
-        String apartmentId = req.getParameter("apartmentId");
 
-        if (user != null) {
-            try {
-                Long id = Long.parseLong(apartmentId);
-                ApartmentDto apartment = DtoUtils.mapApartmentToDto(
-                        apartmentService.getApartmentById(id));
+        try {
+            String apartmentId = req.getParameter("apartmentId");
+            Long id = Long.parseLong(apartmentId);
+            ApartmentDto apartment = DtoUtils.mapApartmentToDto(
+                    apartmentService.getApartmentById(id));
 
-                req.setAttribute("apartment", apartment);
+            req.setAttribute("apartment", apartment);
 
-                ApartmentPhotosService apartmentPhotosService = appContext.getApartmentPhotosService();
-                List<String> photos = apartmentPhotosService.getAllUrlOfPhotosById(id);
-                req.setAttribute("photos", photos);
+            ApartmentPhotosService apartmentPhotosService = appContext.getApartmentPhotosService();
+            List<String> photos = apartmentPhotosService.getAllUrlOfPhotosById(id);
+            req.setAttribute("photos", photos);
 
-                ApartmentTagsService apartmentTagsService = appContext.getApartmentTagsService();
-                List<Tag> tags = apartmentTagsService.getAllTagsByApartmentId(id);
-                req.setAttribute("tags", tags);
+            ApartmentTagsService apartmentTagsService = appContext.getApartmentTagsService();
+            List<Tag> allTags = apartmentTagsService.getAllTagsByApartmentId(id);
+            req.setAttribute("allTags", allTags);
 
+            List<Tag> basicTags = apartmentTagsService.getAllTagsByApartmentId(id, true);
+            req.setAttribute("basicTags", basicTags);
+
+            if (user != null) {
                 String guests = req.getParameter("guests");
                 req.setAttribute("guests", guests);
 
-                String startDateStr = req.getParameter("startDateForDetails");
+                String startDateStr = req.getParameter("startDate");
                 LocalDate startDate = LocalDate.parse(startDateStr);
                 req.setAttribute("startDate", startDate);
 
-                String endDateStr = req.getParameter("endDateForDetails");
+                String endDateStr = req.getParameter("endDate");
                 LocalDate endDate = LocalDate.parse(endDateStr);
                 req.setAttribute("endDate", endDate);
-
-                return PagesNames.PAGE_APARTMENT_SHOW;
-            } catch (ServiceException e) {
-                log.error("Can't get apartment! " + e.getMessage());
             }
+        } catch (ServiceException e) {
+            log.error("Can't get apartment! " + e.getMessage());
+            return PagesNames.PAGE_ERROR;
         }
 
-        return PagesNames.PAGE_HOME_GUEST;
+        return PagesNames.PAGE_APARTMENT_SHOW;
     }
 
 }
