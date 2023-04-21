@@ -68,7 +68,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public boolean isBookingWithParametersExists(Long userId, Long apartmentId, LocalDate checkIn, LocalDate checkOut, Integer guests) throws ServiceException {
+    public boolean isBookingWithParametersExists(Long userId, Long apartmentId, LocalDate checkIn, LocalDate checkOut,
+                                                 Integer guests) throws ServiceException {
         try {
             return bookingDao.isBookingExists(userId, apartmentId, checkIn, checkOut, guests);
         } catch (DaoException e) {
@@ -84,6 +85,127 @@ public class BookingServiceImpl implements BookingService {
                     booking.getCheckOut(), booking.getAdultsNumber());
         } catch (DaoException e) {
             log.error("Can't get booking from table! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+
+    @Override
+    public List<Booking> getAllBookingRequests(Integer offset, Integer pageSize) throws ServiceException {
+        try {
+            return bookingDao.getAllBookingRequests(offset, pageSize);
+        } catch (DaoException e) {
+            log.error("Can't get all Booking Requests from table! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Booking> getAllBookingRequests(LocalDate dateFrom, Integer offset, Integer pageSize) throws ServiceException {
+        try {
+            return bookingDao.getAllBookingRequests(dateFrom, offset, pageSize);
+        } catch (DaoException e) {
+            log.error("Can't get all Booking Requests from table! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Booking> getAllBookingRequests(LocalDate dateFrom, LocalDate dateTo, Integer offset, Integer pageSize) throws ServiceException {
+        try {
+            return bookingDao.getAllBookingRequests(dateFrom, dateTo, offset, pageSize);
+        } catch (DaoException e) {
+            log.error("Can't get all Booking Requests from table! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Booking> getAllRequestsForBooking(Integer offset, Integer pageSize) throws ServiceException {
+        try {
+            return bookingDao.getAllRequestsForBooking(offset, pageSize);
+        } catch (DaoException e) {
+            log.error("Can't get all Requests for Booking from table! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Booking> getAllRequestsForBooking(LocalDate dateFrom, Integer offset, Integer pageSize) throws ServiceException {
+        try {
+            return bookingDao.getAllRequestsForBooking(dateFrom, offset, pageSize);
+        } catch (DaoException e) {
+            log.error("Can't get all Requests for Booking from table! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Booking> getAllRequestsForBooking(LocalDate dateFrom, LocalDate dateTo, Integer offset, Integer pageSize) throws ServiceException {
+        try {
+            return bookingDao.getAllRequestsForBooking(dateFrom, dateTo, offset, pageSize);
+        } catch (DaoException e) {
+            log.error("Can't get all Requests for Booking from table! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Integer getCountOfAllBookingRequests(LocalDate dateFrom, LocalDate dateTo) throws ServiceException {
+        try {
+            return bookingDao.getCountOfBookingRequests(dateFrom, dateTo);
+        } catch (DaoException e) {
+            log.error("Can't get count of all Bookings Requests! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Integer getCountOfAllBookingRequests() throws ServiceException {
+        try {
+            return bookingDao.getCountOfBookingRequests();
+        } catch (DaoException e) {
+            log.error("Can't get count of all Bookings Requests! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Integer getCountOfAllBookingRequests(LocalDate dateFrom) throws ServiceException {
+        try {
+            return bookingDao.getCountOfBookingRequests(dateFrom);
+        } catch (DaoException e) {
+            log.error("Can't get count of all Bookings Requests! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Integer getCountOfRequestsForBooking() throws ServiceException {
+        try {
+            return bookingDao.getCountOfRequestsForBooking();
+        } catch (DaoException e) {
+            log.error("Can't get count of all Requests for Booking! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Integer getCountOfRequestsForBooking(LocalDate dateFrom) throws ServiceException {
+        try {
+            return bookingDao.getCountOfRequestsForBooking(dateFrom);
+        } catch (DaoException e) {
+            log.error("Can't get count of all Requests for Booking! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Integer getCountOfRequestsForBooking(LocalDate dateFrom, LocalDate dateTo) throws ServiceException {
+        try {
+            return bookingDao.getCountOfRequestsForBooking(dateFrom, dateTo);
+        } catch (DaoException e) {
+            log.error("Can't get count of all Requests for Booking! " + e.getMessage());
             throw new ServiceException(e);
         }
     }
