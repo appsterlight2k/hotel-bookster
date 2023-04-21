@@ -1,0 +1,75 @@
+body {
+    padding-top: 92px;
+}
+
+.error { color: red; }
+
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* header */
+ .nav-header-bar {
+     height: 38px;
+     padding: 0;
+ }
+
+.inner-header-bar {
+    height: 100%;
+}
+
+#header-bar {
+    width: 280px;
+    max-width: 280px;
+}
+
+/* card container: apartments */
+.card-container {
+    margin-bottom: 10px;
+    border-radius: 22px;
+}
+
+/* search panel */
+#search-panel {
+    margin-top: 38px;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 0 0 17px 17px;
+}
+
+#datepicker {
+    width: 250px;
+    text-align: center;
+}
+
+.container-centred {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* footer */
+.footer-page-bar {
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    padding: 0;
+    border-top: 1px solid lightgray;
+}
+
+.inner-page-bar {
+    display: flex;
+    justify-content: flex-end;
+    height: 45px;
+    width: auto;
+}
+
+#pagination-bar {
+    margin-top: 3px;
+}
