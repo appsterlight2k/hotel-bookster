@@ -13,6 +13,7 @@ import java.io.Serializable;
 public class Tag implements Serializable {
     private Long id;
     private String name;
+    private Boolean isBasic;
     private String description;
 
 }

@@ -40,6 +40,7 @@ DROP TABLE IF EXISTS tags;
 CREATE TABLE tags (
                       id INT UNIQUE NOT NULL AUTO_INCREMENT,
                       name VARCHAR(200) NOT NULL,
+                      is_basic BOOLEAN NOT NULL DEFAULT false,
                       description VARCHAR(200) NOT NULL
 );
 
@@ -92,7 +93,7 @@ CREATE TABLE booking (
 #-----------------------------[ INSERT INITIAL DATA ] -------------------------------
 INSERT INTO users (id, first_name, last_name, email, phone_number, password, role, description)
 VALUES
-    (1, 'Stephan', 'Rockwell', 'st@gmail.com', '+193520435634', '123', 'ROLE_MANAGER', 'SuperHero'),
+    (1, 'Stephan', 'Rockwell', 'manager@gmail.com', '+193520435634', '123', 'ROLE_MANAGER', 'SuperHero'),
     (2, 'Andrew', 'Hetman', 'ah@gmail.com', '+380969826345', 'Tales', 'ROLE_USER', ''),
     (3, 'Mary', 'Perry', 'marry.star@gmail.com', '+380988476264', 'WeatherCoat', 'ROLE_USER', ''),
 	(4, 'Nikola', 'Tesla', 'tesla@gmail.com', '+380953458323', 'Pasword', 'ROLE_USER', ''),
@@ -135,82 +136,107 @@ VALUES
 (7, '314', 1, 1, 2, 1, 'photos/Room-Type-quad-Room.jpg', 120, 'regular room. Close to elevator'),
 (8, '402', 1, 1, 3, 1, 'photos/Room-Type-quad-Room.jpg', 120, 'regular room. Close to elevator'),
 (9, '405', 1, 1, 1, 1, 'photos/Room-Type-quad-Room.jpg', 150, 'regular room. Close to elevator'),
-(10, '410', 1, 1, 4, 1, 'photos/Room-Type-quad-Room.jpg', 150, 'regular room. Close to elevator');
+(10, '410', 1, 1, 4, 1, 'photos/Room-Type-quad-Room.jpg', 150, 'regular room. Close to elevator'),
+(11, '411', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 150, 'luxary room. Close to elevator'),
+(12, '412', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 150, 'luxary room. Close to elevator'),
+(13, '413', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 150, 'luxary room. Close to elevator'),
+(14, '414', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 150, 'luxary room. Close to elevator'),
+(15, '415', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 150, 'luxary room. Close to elevator'),
+(16, '416', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 150, 'luxary room. Close to elevator'),
+(17, '417', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 160, 'luxary room. Close to elevator'),
+(18, '418', 1, 4, 4, 4, 'photos/Room-Type-King-Room.jpg', 150, 'luxary room. Close to elevator'),
+(19, '419', 1, 4, 3, 4, 'photos/Room-Type-Twin-Room.jpg', 160, 'luxary room. Close to elevator'),
+(20, '420', 1, 4, 4, 4, 'photos/Room-Type-studio-Room.jpg', 150, 'luxary room. Close to elevator'),
+(21, '421', 1, 4, 3, 4, 'photos/Room-Type-quad-Room.jpg', 180, 'luxary room. Close to elevator'),
+(22, '422', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 120, 'luxary room. Close to elevator'),
+(23, '423', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 150, 'luxary room. Close to elevator'),
+(24, '424', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 180, 'luxary room. Close to elevator'),
+(25, '425', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 120, 'luxary room. Close to elevator'),
+(26, '426', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 190, 'luxary room. Close to elevator'),
+(27, '427', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 150, 'luxary room. Close to elevator'),
+(28, '428', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 130, 'luxary room. Close to elevator'),
+(29, '429', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 150, 'luxary room. Close to elevator'),
+(30, '430', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 140, 'luxary room. Close to elevator'),
+(31, '431', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 180, 'luxary room. Close to elevator'),
+(32, '432', 1, 4, 4, 4, 'photos/Room-Type-quad-Room.jpg', 120, 'luxary room. Close to elevator');
 
 INSERT INTO booking (id, user_id, apartment_id, request_class_id, check_in, check_out, adults_number, children_number, reservation_time, comments,
 					 is_approved, is_booked, is_paid, is_canceled)
 VALUES
-(1, 2, 1, null, '2023-03-12', '2023-03-14', 1, 0, '2023-03-01 13:19:26', 'Comment1', true, false, false, false),
-(2, 4, 1, null, '2023-03-17', '2023-03-18', 1, 0, '2023-03-03 13:19:26', 'Comment2', true, false, false, false),
-(3, 4, 1, null, '2023-03-21', '2023-03-21', 1, 0, '2023-03-03 13:19:26', 'Comment3', true, false, false, false),
+(1, 2, 1, null, '2023-03-12', '2023-03-14', 1, 0, '2023-03-01 13:19:26', 'Comment1', true, false, false, false), #booked: approved
+(2, 4, 1, null, '2023-03-17', '2023-03-18', 1, 0, '2023-03-03 13:19:26', 'Comment2', true, true, false, false), #booked
+(3, 4, 1, null, '2023-03-21', '2023-03-21', 1, 0, '2023-03-03 13:19:26', 'Comment3', true, true, true, false), #busy
 
-(4, 2, 2, null, '2023-03-13', '2023-03-16', 2, 0, '2023-03-05 13:19:26', 'Comment4', true, true, false, false),
-(5, 3, 2, null, '2023-03-18', '2023-03-20', 2, 0, '2023-03-01 13:19:26', null, true, true, false, false),
+(4, 2, 2, null, '2023-03-13', '2023-03-16', 2, 0, '2023-03-05 13:19:26', 'Comment4', true, true, false, false), #booked
+(5, 3, 2, null, '2023-03-18', '2023-03-20', 2, 0, '2023-03-01 13:19:26', null, true, true, true, true), #canceled
 
-(6, 4, 3, null, '2023-03-12', '2023-03-12', 2, 0, '2023-03-02 13:19:26', 'Comment6', true, true, true, false),
-(7, 2, 3, null, '2023-03-15', '2023-03-15', 2, 0, '2023-03-08 13:19:26', 'Comment7', true, true, true, false),
-(8, 2, 3, null, '2023-03-18', '2023-03-19', 2, 0, '2023-03-08 13:19:26', null, true, true, true, false),
-(9, 2, 3, null, '2023-03-21', '2023-03-21', 2, 0, '2023-03-08 13:19:26', 'Comment9', true, true, true, false),
+(6, 4, 3, null, '2023-03-12', '2023-03-12', 2, 0, '2023-03-02 13:19:26', 'Comment6', true, true, true, true), #canceled
+(7, 2, 3, null, '2023-03-15', '2023-03-15', 2, 0, '2023-03-08 13:19:26', 'Comment7', true, true, true, false), #busy
+(8, 2, 3, null, '2023-03-18', '2023-03-19', 2, 0, '2023-03-08 13:19:26', null, false, false, false, false), #booked: not approved
+(9, 2, 3, null, '2023-03-21', '2023-03-21', 2, 0, '2023-03-08 13:19:26', 'Comment9', true, true, true, false), #busy
 
-(10, 2, 4, null, '2023-03-11', '2023-03-13', 2, 0, '2023-02-11 13:19:26', 'Comment10', true, true, true, true),
-(11, 3, 4, null, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment11', false, false, false, false),
+(10, 2, 4, null, '2023-03-11', '2023-03-13', 2, 0, '2023-02-11 13:19:26', 'Comment10', true, true, true, false), #busy
+(11, 3, 4, null, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment11', true, true, true, false), #busy
 
-(12, 2, 5, null, '2023-03-14', '2023-03-15', 2, 0, '2023-02-11 13:19:26', 'Comment12', false, true, true, true),
-(13, 3, 5, null, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment13', false, false, false, false),
-(14, 3, 5, null, '2023-03-20', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment14', false, false, false, false),
+(12, 2, 5, null, '2023-03-14', '2023-03-15', 2, 0, '2023-02-11 13:19:26', 'Comment12', true, true, false, false), #booked
+(13, 3, 5, null, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment13', true, true, true, true), #canceled
+(14, 3, 5, null, '2023-03-20', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment14', true, true, true, false), #busy
 
-(15, 2, 6, null, '2023-03-15', '2023-03-15', 2, 0, '2023-02-11 13:19:26', 'Comment15', true, true, true, true),
-(16, 3, 6, null, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment16', false, false, false, false),
-(17, 3, 6, null, '2023-03-20', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment17', false, false, false, false),
+(15, 2, 6, null, '2023-03-15', '2023-03-15', 2, 0, '2023-02-11 13:19:26', 'Comment15', true, true, true, false), #busy
+(16, 3, 6, null, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment16', true, true, false, false), #booked
+(17, 3, 6, null, '2023-03-20', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment17', true, true, false, false), #booked
 
-(18, 3, 7, null, '2023-03-12', '2023-03-13', 1, 0, '2023-02-11 13:19:26', 'Comment18', false, false, false, false),
-(19, 3, 7, null, '2023-03-17', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment19', false, false, false, false),
-(20, 3, 7, null, '2023-03-21', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment20', false, false, false, false),
+(18, 3, 7, null, '2023-03-12', '2023-03-13', 1, 0, '2023-02-11 13:19:26', 'Comment18', true, true, true, false), #busy
+(19, 3, 7, null, '2023-03-17', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment19', true, false, false, false), #booked: approved
+(20, 3, 7, null, '2023-03-21', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment20', false, false, false, false), #booked: not approved
 
-(21, 3, 8, null, '2023-03-13', '2023-03-15', 1, 0, '2023-02-11 13:19:26', 'Comment21', false, false, false, false),
-(22, 3, 8, null, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment22', false, false, false, false),
-(23, 1, null, 2, '2023-03-25', '2023-03-27', 1, 0, '2023-02-11 13:19:26', 'Comment23', false, false, false, false),
-(24, 1, 9, null, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', 'Comment24', false, false, false, false),
-(25, 1, 6, null, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', 'Comment25', false, false, false, false),
-(26, 1, 9, null, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment26', false, false, false, false),
-(27, 1, 10, null, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment27', false, false, false, false);
+(21, 3, 8, null, '2023-03-13', '2023-03-15', 1, 0, '2023-02-11 13:19:26', 'Comment21', true, true, false, false), #booked
+(22, 3, 8, null, '2023-03-18', '2023-03-21', 1, 0, '2023-02-11 13:19:26', 'Comment22', true, true, false, false), #booked
 
-INSERT INTO tags (id, name, description)
+(26, 1, 9, null, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment26', true, true, true, false), #busy
+
+(27, 1, 10, null, '2023-03-18', '2023-03-18', 1, 0, '2023-02-11 13:19:26', 'Comment27', false, false, false, false), #booked: not approved
+
+(24, 1, 11, null, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', 'Comment24', false, false, false, false), #booked: not approved
+(25, 1, 12, null, '2023-03-04', '2023-03-04', 1, 0, '2023-02-11 13:19:26', 'Comment25', true, false, false, false), #booked: approved
+(23, 1, null, 2, '2023-03-25', '2023-03-27', 1, 0, '2023-02-11 13:19:26', 'Comment23', false, false, false, false); #request
+
+INSERT INTO tags (id, name, is_basic, description)
 VALUES
-(1, 'Toiletries', ''),
-(2, 'Bathrobe', ''),
-(3, 'Safe', ''),
-(4, 'Toilet', ''),
-(5, 'Sofa', ''),
-(6, 'Bath or shower', ''),
-(7, 'Towels', ''),
-(8, 'Linen', ''),
-(9, 'Socket near the bed', ''),
-(10, 'Cleaning products', ''),
-(11, 'Safe for allergy sufferers', ''),
-(12, 'Work desk', ''),
-(13, 'Living room / seating area', ''),
-(14, 'TV set', ''),
-(15, 'Slippers', ''),
-(16, 'Refrigerator', ''),
-(17, 'Telephone', ''),
-(18, 'Accessories for ironing clothes', ''),
-(19, 'Satellite channels', ''),
-(20, 'Kettle / coffee maker', ''),
-(21, 'Iron', ''),
-(22, 'Heating', ''),
-(23, 'Hair dryer', ''),
-(24, 'Towels / bed linen for an additional fee', ''),
-(25, 'Carpeted flooring', ''),
-(26, 'Electric kettle', ''),
-(27, 'Cable channels', ''),
-(28, 'Wake-up call service', ''),
-(29, 'Wardrobe or wardrobe', ''),
-(30, 'The higher floors can be reached by elevator', ''),
-(31, 'A hanger for clothes', ''),
-(32, 'Toilet paper', ''),
-(33, 'Sofa bed', ''),
-(34, 'Individual air conditioning in guest rooms', '');
+(1, 'Toiletries', true, ''),
+(2, 'Bathrobe', false, ''),
+(3, 'Safe', false, ''),
+(4, 'Toilet', true, ''),
+(5, 'Sofa', false, ''),
+(6, 'Bath or shower', true, ''),
+(7, 'Towels', true, ''),
+(8, 'Linen', false, ''),
+(9, 'Socket near the bed', true, ''),
+(10, 'Cleaning products', false, ''),
+(11, 'Safe for allergy sufferers', false, ''),
+(12, 'Work desk', false, ''),
+(13, 'Living room / seating area', false, ''),
+(14, 'TV set', false, ''),
+(15, 'Slippers', false, ''),
+(16, 'Refrigerator', false, ''),
+(17, 'Telephone', false, ''),
+(18, 'Accessories for ironing clothes', false, ''),
+(19, 'Satellite channels', false, ''),
+(20, 'Kettle / coffee maker', false, ''),
+(21, 'Iron', false, ''),
+(22, 'Heating', false, ''),
+(23, 'Hair dryer', false, ''),
+(24, 'Towels / bed linen for an additional fee', false, ''),
+(25, 'Carpeted flooring', false, ''),
+(26, 'Electric kettle', false, ''),
+(27, 'Cable channels', false, ''),
+(28, 'Wake-up call service', false, ''),
+(29, 'Wardrobe or wardrobe', false, ''),
+(30, 'The higher floors can be reached by elevator', false, ''),
+(31, 'A hanger for clothes', false, ''),
+(32, 'Toilet paper', false, ''),
+(33, 'Sofa bed', false, ''),
+(34, 'Individual air conditioning in guest rooms', false, '');
 
 
 INSERT INTO apartments_tags (id, tag_id, apartment_id)
@@ -218,7 +244,7 @@ VALUES
 (1, 1, 1),
 (2, 2, 1),
 (3, 3, 1),
-(4, 6, 1),
+(4, 4, 1),
 
 (5, 1, 2),
 (6, 3, 2),
