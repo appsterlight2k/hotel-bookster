@@ -2,13 +2,14 @@ package com.appsterlight.controller.action.utils;
 
 import com.appsterlight.controller.dto.ApartmentClassDto;
 import com.appsterlight.controller.dto.ApartmentDto;
+import com.appsterlight.controller.dto.BookingDto;
 import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.exception.ServiceException;
-import com.appsterlight.model.domain.Apartment;
-import com.appsterlight.model.domain.ApartmentClass;
-import com.appsterlight.model.domain.User;
+import com.appsterlight.model.domain.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -96,5 +97,85 @@ public class DtoUtils {
         }
 
         return apartmentClasses;
+    }
+
+    public static BookingDto mapBookingToDto(BookingExtended booking) {
+        return BookingDto.builder()
+                .id(booking.getId())
+                .userId(booking.getUserId())
+                .apartmentId(booking.getApartmentId())
+                .requestClassId(booking.getRequestClassId())
+                .checkIn(booking.getCheckIn())
+                .checkOut(booking.getCheckOut())
+                .adultsNumber(booking.getAdultsNumber())
+                .childrenNumber(booking.getChildrenNumber())
+                .reservationTime(changeDateTimeFormat(booking.getReservationTime()))
+                .comments(booking.getComments())
+                .isApproved(booking.getIsApproved())
+                .isBooked(booking.getIsBooked())
+                .isPaid(booking.getIsPaid())
+                .isCanceled(booking.getIsCanceled())
+                //additional fields:
+                .firstName(booking.getFirstName())
+                .lastName(booking.getLastName())
+                .email(booking.getEmail())
+                .userPhoneNumber(booking.getUserPhoneNumber())
+                .userDescription(booking.getUserDescription())
+                .apartmentNumber(booking.getApartmentNumber())
+                .apartmentClass(booking.getApartmentClass())
+                .roomsCount(booking.getRoomsCount())
+                .capacity(booking.getCapacity())
+                .price(booking.getPrice())
+                .build();
+    }
+
+    public static BookingDto mapRequestBookingToDto(RequestBookingExtended booking) {
+        return BookingDto.builder()
+                .id(booking.getId())
+                .userId(booking.getUserId())
+                .apartmentId(booking.getApartmentId())
+                .requestClassId(booking.getRequestClassId())
+                .checkIn(booking.getCheckIn())
+                .checkOut(booking.getCheckOut())
+                .adultsNumber(booking.getAdultsNumber())
+                .childrenNumber(booking.getChildrenNumber())
+                .reservationTime(changeDateTimeFormat(booking.getReservationTime()))
+                .comments(booking.getComments())
+                .isApproved(booking.getIsApproved())
+                .isBooked(booking.getIsBooked())
+                .isPaid(booking.getIsPaid())
+                .isCanceled(booking.getIsCanceled())
+                //additional fields:
+                .firstName(booking.getFirstName())
+                .lastName(booking.getLastName())
+                .email(booking.getEmail())
+                .userPhoneNumber(booking.getUserPhoneNumber())
+                .userDescription(booking.getUserDescription())
+                .apartmentClass(booking.getApartmentClass())
+                .build();
+    }
+
+    public static List<BookingDto> mapBookingListToDtoList(List<Booking> list) {
+        List<BookingDto> bookingDtoList = new ArrayList<>();
+        if (!list.isEmpty()) {
+            if (list.get(0) instanceof BookingExtended) {
+                for (Booking ap : list) {
+                    bookingDtoList.add(mapBookingToDto((BookingExtended) ap));
+                }
+            } else {
+                //RequestBookingExtended
+                for (Booking ap : list) {
+                    bookingDtoList.add(mapRequestBookingToDto((RequestBookingExtended) ap));
+                }
+            }
+        }
+
+        return bookingDtoList;
+    }
+
+    private static String changeDateTimeFormat(Timestamp inputDateTime) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        return dateFormat.format(inputDateTime);
     }
 }
