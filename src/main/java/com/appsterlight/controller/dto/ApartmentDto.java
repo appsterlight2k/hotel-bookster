@@ -8,7 +8,6 @@ import java.io.Serializable;
 @Builder
 @Data
 @Getter
-//@EqualsAndHashCode(of = {"apartmentNumber", "roomsCount","classId"})
 public class ApartmentDto implements Serializable {
 
 private Long id;

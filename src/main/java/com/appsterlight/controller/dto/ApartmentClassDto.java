@@ -6,7 +6,6 @@ import lombok.Getter;
 
 import java.io.Serializable;
 
-
 @Builder
 @Data
 @Getter

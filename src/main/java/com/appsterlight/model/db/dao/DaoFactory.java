@@ -14,7 +14,6 @@ public abstract class DaoFactory {
 
     public static synchronized DaoFactory getInstance() {
         if (instance == null) {
-//           instance = new MySqlDaoFactory(con);
             Class<?> cl;
             try {
                 cl = Class.forName(DaoFactory.class.getName());

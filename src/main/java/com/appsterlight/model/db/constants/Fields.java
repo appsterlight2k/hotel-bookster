@@ -20,8 +20,8 @@ public final class Fields {
     public static final String BOOKING_USER_ID = "user_id";
     public static final String BOOKING_APARTMENT_ID = "apartment_id";
     public static final String BOOKING_REQUEST_CLASS_ID = "request_class_id";
-    public static final String BOOKING_CHECK_IN = "check_out";
-    public static final String BOOKING_CHECK_OUT = "check_in";
+    public static final String BOOKING_CHECK_IN = "check_in";
+    public static final String BOOKING_CHECK_OUT = "check_out";
     public static final String BOOKING_ADULTS_NUMBER = "adults_number";
     public static final String BOOKING_CHILDREN_NUMBER = "children_number";
     public static final String BOOKING_RESERVATION_TIME = "reservation_time";
@@ -30,6 +30,12 @@ public final class Fields {
     public static final String BOOKING_IS_BOOKED = "is_booked";
     public static final String BOOKING_IS_PAID = "is_paid";
     public static final String BOOKING_IS_CANCELED = "is_canceled";
+
+    //additional fields from USERS table:
+    public static final String BOOKING_USER_PHONE_NUMBER = "user_phone_number";
+    public static final String BOOKING_USER_DESCRIPTION = "user_description";
+    //additional fields from APARTMENT_CLASS table:
+    public static final String BOOKING_APARTMENT_CLASS = "class";
 
 
     /* SPECIFIC FIELDS FOR APARTMENT TABLE */
@@ -41,7 +47,6 @@ public final class Fields {
     public static final String APARTMENT_MAIN_PHOTO_URL = "main_photo_url";
 
     public static final String APARTMENT_PRICE = "price";
-    public static final String APARTMENT_IS_BUSY = "is_busy";
     public static final String APARTMENT_CLASS_NAME = "class_name";
     public static final String APARTMENT_CLASS_DESCRIPTION = "class_description";
 

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.appsterlight.controller.action.factory.constants.ActionName.*;
@@ -25,32 +26,46 @@ public final class ActionByRoleList {
     private static final List<String> managerActions = new ArrayList<>();
 
     static {
-        guestActions.add(ACTION_HOME);
-        guestActions.add(ACTION_LOGIN);
-        guestActions.add(ACTION_LOGOUT);
-        guestActions.add(ACTION_REGISTRATION);
-        guestActions.add(ACTION_APARTMENTS);
-        guestActions.add(ACTION_ERROR);
+        //Guest actions:
+        guestActions.addAll(Arrays.asList(
+            ACTION_HOME,
+            ACTION_LOGIN,
+            ACTION_LOGOUT,
+            ACTION_REGISTRATION,
+            ACTION_APARTMENTS,
+            ACTION_GET_APARTMENT,
+            ACTION_ERROR
+        ));
 
-        userActions.add(ACTION_HOME);
-        userActions.add(ACTION_LOGIN);
-        userActions.add(ACTION_LOGOUT);
-        userActions.add(ACTION_REGISTRATION);
-        userActions.add(ACTION_APARTMENTS);
-        userActions.add(ACTION_GET_APARTMENT);
+        //User actions:
+        userActions.addAll(Arrays.asList(
+            ACTION_HOME,
+            ACTION_LOGIN,
+            ACTION_LOGOUT,
+            ACTION_REGISTRATION,
+            ACTION_APARTMENTS,
+            ACTION_GET_APARTMENT,
+            ACTION_BOOKING,
+            ACTION_CABINET,
+            ACTION_ERROR
+        ));
 
-        userActions.add(ACTION_BOOKING);
-        userActions.add(ACTION_CABINET);
-        userActions.add(ACTION_ERROR);
+        //Manager actions:
+        managerActions.addAll(Arrays.asList(
+            ACTION_LOGIN,
+            ACTION_LOGOUT,
+            ACTION_MANAGER_HOME,
 
-        managerActions.add(ACTION_LOGIN);
-        managerActions.add(ACTION_LOGOUT);
-//        managerActions.add(ACTION_REGISTRATION);
-        managerActions.add(ACTION_MANAGER_HOME);
-        managerActions.add(ACTION_MANAGER_REQUESTS);
-        managerActions.add(ACTION_APARTMENTS); //choose apartments for request
-        managerActions.add(ACTION_ERROR);
+            ACTION_MANAGER_ALL_APARTMENTS,
+            ACTION_MANAGER_ALL_REQUESTS,
+            ACTION_MANAGER_REQUESTS_FOR_BOOKING,
+            ACTION_MANAGER_BOOKING_REQUESTS,
+            ACTION_MANAGER_OFFER_APARTMENTS,
+            ACTION_MANAGER_BOOKED,
 
+            ACTION_APARTMENTS,  //choose apartments for request
+            ACTION_ERROR
+        ));
     }
 
     public static FrontAction getActionByRole(String action, String role) {

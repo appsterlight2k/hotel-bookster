@@ -66,15 +66,4 @@ public class ApartmentClassServiceImpl implements ApartmentClassService {
         }
     }
 
-    /*public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut)
-            throws ServiceException {
-        try {
-            return apartmentClassDao.getAllFreeByGuestsNumber(guests, checkIn, checkOut);
-        } catch (DaoException e) {
-            log.error("Can't get all free Apartments by guests number, checkin and checkout date. " + e.getMessage());
-            throw new ServiceException(e);
-        }
-    }*/
-
-
 }

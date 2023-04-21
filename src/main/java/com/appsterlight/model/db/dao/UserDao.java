@@ -4,7 +4,6 @@ import com.appsterlight.model.domain.User;
 import com.appsterlight.exception.DaoException;
 import com.appsterlight.shared.Dao;
 
-import java.sql.Connection;
 import java.util.Optional;
 
 public interface UserDao extends Dao<User> {

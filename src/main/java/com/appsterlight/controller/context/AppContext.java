@@ -20,8 +20,7 @@ public class AppContext {
 
     private AppContext() {
         MySQLDBManager manager = MySQLDBManager.getInstance();
-//        DaoFactory daoFactory = DaoFactory.getInstance();
-        MySqlDaoFactory daoFactory = new MySqlDaoFactory(manager.getConnection());
+        MySqlDaoFactory daoFactory = new MySqlDaoFactory(manager.getDataSource());
         ServiceFactory serviceFactory = ServiceFactory.getInstance(daoFactory);
         userService = serviceFactory.getUserService();
         bookingService = serviceFactory.getBookingService();

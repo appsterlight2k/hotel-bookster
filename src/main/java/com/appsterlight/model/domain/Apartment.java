@@ -28,7 +28,4 @@ public class Apartment implements Serializable {
     private String classDescription;
     private String description;
 
-//    ApartmentClass apartmentClass;
-
-
 }

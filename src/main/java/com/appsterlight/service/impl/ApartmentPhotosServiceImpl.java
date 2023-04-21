@@ -7,14 +7,12 @@ import com.appsterlight.service.ApartmentPhotosService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 public class ApartmentPhotosServiceImpl implements ApartmentPhotosService {
     private final ApartmentPhotosDao apartmentPhotosDao;
-    AppContext appContext = AppContext.getAppContext();
 
     @Override
     public List<String> getAllUrlOfPhotosById(Long id) throws ServiceException {

@@ -1,6 +1,5 @@
 package com.appsterlight.controller.action;
 
-import com.appsterlight.exception.ServiceException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

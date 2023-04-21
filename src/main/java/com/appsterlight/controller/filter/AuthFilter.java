@@ -7,7 +7,6 @@ import com.appsterlight.controller.context.AppContext;
 import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.controller.filter.permissions.ActionByRoleList;
 import com.appsterlight.model.domain.Role;
-import com.appsterlight.service.UserService;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +26,6 @@ public class AuthFilter implements Filter {
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse res = (HttpServletResponse) response;
 
-        final AppContext appContext = AppContext.getAppContext();
         final HttpSession session = req.getSession();
 
         String action = req.getParameter("action");
@@ -42,13 +40,13 @@ public class AuthFilter implements Filter {
 
         FrontAction actionByRole = ActionByRoleList.getActionByRole(action, role.toString());
 
-        if (actionByRole == ActionFactory.getActionByName(ACTION_ERROR)) {
+        if (actionByRole != ActionFactory.getActionByName(ACTION_ERROR)) {
+            //regular case:
+            chain.doFilter(request, response);
+        } else {
             //in case of access permissions violation:
             log.error("*** User have tried to access restricted domain. Violation of access permissions! ***");
             redirectToHome(req, res, role);
-        } else {
-            //regular case:
-            chain.doFilter(request, response);
         }
     }
 
