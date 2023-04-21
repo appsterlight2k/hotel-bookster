@@ -61,7 +61,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut)
             throws ServiceException {
         try {
-            return apartmentDao.getAllFreeByGuestsNumber(guests, checkIn, checkOut);
+            return apartmentDao.getAllFreeApartments(guests, checkIn, checkOut);
         } catch (DaoException e) {
             log.error("Can't get all free Apartments by guests number, checkin and checkout date. " + e.getMessage());
             throw new ServiceException(e);
@@ -69,12 +69,35 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public List<Apartment> getAllFreeApartmentsByClass(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId)
+    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId)
             throws ServiceException {
         try {
-            return apartmentDao.getAllFreeByGuestsNumberAndClass(guests, checkIn, checkOut, classId);
+            return apartmentDao.getAllFreeApartments(guests, checkIn, checkOut, classId);
         } catch (DaoException e) {
             log.error("Can't get all free Apartments by guests number, checkin-checkout date and class. " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer offset, Integer pagesCount) throws ServiceException {
+        try {
+            return apartmentDao.getAllFreeApartments(guests, checkIn, checkOut, offset, pagesCount);
+        } catch (DaoException e) {
+            log.error("Can't get all free Apartments by guests number, checkin-checkout date, offset and pages count. "
+                    + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId,
+                                                Integer offset, Integer pagesCount) throws ServiceException {
+        try {
+            return apartmentDao.getAllFreeApartments(guests, checkIn, checkOut, classId, offset, pagesCount);
+        } catch (DaoException e) {
+            log.error("Can't get all free Apartments by guests number, checkin-checkout date, class, offset and pages count. "
+                    + e.getMessage());
             throw new ServiceException(e);
         }
     }
@@ -84,6 +107,17 @@ public class ApartmentServiceImpl implements ApartmentService {
             throws ServiceException {
         try {
             return apartmentDao.getCountOfAllFree(guests, checkIn, checkOut, classId);
+        } catch (DaoException e) {
+            log.error("Can't get count of all free Apartments by guests number, checkin-checkout date and class. " +
+                    e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut) throws ServiceException {
+        try {
+            return apartmentDao.getCountOfAllFree(guests, checkIn, checkOut);
         } catch (DaoException e) {
             log.error("Can't get count of all free Apartments by guests number, checkin-checkout date and class. " +
                     e.getMessage());
