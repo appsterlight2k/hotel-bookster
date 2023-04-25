@@ -12,10 +12,8 @@ public final class ControllerUtils {
             if (actualRole == Role.ROLE_MANAGER) {
                 return PagesNames.PAGE_MANAGER_HOME;
             } else if (actualRole == Role.ROLE_USER) {
-//                return PagesNames.PAGE_HOME_USER;
                 return PagesNames.PAGE_START;
             } else {
-//                return PagesNames.PAGE_HOME_GUEST;
                 return PagesNames.PAGE_START;
             }
         } catch (IllegalArgumentException e) {

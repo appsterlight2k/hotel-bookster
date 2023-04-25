@@ -1,15 +1,28 @@
-package com.appsterlight.model.domain;
+package com.appsterlight.model.domain.UI;
 
+import com.appsterlight.controller.action.utils.DtoUtils;
+import com.appsterlight.controller.context.AppContext;
+import com.appsterlight.controller.dto.ApartmentClassDto;
+import com.appsterlight.exception.ServiceException;
+import com.appsterlight.model.domain.ApartmentClass;
+import com.appsterlight.service.ApartmentClassService;
+import com.appsterlight.service.ApartmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+@Slf4j
 @Getter
 public class Searcher {
+    private static final AppContext appContext = AppContext.getAppContext();
     private final HttpServletRequest req;
     private String minDate;
     private final Boolean isDateModeChangeable;
+    private final List<String> statuses = new ArrayList<>(List.of("free", "booked", "busy", "unavailable"));
 
     public Searcher(HttpServletRequest req, Boolean isDateModeChangeable) {
         this.req = req;
@@ -44,6 +57,44 @@ public class Searcher {
         req.setAttribute("isMultiDate", isMultiDate);
 
         return isMultiDate;
+    }
+
+    public List<ApartmentClassDto> getApartmentClasses() {
+        List<ApartmentClassDto> result;
+
+        try {
+            ApartmentClassService apartmentClassService = appContext.getApartmentClassService();
+            List<ApartmentClass> allApartmentClasses = apartmentClassService.getAllApartmentClasses();
+            result = DtoUtils.mapApartmentClassListToDtoList(allApartmentClasses);
+
+
+        } catch (ServiceException e) {
+            log.error("Cant's get all Apartment Classes! " + e.getMessage());
+            throw new RuntimeException("Cant's get all Apartment Classes! " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    public void setApartmentClasses(List<ApartmentClassDto> list) {
+        req.setAttribute("apartmentClasses", list);
+    }
+
+    public String getApartmentClass() {
+        String apartmentClass = req.getParameter("apartmentClass");
+        req.setAttribute("chosenClass", apartmentClass);
+
+        return apartmentClass;
+    }
+
+    public String getApartmentStatus() {
+        String status = req.getParameter("status");
+        if (status == null) status = "0";
+        req.setAttribute("chosenStatus", status);
+        req.setAttribute("chosenStatus", status);
+        req.setAttribute("apartmentStatuses", statuses);
+
+        return (status.equals("0")) ? "%" : statuses.get(Integer.parseInt(status) - 1);
     }
 
     private String getDatesRange(LocalDate... dates) {
@@ -110,6 +161,10 @@ public class Searcher {
 
     public void showMultiDateControl(Boolean showControl) {
         req.setAttribute("showMultidateControl", showControl);
+    }
+
+    public void showClassControl(Boolean showControl) {
+        req.setAttribute("showClassControl", showControl);
     }
 
     public void showDescriptionControl(Boolean showControl) {

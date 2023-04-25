@@ -51,7 +51,7 @@ public class LoginAction extends FrontAction {
             session.setAttribute("error", "No such user");
             log.error(String.format("* User with email %s doesn't exist", email) + "! " + e.getMessage());
         }
-//        return ControllerUtils.getHomePageByRole(Role.ROLE_USER.toString());
+
         return PagesNames.PAGE_LOGIN;
     }
 }

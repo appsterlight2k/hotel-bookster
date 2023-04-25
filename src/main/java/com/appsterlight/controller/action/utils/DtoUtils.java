@@ -49,6 +49,8 @@ public class DtoUtils {
                     .className(obj.getClassName())
                     .classDescription(obj.getClassDescription())
                     .description(obj.getDescription())
+                    .isUnavailable(obj.getIsUnavailable())
+                    .status(obj.getStatus())
                     .build();
         } catch (ServiceException e) {
             log.error("Exception in mapApartmentToDto: The apartment is null!");

@@ -11,6 +11,7 @@
                 <td class="table-primary">rooms</td>
                 <td class="table-primary">capacity</td>
                 <td class="table-primary">price</td>
+                <td class="table-primary">status</td>
                 <td class="table-primary description-column">description</td>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                    <td>${apartment.roomsCount}</td>
                    <td>${apartment.adultsCapacity}</td>
                    <td>${apartment.price}</td>
+                    <td>${apartment.status}</td>
                    <td class="description-column">${apartment.description}</td>
                 </tr>
             </c:forEach>

@@ -25,7 +25,11 @@
     </script>
 
     <link rel="stylesheet" type="text/css" href="css/main.css">
-
+    <style>
+        #header-info {
+            width: 225px;
+        }
+    </style>
 </head>
 <body>
     <jsp:include page="/common/header.jsp" />

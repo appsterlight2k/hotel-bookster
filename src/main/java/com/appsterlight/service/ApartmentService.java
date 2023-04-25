@@ -14,19 +14,21 @@ public interface ApartmentService {
     boolean deleteApartment(Long id) throws ServiceException;
     List<Apartment> getAllApartments() throws ServiceException;
 
-    List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut)
+    /*List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut)
                                                                         throws ServiceException;
     List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
                                          Integer classId) throws ServiceException;
     List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                         Integer offset, Integer pagesCount) throws ServiceException;
-    List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                         Integer classId, Integer offset, Integer pagesCount)
-                                         throws ServiceException;
-    Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId)
-                                                                            throws ServiceException;
-    Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut)
-                                                            throws ServiceException;
+                                         Integer offset, Integer pageSize) throws ServiceException;*/
+   /* List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
+                                         Integer classId, Integer offset, Integer pageSize)
+                                         throws ServiceException;*/
+    List<Apartment> getAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
+                                         Integer classId, String status, String sortingField,
+                                         String sortingOrder, Integer offset, Integer pageSize) throws ServiceException;
+
+    Integer getCountOfAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId,
+                              String status) throws ServiceException;
 
 
 }

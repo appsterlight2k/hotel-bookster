@@ -55,14 +55,12 @@ public final class ActionByRoleList {
             ACTION_LOGIN,
             ACTION_LOGOUT,
             ACTION_MANAGER_HOME,
-
-            ACTION_MANAGER_ALL_APARTMENTS,
+            ACTION_APARTMENTS,
             ACTION_MANAGER_ALL_REQUESTS,
             ACTION_MANAGER_REQUESTS_FOR_BOOKING,
             ACTION_MANAGER_BOOKING_REQUESTS,
             ACTION_MANAGER_OFFER_APARTMENTS,
             ACTION_MANAGER_BOOKED,
-
             ACTION_APARTMENTS,  //choose apartments for request
             ACTION_ERROR
         ));
@@ -71,25 +69,15 @@ public final class ActionByRoleList {
     public static FrontAction getActionByRole(String action, String role) {
         String result;
         try {
-            /*result = switch (Role.get(role)) {
+            result = switch (Role.valueOf(role)) {
                 case ROLE_GUEST -> guestActions.contains(action) ? action : ACTION_ERROR;
                 case ROLE_USER -> userActions.contains(action) ? action : ACTION_ERROR;
                 case ROLE_MANAGER -> managerActions.contains(action) ? action : ACTION_ERROR;
-            };*/
-
-            Role userRole = Role.valueOf(role);
-            if (userRole == Role.ROLE_GUEST) {
-                result = guestActions.contains(action) ? action : ACTION_ERROR;
-            } else if (userRole == Role.ROLE_USER) {
-                result = userActions.contains(action) ? action : ACTION_ERROR;
-            } else if (userRole == Role.ROLE_MANAGER) {
-                result = managerActions.contains(action) ? action : ACTION_ERROR;
-            } else {
-                result = ACTION_ERROR;
-            }
+                default -> ACTION_ERROR;
+            };
         } catch (Exception e) {
             result = ACTION_ERROR;
-            log.error("Action is null! -> " + e.getMessage());
+            log.error("Error: Action is null! -> " + e.getMessage());
         }
 
         return ActionFactory.getActionByName(result);

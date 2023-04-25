@@ -98,7 +98,6 @@ public final class Queries {
                     "AND check_in >= ? AND check_out <= ? ORDER BY check_in ASC " +
                     "LIMIT ?, ?";
 
-
     public static final String SQL_BOOKING_GET_COUNT_OF_ALL_BOOKING_REQUEST =
             "SELECT COUNT(*) FROM booking WHERE apartment_id IS NOT NULL AND is_approved = false";
     public static final String SQL_BOOKING_GET_COUNT_OF_ALL_BOOKING_REQUEST_AFTER_DATE =
@@ -129,7 +128,8 @@ public final class Queries {
     /* QUERIES FOR APARTMENT TABLE */
     public static final String SQL_APARTMENT_GET =
             "SELECT a.*, c.name as class_name, c.description as class_description " +
-            "FROM apartments a INNER JOIN apartment_class c ON a.class_id = c.id WHERE a.id = ?";
+            "FROM apartments a " +
+            "INNER JOIN apartment_class c ON a.class_id = c.id WHERE a.id = ?";
 
     public static final String SQL_APARTMENT_GET_BY_APARTMENT_NUMBER =
             "SELECT a.*, c.name as class_name, c.description as class_description " +
@@ -148,56 +148,86 @@ public final class Queries {
                     "children_capacity = ?, main_photo_url = ?, price = ?, description = ? " +
                     "WHERE ID = ?";
 
-    public static final String SQL_APARTMENT_GET_ALL_WITH_STATUS =
+    //Parameters:
+    //1st: checkin date; 2nd: checkout date; 3rd: adults_capacity; 4th: class_id; 5th: status;
+    //6th: sorting field; 7th: asc/desc order
+    public static final String SQL_APARTMENT_GET_ALL_WITH_STATUS_FULL =
+        "SELECT * FROM ( " +
             "SELECT a.*, b.id as booking_id, b.is_approved, b.is_booked, b.is_paid, b.is_canceled, " +
+                "c.name as class_name, c.description as class_description, " +
             "CASE " +
                 "WHEN b.is_canceled = true THEN 'free' " +
-                "WHEN b.is_paid = true THEN 'busy' " +
                 "WHEN b.id IS NOT NULL THEN 'booked' " +
+                "WHEN b.is_paid = true THEN 'busy' " +
+                "WHEN a.is_unavailable = true THEN 'unavailable' " +
                 "ELSE 'free' " +
             "END AS status " +
             "FROM apartments a " +
-            "LEFT JOIN booking b " +
-            "ON a.id = b.apartment_id " +
-            "AND b.check_in <= ? " +
-            "AND b.check_out >= ? " +
-            "GROUP BY a.id";
+            "LEFT JOIN booking b ON a.id = b.apartment_id " +
+                "AND b.check_out >= ? " +
+                "AND b.check_in <= ? " +
+            "INNER JOIN apartment_class c ON a.class_id = c.id " +
+        ") AS subquery " +
+        "WHERE subquery.adults_capacity >= ? " +
+            "AND (subquery.class_id = ? OR ? IS NULL) " +
+            "AND subquery.status LIKE ? ";
 
-    public static final String SQL_APARTMENT_GET_ALL_WITH_STATUS_AND_PAGINATION =
-            SQL_APARTMENT_GET_ALL_WITH_STATUS + " LIMIT ?, ?";
+    /*public static final String SQL_APARTMENT_GET_ALL_WITH_STATUS_AND_PAGINATION_FULL =
+            SQL_APARTMENT_GET_ALL_WITH_STATUS_FULL + " LIMIT ?, ?";*/
 
-    //2nd parameter is check_in of user request, and th 3rd is check_out!
-    public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY =
+    //the value for 2nd parameter is check_in of user request, and for 3rd is check_out!
+    /*public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY =
             "SELECT a.*, c.name as class_name, c.description as class_description " +
             "FROM apartments a " +
-            "LEFT JOIN booking b ON a.id = b.apartment_id AND b.check_out >= ? AND b.check_in <= ? " +
+            "LEFT JOIN booking b " +
+            "ON a.id = b.apartment_id " +
+            "AND b.check_out >= ? AND b.check_in <= ? " +
             "INNER JOIN apartment_class c ON a.class_id = c.id " +
-            "WHERE a.adults_capacity >= ? AND b.apartment_id IS NULL";
+            "WHERE a.adults_capacity >= ? AND b.apartment_id IS NULL";*/
 
     // Parameters:
     // 1st: checkin; 2nd: checkout; 3rd: guests count; 4th: offset; 5th: count of records;
-    public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_WITH_PAGINATION =
-            SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY + " LIMIT ?, ?"; //AND a.class_id = ?
+   /* public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_WITH_PAGINATION =
+            SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY + " LIMIT ?, ?";*/
 
     // Parameters:
     // 1st: checkin; 2nd: checkout; 3rd: guests count; 4th: class id;
-    public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS =
-            SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY + " AND a.class_id = ?";
+   /* public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS =
+            SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY + " AND a.class_id = ?";*/
 
 
     // Parameters:
     // 1st: checkin; 2nd: checkout; 3rd: guests count; 4th: class id; 5th: offset; 6th: count of records;
-    public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS_WITH_PAGINATION =
-            SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS + " LIMIT ?, ?";
+   /* public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS_WITH_PAGINATION =
+            SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS + " LIMIT ?, ?";*/
 
-    public static final String SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY =
+ /*   public static final String SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY =
             "SELECT COUNT(*)" +
                     "FROM apartments a " +
                     "LEFT JOIN booking b ON a.id = b.apartment_id AND b.check_out >= ? AND b.check_in <= ? " +
-                    "WHERE a.adults_capacity >= ? AND b.apartment_id IS NULL";
+                    "WHERE a.adults_capacity >= ? AND b.apartment_id IS NULL";*/
 
-    public static final String SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY_AND_CLASS =
-            SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY + " AND a.class_id = ?";
+   /* public static final String SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY_AND_CLASS =
+            SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY + " AND a.class_id = ?";*/
+
+    public static final String SQL_APARTMENT_GET_COUNT_OF_ALL_WITH_STATUS_FULL =
+            "SELECT COUNT(*) FROM ( " +
+                "SELECT a.*, b.id as booking_id, b.is_approved, b.is_booked, b.is_paid, b.is_canceled, " +
+                "CASE " +
+                    "WHEN b.is_canceled = true THEN 'free' " +
+                    "WHEN b.id IS NOT NULL THEN 'booked' " +
+                    "WHEN b.is_paid = true THEN 'busy' " +
+                    "WHEN a.is_unavailable = true THEN 'unavailable' " +
+                    "ELSE 'free' " +
+                "END AS status " +
+                "FROM apartments a " +
+                    "LEFT JOIN booking b ON a.id = b.apartment_id " +
+                "AND b.check_out >= ? " +
+                "AND b.check_in <= ? " +
+            ") AS subquery " +
+            "WHERE subquery.adults_capacity >= ? " +
+                    "AND (subquery.class_id = ? OR ? IS NULL) " +
+                    "AND subquery.status LIKE ?";
 
     /* QUERIES FOR APARTMENT_CLASS TABLE */
     public static final String SQL_APARTMENT_CLASS_GET = "SELECT * FROM apartment_class WHERE id = ?";

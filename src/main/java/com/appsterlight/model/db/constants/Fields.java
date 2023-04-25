@@ -2,6 +2,7 @@ package com.appsterlight.model.db.constants;
 
 public final class Fields {
     /* GENERAL FIELDS */
+    public static final String ANY_VALUE_MASK = "%";
     public static final String ID = "id";
     public static final String DESCRIPTION = "description";
     public static final String NAME = "name";
@@ -49,7 +50,8 @@ public final class Fields {
     public static final String APARTMENT_PRICE = "price";
     public static final String APARTMENT_CLASS_NAME = "class_name";
     public static final String APARTMENT_CLASS_DESCRIPTION = "class_description";
-
+    public static final String APARTMENT_IS_UNAVAILABLE = "is_unavailable";
+    public static final String APARTMENT_STATUS = "status";
 
     //DESCRIPTION
 

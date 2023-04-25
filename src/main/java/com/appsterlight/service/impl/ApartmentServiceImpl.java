@@ -58,68 +58,29 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
     }
 
-    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut)
-            throws ServiceException {
-        try {
-            return apartmentDao.getAllFreeApartments(guests, checkIn, checkOut);
-        } catch (DaoException e) {
-            log.error("Can't get all free Apartments by guests number, checkin and checkout date. " + e.getMessage());
-            throw new ServiceException(e);
-        }
-    }
-
     @Override
-    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId)
-            throws ServiceException {
+    public List<Apartment> getAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId,
+                                                String status, String sortingField, String sortingOrder, Integer offset,
+                                                Integer pageSize) throws ServiceException {
         try {
-            return apartmentDao.getAllFreeApartments(guests, checkIn, checkOut, classId);
+            return apartmentDao.getAllApartments(guests, checkIn, checkOut, classId, status, sortingField,
+                    sortingOrder, offset, pageSize);
         } catch (DaoException e) {
-            log.error("Can't get all free Apartments by guests number, checkin-checkout date and class. " + e.getMessage());
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer offset, Integer pagesCount) throws ServiceException {
-        try {
-            return apartmentDao.getAllFreeApartments(guests, checkIn, checkOut, offset, pagesCount);
-        } catch (DaoException e) {
-            log.error("Can't get all free Apartments by guests number, checkin-checkout date, offset and pages count. "
+            log.error("Can't get all Apartments by guests number, checkin-checkout date, class, status, sorting field, " +
+                    "sorting order, offset and pages count. "
                     + e.getMessage());
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId,
-                                                Integer offset, Integer pagesCount) throws ServiceException {
+    public Integer getCountOfAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId,
+                                     String status) throws ServiceException {
         try {
-            return apartmentDao.getAllFreeApartments(guests, checkIn, checkOut, classId, offset, pagesCount);
+            return apartmentDao.getCountOfAllApartments(guests, checkIn, checkOut, classId, status);
         } catch (DaoException e) {
-            log.error("Can't get all free Apartments by guests number, checkin-checkout date, class, offset and pages count. "
-                    + e.getMessage());
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId)
-            throws ServiceException {
-        try {
-            return apartmentDao.getCountOfAllFree(guests, checkIn, checkOut, classId);
-        } catch (DaoException e) {
-            log.error("Can't get count of all free Apartments by guests number, checkin-checkout date and class. " +
-                    e.getMessage());
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut) throws ServiceException {
-        try {
-            return apartmentDao.getCountOfAllFree(guests, checkIn, checkOut);
-        } catch (DaoException e) {
-            log.error("Can't get count of all free Apartments by guests number, checkin-checkout date and class. " +
+            log.error("Can't get count of all Apartments by guests number, checkin-checkout date, class, " +
+                    "status, sortingField and sortingOrder!" +
                     e.getMessage());
             throw new ServiceException(e);
         }

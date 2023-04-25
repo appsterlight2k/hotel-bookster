@@ -33,7 +33,6 @@ public final class ActionFactory {
         ACTIONS.put(ACTION_REGISTRATION, new RegistrationAction());
         ACTIONS.put(ACTION_MANAGER_HOME, new ManagerHomeAction());
 
-        ACTIONS.put(ACTION_MANAGER_ALL_APARTMENTS, new ManagerApartmentsAction());
         ACTIONS.put(ACTION_MANAGER_ALL_REQUESTS, new ManagerRequestsAction());
         ACTIONS.put(ACTION_MANAGER_BOOKING_REQUESTS, new ManagerBookingRequestsAction(true));
         ACTIONS.put(ACTION_MANAGER_REQUESTS_FOR_BOOKING, new ManagerBookingRequestsAction(false));

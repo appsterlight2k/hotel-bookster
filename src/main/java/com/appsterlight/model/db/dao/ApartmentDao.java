@@ -11,20 +11,11 @@ import java.util.Optional;
 public interface ApartmentDao extends Dao<Apartment> {
     Optional<Apartment> getApartmentByApartmentNumber(String number) throws DaoException;
 
-    List<Apartment> getAllFreeApartments(Integer guests,
-                                         LocalDate checkIn, LocalDate checkOut) throws DaoException;
+    List<Apartment> getAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
+                                                Integer classId, String status, String sortingField,
+                                                String sortingOrder, Integer offset, Integer pageSize) throws DaoException;
 
-    List<Apartment> getAllFreeApartments(Integer guests,
-                                         LocalDate checkIn, LocalDate checkOut, Integer classId) throws DaoException;
-
-    List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId,
-                                         Integer offset, Integer recordsPerPage) throws DaoException;
-
-    List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                         Integer offset, Integer recordsPerPage) throws DaoException;
-
-    Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId) throws DaoException;
-
-    Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut) throws DaoException;
+    Integer getCountOfAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId,
+                              String status) throws DaoException;
 
 }

@@ -16,6 +16,7 @@ import java.util.Optional;
 import static com.appsterlight.model.db.constants.Messages.*;
 import static com.appsterlight.model.db.constants.Queries.*;
 import static com.appsterlight.model.db.constants.Fields.*;
+import static com.appsterlight.model.utils.QueryUtils.QueryBuilder;
 
 @Slf4j
 public class MySqlApartmentDao extends AbstractDao<Apartment> implements ApartmentDao {
@@ -68,6 +69,7 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         Apartment object = null;
 
         String query = getSelectQuery();
+
         try (Connection connection = dataSource.getConnection();
                 PreparedStatement prst = connection.prepareStatement(query)) {
             prst.setLong(1, id);
@@ -76,6 +78,7 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
                 object = mapEntity(rs);
                 object.setClassName(rs.getString(APARTMENT_CLASS_NAME));
                 object.setClassDescription(rs.getString(APARTMENT_CLASS_DESCRIPTION));
+                object.setIsUnavailable(rs.getBoolean(APARTMENT_IS_UNAVAILABLE));
             }
         } catch (SQLException e) {
             log.error(READ_ERROR, e);
@@ -84,11 +87,25 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         return Optional.ofNullable(object);
     }
 
+    @Override
+    public List<Apartment> getAll() throws DaoException {
+        List<Apartment> apartments;
+
+        try {
+            apartments = getAllByQuery(getSelectAllQuery());
+        } catch (Exception e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+
+        return apartments;
+    }
+
     private List<Apartment> getAllByQuery(String query, Object... parameters) throws DaoException {
         List<Apartment> apartments = new ArrayList<>();
         Apartment apartment;
         ResultSet rs;
-        try (Connection connection = dataSource.getConnection();) {
+        try (Connection connection = dataSource.getConnection()) {
             if (parameters.length > 0) {
                 PreparedStatement prst = connection.prepareStatement(query);
                 for (int i = 0; i < parameters.length; i++) {
@@ -105,6 +122,7 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
                 apartment = mapEntity(rs);
                 apartment.setClassName(rs.getString(APARTMENT_CLASS_NAME));
                 apartment.setClassDescription(rs.getString(APARTMENT_CLASS_DESCRIPTION));
+                apartment.setStatus(rs.getString(APARTMENT_STATUS));
                 apartments.add(apartment);
             }
         } catch (SQLException e) {
@@ -114,52 +132,32 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
         return apartments;
     }
 
-    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut)
-                                                                                  throws DaoException {
-        String query = SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY;
-        return getAllByQuery(query, checkIn, checkOut, guests);
+    @Override
+    public List<Apartment> getAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
+                                                Integer classId, String status, String sortingField,
+                                                String sortingOrder, Integer offset, Integer pageSize) throws DaoException {
+
+        String query = QueryBuilder(SQL_APARTMENT_GET_ALL_WITH_STATUS_FULL,
+                "ORDER BY subquery.", sortingField, " ", sortingOrder, " LIMIT ?, ?");
+
+        return getAllByQuery(query, checkIn, checkOut, guests, classId, classId, status, offset, pageSize);
     }
 
-    @Override
-    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                                                     Integer classId) throws DaoException {
-        String query = SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS;
-
-        return getAllByQuery(query, checkIn, checkOut, guests, classId);
-    }
-
-    @Override
-    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                                Integer classId, Integer offset, Integer recordsPerPage) throws DaoException {
-        String query = SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS_WITH_PAGINATION;
-
-        return getAllByQuery(query, checkIn, checkOut, guests, classId, offset, recordsPerPage);
-    }
-
-    @Override
-    public List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                                Integer offset, Integer recordsPerPage) throws DaoException {
-        String query = SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_WITH_PAGINATION;
-
-        return getAllByQuery(query, checkIn, checkOut, guests, offset, recordsPerPage);
-    }
-
-    @Override
-    public Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId)
-                                                                                        throws DaoException {
-        String query = SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY_AND_CLASS;
+    public Integer getCountByQuery(String query, Object... parameters) throws DaoException {
         Integer count = -1;
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement prst = connection.prepareStatement(query)) {
-            prst.setDate(1, Date.valueOf(checkIn));
-            prst.setDate(2, Date.valueOf(checkOut));
-            prst.setInt(3, guests);
-            prst.setInt(4, classId);
+            if (parameters.length > 0) {
+                for (int i = 0; i < parameters.length; i++) {
+                    Object param = parameters[i];
+                    setParamsToStatementByType(i + 1, param, prst);
+                }
+                ResultSet rs = prst.executeQuery();
 
-            ResultSet rs = prst.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
             }
         } catch (SQLException e) {
             log.error(READ_ERROR, e);
@@ -170,39 +168,13 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
     }
 
     @Override
-    public Integer getCountOfAllFree(Integer guests, LocalDate checkIn, LocalDate checkOut) throws DaoException {
-        String query = SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY;
-        Integer count = -1;
+    public Integer getCountOfAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId,
+                                     String status) throws DaoException {
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement prst = connection.prepareStatement(query)) {
-            prst.setDate(1, Date.valueOf(checkIn));
-            prst.setDate(2, Date.valueOf(checkOut));
-            prst.setInt(3, guests);
+        String query = SQL_APARTMENT_GET_COUNT_OF_ALL_WITH_STATUS_FULL;
 
-            ResultSet rs = prst.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            log.error(READ_ERROR, e);
-            throw new DaoException(e);
-        }
-        return count;
-    }
-
-    @Override
-    public List<Apartment> getAll() throws DaoException {
-        List<Apartment> apartments;
-
-        try {
-            apartments = getAllByQuery(getSelectAllQuery());
-        } catch (Exception e) {
-            log.error(READ_ERROR, e);
-            throw new DaoException(e);
-        }
-
-        return apartments;
+        //double classId parameter used for ability to get items with some specific classId or with all classId
+        return getCountByQuery(query, checkIn, checkOut, guests, classId, classId, status);
     }
 
     @Override
@@ -236,6 +208,8 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
                 prst.setBoolean(i, (Boolean) param);
             } else if (param instanceof LocalDate) {
                 prst.setDate(i, Date.valueOf((LocalDate) param));
+            } else if (param == null) {
+                prst.setNull(i, java.sql.Types.NULL);
             }
         } catch (Exception e) {
             log.error("Cant set parameter to PreparedStatement by type! " + e.getMessage());
@@ -256,6 +230,7 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
                 object.getMainPhotoUrl(),
                 object.getPrice(),
                 object.getDescription(),
+                object.getIsUnavailable(),
                 object.getId()
         };
     }
@@ -263,17 +238,18 @@ public class MySqlApartmentDao extends AbstractDao<Apartment> implements Apartme
     @Override
     protected Apartment mapEntity(ResultSet rs) throws DaoException {
         try {
-            return  Apartment.builder()
-                    .id(rs.getLong(ID))
-                    .apartmentNumber(rs.getString(APARTMENT_NUMBER))
-                    .roomsCount(rs.getInt(APARTMENT_ROOMS_COUNT))
-                    .classId(rs.getInt(APARTMENT_CLASS_ID))
-                    .adultsCapacity(rs.getInt(APARTMENT_ADULTS_CAPACITY))
-                    .childrenCapacity(rs.getInt(APARTMENT_CHILDREN_CAPACITY))
-                    .price(rs.getInt(APARTMENT_PRICE))
-                    .mainPhotoUrl(rs.getString(APARTMENT_MAIN_PHOTO_URL))
-                    .description(rs.getString(DESCRIPTION))
-                    .build();
+            return Apartment.builder()
+                   .id(rs.getLong(ID))
+                   .apartmentNumber(rs.getString(APARTMENT_NUMBER))
+                   .roomsCount(rs.getInt(APARTMENT_ROOMS_COUNT))
+                   .classId(rs.getInt(APARTMENT_CLASS_ID))
+                   .adultsCapacity(rs.getInt(APARTMENT_ADULTS_CAPACITY))
+                   .childrenCapacity(rs.getInt(APARTMENT_CHILDREN_CAPACITY))
+                   .price(rs.getInt(APARTMENT_PRICE))
+                   .mainPhotoUrl(rs.getString(APARTMENT_MAIN_PHOTO_URL))
+                   .description(rs.getString(DESCRIPTION))
+                   .isUnavailable(rs.getBoolean(APARTMENT_IS_UNAVAILABLE))
+                   .build();
         } catch (SQLException e) {
             log.error(READ_ERROR, e);
             throw new DaoException(e);

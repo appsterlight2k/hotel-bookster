@@ -32,52 +32,29 @@
                 </li>
             </c:if>
 
-            <c:if test="${empty loggedUser || loggedUser.role == 'ROLE_USER'}">
-                <li>
-                    <div class="container container-centred">
-                        <select class="form-select" name="apartmentClass" onchange="SubmitSearch()"
-                                aria-label="Choose Apartment Class:">
-                            <c:if test="${not empty apartmentClasses}">
-                                <c:choose>
-                                    <c:when test="${chosenClass == 0}">
-                                        <option value="0" selected>Any Class</option>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <option value="0">Any Class</option>
-                                    </c:otherwise>
-                                </c:choose>
-
-                                <c:forEach items="${apartmentClasses}" var="apartClass">
-                                    <c:choose>
-                                        <c:when test="${chosenClass == apartClass.id}">
-                                            <option value="${apartClass.id}" selected> ${apartClass.name} </option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="${apartClass.id}"> ${apartClass.name} </option>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                            </c:if>
-                        </select>
-                    </div>
+            <c:if test="${showClassControl}">
+                <li class="nav-item">
+                    <jsp:include page="apartment_class_control.jsp" />
                 </li>
             </c:if>
+
+            <li class="nav-item">
+                <jsp:include page="/common/apartment_status_control.jsp" />
+            </li>
 
             <li class="nav-item">
                 <input type="hidden" id="search-action" name="action" value="${baseAction}">
                 <input type="hidden" id="startDate" name="startDate" value="${startDate}">
                 <input type="hidden" id="endDate" name="endDate" value="${endDate}">
 
-
                 <div class="container-centred">
                     <button type="submit" id="button-search" class="btn btn-light" style="color: #569ff7; border-color: #0d6efd; font-weight: bold;"
                             onclick="onSearchClick()">Search</button>
                 </div>
-
             </li>
             <li class="nav-item">
                 <div class="container-centred">
-                    <div style="width: 250px; margin: 0 auto;">
+                    <div id="header-info" style="margin: 0 auto;">
                         <p style="margin: 0 20px;">${searchResultText} ${totalCount}</p>
                     </div>
                 </div>
@@ -95,7 +72,7 @@
                     <div class="container-sm container-centred checkboxes-bar">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="flexShowDesc" name="showDesc"
-                            ${showDescChecked} onchange="onChangeShowDescSwitch()">
+                            ${showDescChecked} onchange="onChangeShowDescSwitch()" style="cursor: pointer;">
                             <label class="form-check-label" for="flexShowDesc">show description</label>
                         </div>
                     </div>

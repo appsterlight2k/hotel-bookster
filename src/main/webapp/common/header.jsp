@@ -33,7 +33,7 @@
 
                 <c:if test="${loggedUser.role == 'ROLE_MANAGER'}">
                     <li class="nav-item" id="menu-get-apartments">
-                        <a class="nav-link" href="controller?action=manager-get-apartments">Apartments</a>
+                        <a class="nav-link" href="controller?action=apartments">Apartments</a>
                     </li>
                     <li class="nav-item" id="menu-get-all-requests">
                         <a class="nav-link" href="controller?action=manager-get-all-requests">All Requests</a>

@@ -27,5 +27,7 @@ public class Apartment implements Serializable {
     private String className;
     private String classDescription;
     private String description;
+    private Boolean isUnavailable;
+    private String status;
 
 }
