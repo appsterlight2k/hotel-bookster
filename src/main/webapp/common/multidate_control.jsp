@@ -4,7 +4,7 @@
 
   <div class="container-sm container-centred pages-count">
     <select class="form-select" id="multiDateMode" name="multiDateMode"
-            onchange="onChangeMultiDateMode()" aria-label="Date type:" style="/*margin-left: 10px;*/">
+            onchange="onChangeMultiDateMode()" aria-label="Date type:" style="cursor: pointer;">
       <c:choose>
         <c:when test="${isMultiDate}">
           <option value="1" selected>From-To date</option>

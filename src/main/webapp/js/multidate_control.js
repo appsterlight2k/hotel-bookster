@@ -3,6 +3,11 @@
         setDateControlsState();
     });
 
+    function SubmitSearch() {
+        const search = document.getElementById('button-search');
+        search.click();
+    }
+
     function setDateControlsState() {
         const flexByPeriod = document.getElementById('flexSwitchByPeriod');
         const multiDate = document.getElementById('multiDateMode');

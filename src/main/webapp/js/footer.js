@@ -10,12 +10,12 @@
         liElements[i].addEventListener('click', function() {
             var page = document.getElementById('page');
 
-            if (this.querySelector('span').id === 'prev-btn') {
+            if (this.querySelector('a').id === 'prev-btn') {
                 if (page.value !== '1') {
                     page.value--;
                     SubmitSearch();
                 }
-            } else if (this.querySelector('span').id === 'next-btn') {
+            } else if (this.querySelector('a').id === 'next-btn') {
                 if (page.value !== config.pagesCount) {
                     page.value++;
                     SubmitSearch();

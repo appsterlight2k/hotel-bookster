@@ -10,8 +10,8 @@
             <nav aria-label="Choose pages" id="pagination-bar" >
                 <ul class="pagination">
                     <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span id="prev-btn" aria-hidden="true">&laquo;</span>
+                        <a id="prev-btn" class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
 
@@ -31,8 +31,8 @@
                     </c:forEach>
 
                     <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span id="next-btn" aria-hidden="true">&raquo;</span>
+                        <a id="next-btn" class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                 </ul>
