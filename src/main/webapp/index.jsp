@@ -17,7 +17,7 @@
 </head>
 <body>
     <jsp:include page="/common/header.jsp" />
-    <div class="container <%--d-flex--%> vh-100 mt-5 text-center">
+    <div class="container vh-100 mt-5 text-center">
         <h4>Welcome to Hotel</h4> <br>
         <h5>You can search for apartment in Apartments menu</h5><br>
         <c:if test="${empty loggedUser}">

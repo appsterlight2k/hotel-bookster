@@ -3,7 +3,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
     <div class="container-fluid fixed-top" id="search-panel">
-        <ul class="nav justify-content-center" style="height: 48px;">
+        <ul class="nav justify-content-center">
             <c:if test="${showMultidateControl}">
                 <li class="nav-item">
                     <div class="container-sm container-centred checkboxes-bar">
@@ -49,7 +49,7 @@
 
                 <div class="container-centred">
                     <button type="submit" id="button-search" class="btn btn-light" style="color: #569ff7; border-color: #0d6efd; font-weight: bold;"
-                            onclick="onSearchClick()">Search</button>
+                            onclick="submitSearch()">Search</button>
                 </div>
             </li>
             <li class="nav-item">

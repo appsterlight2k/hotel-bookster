@@ -9,6 +9,7 @@ import com.appsterlight.exception.ServiceException;
 import com.appsterlight.model.domain.Booking;
 import com.appsterlight.model.domain.UI.Pagination;
 import com.appsterlight.model.domain.UI.Searcher;
+import com.appsterlight.model.domain.UI.UIController;
 import com.appsterlight.service.BookingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,8 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.appsterlight.controller.action.factory.constants.ActionName.ACTION_MANAGER_BOOKING_REQUESTS;
-import static com.appsterlight.controller.action.factory.constants.ActionName.ACTION_MANAGER_REQUESTS_FOR_BOOKING;
+import static com.appsterlight.controller.action.factory.constants.ActionName.*;
 
 @Slf4j
 public class ManagerBookingRequestsAction extends FrontAction {
@@ -34,6 +34,9 @@ public class ManagerBookingRequestsAction extends FrontAction {
 
     @Override
     public String process(HttpServletRequest req, HttpServletResponse resp) {
+        UIController ui = new UIController(req);
+        ui.init();
+
         LocalDate startDate;
         LocalDate endDate;
 
@@ -50,7 +53,7 @@ public class ManagerBookingRequestsAction extends FrontAction {
         searcher.showClassControl(false);
 
         Pagination page = new Pagination(req);
-        int pageSize = page.getPageSize();
+        Integer pageSize = page.getPageSize();
         page.setPage(oldPageSize);
         Integer offset = page.getOffset();
 
@@ -72,7 +75,7 @@ public class ManagerBookingRequestsAction extends FrontAction {
 
     private Integer getBookingsAndCountOfFree(HttpServletRequest req, String byPeriodCheckedState, boolean isMultiDate,
                                               LocalDate startDate, LocalDate endDate, Integer offset, Integer pageSize) {
-        Integer count = 0;
+        Integer count = -1;
         List<Booking> bookings;
         try {
             if (byPeriodCheckedState.equals("checked")) {

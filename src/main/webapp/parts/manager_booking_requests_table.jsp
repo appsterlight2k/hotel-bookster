@@ -27,8 +27,8 @@
     </thead>
     <tbody>
     <c:forEach items="${bookings}" var="booking" varStatus="loop">
-        <tr><td>${loop.index + offset + 1}</td>
-            <td id="user-id" class="d-none">${booking.id}</td>
+        <tr><td>${loop.index + 1 + ((page - 1) * pageSize)}</td>
+            <td id="booking-id" class="d-none">${booking.id}</td>
             <td id="user-firstname">${booking.firstName}</td>
             <td id="user-lastname">${booking.lastName}</td>
             <td id="user-email">${booking.email}</td>
@@ -46,7 +46,6 @@
             <td id="user-phone" class="d-none">${booking.userPhoneNumber}</td>
             <td id="user-description" class="d-none">${booking.userDescription}</td>
         </tr>
-        <%--<input type="hidden" id="userId" name="userId" value="${userId}">--%>
     </c:forEach>
     </tbody>
 </table>

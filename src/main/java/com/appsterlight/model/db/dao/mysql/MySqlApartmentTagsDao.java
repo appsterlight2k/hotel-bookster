@@ -133,19 +133,19 @@ public class MySqlApartmentTagsDao extends AbstractDao<ApartmentTag> implements 
                     object.getTagId(),
                     object.getApartmentId(),
                     object.getId() };
-        } catch (Exception e) {
-            log.error("ApartmentTags object is null! Can't get fields!");
+        } catch (NullPointerException e) {
+            log.error("ApartmentTags object is null! Can't get fields! " + e);
             throw new DaoException("ApartmentTags object is null! Can't get fields!");
         }
     }
 
     protected Tag mapTag(ResultSet rs) throws DaoException {
         try {
-            return  Tag.builder()
-                    .id(rs.getLong(Fields.ID))
-                    .name(rs.getString(Fields.TAGS_NAME))
-                    .description(rs.getString(Fields.DESCRIPTION))
-                    .build();
+            return Tag.builder()
+                   .id(rs.getLong(Fields.ID))
+                   .name(rs.getString(Fields.TAGS_NAME))
+                   .description(rs.getString(Fields.DESCRIPTION))
+                   .build();
         } catch (SQLException e) {
             log.error(READ_ERROR, e);
             throw new DaoException(e);

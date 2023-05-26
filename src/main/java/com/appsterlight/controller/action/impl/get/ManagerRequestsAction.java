@@ -2,6 +2,7 @@ package com.appsterlight.controller.action.impl.get;
 
 import com.appsterlight.controller.action.FrontAction;
 import com.appsterlight.controller.constants.PagesNames;
+import com.appsterlight.model.domain.UI.UIController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -11,6 +12,8 @@ public class ManagerRequestsAction extends FrontAction {
     @Override
     public String process(HttpServletRequest req, HttpServletResponse resp) {
 
+        UIController ui = new UIController(req);
+        ui.init();
 
         req.setAttribute("action", "requests-for-booking");
         req.setAttribute("HeaderInfo", headerInfo);

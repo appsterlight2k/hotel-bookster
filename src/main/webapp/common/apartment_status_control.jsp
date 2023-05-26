@@ -5,7 +5,7 @@
 <body>
   <c:if test="${showStatuses}">
     <div class="container container-centred">
-      <select class="form-select" name="status" onchange="SubmitSearch()"
+      <select class="form-select" name="status" onchange="submitSearch()"
               aria-label="Choose Apartment Status:" style="cursor: pointer;">
         <c:if test="${not empty apartmentStatuses}">
           <c:choose>

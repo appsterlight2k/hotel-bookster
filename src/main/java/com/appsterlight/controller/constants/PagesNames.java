@@ -1,6 +1,11 @@
 package com.appsterlight.controller.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PagesNames {
+    public static final String JSON_RESPONSE = "json-response";
     public static final String PAGE_START = "index.jsp";
     public static final String PAGE_LOGIN = "login.jsp";
     public static final String PAGE_REGISTRATION = "registration.jsp";

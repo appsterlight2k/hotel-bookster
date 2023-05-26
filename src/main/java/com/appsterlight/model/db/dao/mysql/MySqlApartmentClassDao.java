@@ -57,13 +57,17 @@ public class MySqlApartmentClassDao extends AbstractDao<ApartmentClass> implemen
     }
     @Override
     protected Object[] getAllFieldsOfObject(ApartmentClass object) throws DaoException {
-        if (object == null) throw new DaoException("Booking object is null! Can't get fields!");
+        try {
+            return new Object[] {
+                    object.getName(),
+                    object.getDescription(),
+                    object.getId()
+            };
+        } catch (NullPointerException e) {
+            log.error("Booking object is null! Can't get fields! " + e);
+            throw new DaoException("Booking object is null! Can't get fields!");
+        }
 
-        return new Object[]{
-                object.getName(),
-                object.getDescription(),
-                object.getId()
-        };
     }
 
     @Override

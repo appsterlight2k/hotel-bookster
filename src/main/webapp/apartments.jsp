@@ -38,6 +38,7 @@
         <div class="container" id="main-form">
 
             <form method="get" action="controller" id="form-search" >
+                <input type="hidden" name="activeTab" value="1">
                 <c:if test="${loggedUser.role == 'ROLE_USER'}">
                     <!-- Modal -->
                     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -49,10 +50,12 @@
                                 </div>
                                 <div class="modal-body">
                                     <h6><p id="modal-summary"></p></h6>
-                                    <div class="mb-3">
-                                        <label for="comments" class="col-form-label">Comments:</label>
-                                        <textarea class="form-control" id="comments" name="comments"></textarea>
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="comments" name="comments"
+                                                  placeholder="Leave a comment here" id="comments" style="height: 100px"></textarea>
+                                        <label for="comments">Comments</label>
                                     </div>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Request</button>
@@ -86,13 +89,11 @@
 
     <script>
         let action = document.getElementById('search-action');
-        function onSearchClick() {
-            action.value = config.baseAction;
-        }
 
-        function SubmitSearch() {
-            const search = document.getElementById('button-search');
-            search.click();
+        function submitSearch() {
+            action.value = config.baseAction;
+            const form = document.getElementById('form-search');
+            form.submit();
         }
     </script>
 
@@ -142,14 +143,14 @@
             });
 
             function hideDescriptionColumn() {
-                var descriptionColumn = document.querySelectorAll(".description-column");
+                let descriptionColumn = document.querySelectorAll(".description-column");
                 descriptionColumn.forEach(function(el) {
                     el.style.display = "none";
                 });
             }
 
             function showDescriptionColumn() {
-                var descriptionColumn = document.querySelectorAll(".description-column");
+                let descriptionColumn = document.querySelectorAll(".description-column");
                 descriptionColumn.forEach(function(el) {
                     el.style.display = "table-cell";
                 });

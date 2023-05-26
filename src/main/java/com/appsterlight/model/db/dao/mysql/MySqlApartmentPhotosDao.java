@@ -69,8 +69,6 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhoto> impleme
             while (rs.next()) {
                 urls.add(mapEntity(rs).getPath());
             }
-
-
         } catch (SQLException e) {
             log.error(READ_ERROR, e);
             throw new DaoException(e);
@@ -79,12 +77,14 @@ public class MySqlApartmentPhotosDao extends AbstractDao<ApartmentPhoto> impleme
         return urls;
     }
 
-
     @Override
     protected Object[] getAllFieldsOfObject(ApartmentPhoto object) throws DaoException {
-        if (object == null) throw new DaoException("Booking object is null! Can't get fields!");
-
-        return new Object[]{ object.getApartmentId(), object.getPath(), object.getId() };
+        try {
+            return new Object[]{ object.getApartmentId(), object.getPath(), object.getId() };
+        } catch (NullPointerException e) {
+            log.error("Booking object is null! Can't get fields! " + e);
+            throw new DaoException("Booking object is null! Can't get fields!");
+        }
     }
 
     @Override

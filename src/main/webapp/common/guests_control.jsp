@@ -5,6 +5,6 @@
 <body>
     <div class="container-sm" style="width: 160px; height: 100%; cursor: pointer;">
         <label for="range" class="form-label" id="rangeValue" style="margin-bottom: 0;">Guests number: ${guests}</label>
-        <input type="range" class="form-range" min="1" max="15" id="range" name="guests" value="${guests}">
+        <input type="range" class="form-range" min="1" max="${maxGuests}" id="range" name="guests" value="${guests}">
     </div>
 </body>

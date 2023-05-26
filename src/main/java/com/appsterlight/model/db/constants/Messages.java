@@ -1,5 +1,9 @@
 package com.appsterlight.model.db.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Messages {
     public static final String INSERT_ERROR = "Can't insert record into table";
     public static final String UPDATE_ERROR = "Can't update record in table";

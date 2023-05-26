@@ -41,13 +41,14 @@
                 <label for="lastname">Last name:</label>
             </div>
 
-            <div class="form-floating mb-3">
+            <div class="form-floating flex-grow-1 mb-3">
                 <input type="email" class="form-control" id="email" name="email"
                        placeholder="example@mail.com" required>
                 <label for="email">Email:</label>
             </div>
 
-            <div class="form-floating mb-3">
+
+            <div class="form-floating flex-grow-1 mb-3">
                 <input type="text" class="form-control" id="phone_number" name="phone_number"
                        placeholder="+18937411243">
                 <label for="phone_number">Phone number:</label>

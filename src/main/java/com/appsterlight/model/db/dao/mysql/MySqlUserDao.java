@@ -81,18 +81,21 @@ public class MySqlUserDao extends AbstractDao<User> implements UserDao {
 
     @Override
     protected Object[] getAllFieldsOfObject(User user) throws DaoException {
-        if (user == null) throw new DaoException("User object is null! Can't get fields!");
-
-        return new Object[]{
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPhoneNumber(),
-                user.getPassword(),
-                user.getRole(),
-                user.getDescription(),
-                user.getId(),
-        };
+        try {
+            return new Object[]{
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    user.getPassword(),
+                    user.getRole(),
+                    user.getDescription(),
+                    user.getId(),
+            };
+        } catch (NullPointerException e) {
+            log.error("User object is null! Can't get fields! " + e);
+            throw new DaoException("User object is null! Can't get fields!");
+        }
     }
 
     @Override

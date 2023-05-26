@@ -6,7 +6,6 @@ import com.appsterlight.controller.dto.ApartmentClassDto;
 import com.appsterlight.exception.ServiceException;
 import com.appsterlight.model.domain.ApartmentClass;
 import com.appsterlight.service.ApartmentClassService;
-import com.appsterlight.service.ApartmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +14,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.appsterlight.model.db.constants.Fields.ANY_VALUE_MASK;
+
 @Slf4j
 @Getter
 public class Searcher {
     private static final AppContext appContext = AppContext.getAppContext();
     private final HttpServletRequest req;
+    private final Integer maxGuests;
     private String minDate;
     private final Boolean isDateModeChangeable;
     private final List<String> statuses = new ArrayList<>(List.of("free", "booked", "busy", "unavailable"));
@@ -27,6 +29,12 @@ public class Searcher {
     public Searcher(HttpServletRequest req, Boolean isDateModeChangeable) {
         this.req = req;
         this.isDateModeChangeable = isDateModeChangeable;
+        this.maxGuests = appContext.getMaxGuestsNumber();
+        init();
+    }
+
+    private void init() {
+        req.setAttribute("maxGuests", maxGuests);
     }
 
     //no parameters: attribute minDate = today;
@@ -94,7 +102,7 @@ public class Searcher {
         req.setAttribute("chosenStatus", status);
         req.setAttribute("apartmentStatuses", statuses);
 
-        return (status.equals("0")) ? "%" : statuses.get(Integer.parseInt(status) - 1);
+        return (status.equals("0")) ? ANY_VALUE_MASK : statuses.get(Integer.parseInt(status) - 1);
     }
 
     private String getDatesRange(LocalDate... dates) {

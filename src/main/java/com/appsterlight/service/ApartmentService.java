@@ -14,21 +14,10 @@ public interface ApartmentService {
     boolean deleteApartment(Long id) throws ServiceException;
     List<Apartment> getAllApartments() throws ServiceException;
 
-    /*List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut)
-                                                                        throws ServiceException;
-    List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                         Integer classId) throws ServiceException;
-    List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                         Integer offset, Integer pageSize) throws ServiceException;*/
-   /* List<Apartment> getAllFreeApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
-                                         Integer classId, Integer offset, Integer pageSize)
-                                         throws ServiceException;*/
     List<Apartment> getAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut,
                                          Integer classId, String status, String sortingField,
                                          String sortingOrder, Integer offset, Integer pageSize) throws ServiceException;
 
     Integer getCountOfAllApartments(Integer guests, LocalDate checkIn, LocalDate checkOut, Integer classId,
                               String status) throws ServiceException;
-
-
 }

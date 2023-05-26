@@ -3,7 +3,7 @@
         setDateControlsState();
     });
 
-    function SubmitSearch() {
+    function submitSearch() {
         const search = document.getElementById('button-search');
         search.click();
     }
@@ -19,7 +19,7 @@
 
     function onChangeSwitch() {
         setDateControlsState();
-        SubmitSearch();
+        submitSearch();
     }
 
 
@@ -27,7 +27,7 @@
         let multiDateMode = document.getElementById("multiDateMode");
         setMultiDateCalendarMode(multiDateMode.value);
         action.value = config.baseAction;
-        SubmitSearch();
+        submitSearch();
     }
 
     function setMultiDateCalendarMode(isMultiDate) {

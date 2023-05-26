@@ -1,4 +1,4 @@
-    function SubmitSearch() {
+    function submitSearch() {
         const search = document.getElementById('button-search');
         search.click();
     }
@@ -14,7 +14,7 @@
     });
 
     range.addEventListener("change", function() {
-        SubmitSearch();
+        submitSearch();
     });
 
     function getRange() {

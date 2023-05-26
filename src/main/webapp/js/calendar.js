@@ -16,12 +16,12 @@
                 let startDate = selectedDates[0];
                 let startDateInput = document.getElementById("startDate");
                 startDateInput.value = parseDateInputValue(startDate);
-                if (!isMultidate) SubmitSearch();
+                if (!isMultidate) submitSearch();
             } else if (selectedDates.length === 2) {
                 let endDate = selectedDates[1];
                 let endDateInput = document.getElementById("endDate");
                 endDateInput.value = parseDateInputValue(endDate);
-                SubmitSearch();
+                submitSearch();
             }
         }
     });

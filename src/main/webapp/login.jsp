@@ -29,13 +29,13 @@
 
     <div class="container d-flex justify-content-center align-items-center vh-100 text-center">
         <form class="login-form mb-3" method="post" action="controller">
+            <input type="hidden" name="action" value="login">
             <div class="form-floating flex-grow-1 mb-3">
                 <h4>Enter you email and password</h4>
             </div>
 
-            <input type="hidden" name="action" value="login">
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required autofocus>
                 <label for="email">Email:</label>
             </div>
 

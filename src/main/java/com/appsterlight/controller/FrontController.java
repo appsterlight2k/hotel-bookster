@@ -2,6 +2,7 @@ package com.appsterlight.controller;
 
 import com.appsterlight.controller.action.FrontAction;
 import com.appsterlight.controller.action.factory.ActionFactory;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
 
@@ -11,37 +12,36 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.appsterlight.controller.action.utils.ControllerUtils.isGetMethod;
+import static com.appsterlight.controller.constants.PagesNames.JSON_RESPONSE;
+
 @WebServlet(name = "FrontController", value = "/controller")
 @Slf4j
 public class FrontController extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         handleRequest(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         handleRequest(req, resp);
     }
 
     private void handleRequest(HttpServletRequest req, HttpServletResponse resp) {
         FrontAction action = ActionFactory.getAction(req);
-        String target = action.process(req, resp);
 
         try {
+            String target = action.process(req, resp);
            if (isGetMethod(req)) {
-               req.getRequestDispatcher(target).forward(req, resp);
+               RequestDispatcher view = req.getRequestDispatcher(target);
+               view.forward(req, resp);
            } else {
-               resp.sendRedirect(target);
+               if (!target.equals(JSON_RESPONSE)) resp.sendRedirect(target);
            }
-        } catch (IOException | ServletException e) {
-            log.error("Exception in handleRequest method: can't handle request! " + e.getMessage());
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.error("Exception in handleRequest method: Can't handle request! " + e);
         }
-    }
-
-    private boolean isGetMethod(HttpServletRequest req) {
-        return req.getMethod().equalsIgnoreCase("GET");
     }
 
 }

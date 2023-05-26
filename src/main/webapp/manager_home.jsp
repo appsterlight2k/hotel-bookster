@@ -8,19 +8,17 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="css/main.css">
 
-<title>JSP - Test page</title>
-
 
 <html>
 <head>
-    <title>Manager Page</title>
+    <title>Manager Home</title>
 </head>
 <body>
     <jsp:include page="/common/header.jsp" />
 
 
     <div class="container mt-5">
-        MANAGER PAGE <br>
+        MANAGER HOME PAGE <br>
         ${sessionScope.loggedUser.firstName}
         ${sessionScope.loggedUser.email} <br>
     </div>
