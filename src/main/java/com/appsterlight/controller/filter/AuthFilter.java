@@ -3,7 +3,6 @@ package com.appsterlight.controller.filter;
 import com.appsterlight.controller.action.FrontAction;
 import com.appsterlight.controller.action.factory.ActionFactory;
 import com.appsterlight.controller.action.utils.ControllerUtils;
-import com.appsterlight.controller.context.AppContext;
 import com.appsterlight.controller.dto.UserDto;
 import com.appsterlight.controller.filter.permissions.ActionByRoleList;
 import com.appsterlight.model.domain.Role;
@@ -17,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 
 import static com.appsterlight.controller.action.factory.constants.ActionName.ACTION_ERROR;
+import static com.appsterlight.controller.action.utils.SessionUtils.getActiveRole;
 
 @Slf4j
 @WebFilter("/controller")
@@ -45,14 +45,15 @@ public class AuthFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             //in case of access permissions violation:
-            log.error("*** User have tried to access restricted domain. Violation of access permissions! ***");
+            log.error("*** User have tried to access restricted domain '" + action
+                    + "'. Violation of access permissions! ***");
             redirectToHome(req, res, role);
         }
     }
 
     private void redirectToHome(final HttpServletRequest req, final HttpServletResponse res, final Role role)
             throws ServletException, IOException {
-        String target = ControllerUtils.getHomePageByRole(role.toString());
+        String target = ControllerUtils.getHomePageByRole(getActiveRole(req));
         req.getRequestDispatcher(target).forward(req, res);
     }
 

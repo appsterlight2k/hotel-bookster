@@ -62,6 +62,7 @@ public final class ActionByRoleList {
             ACTION_MANAGER_OFFER_APARTMENTS,
             ACTION_MANAGER_BOOKED,
             ACTION_APARTMENTS,  //choose apartments for request
+            ACTION_CABINET,
             ACTION_ERROR
         ));
     }

@@ -44,18 +44,15 @@ public final class ActionFactory {
         ACTIONS.put(ACTION_GET_APARTMENT, new ShowApartmentAction());
         ACTIONS.put(ACTION_CABINET, new CabinetAction());
         ACTIONS.put(ACTION_ERROR, new ErrorAction());
+        ACTIONS.put(ACTION_DEFAULT, new DefaultAction());
     }
     public static FrontAction getAction(HttpServletRequest req) {
-        String reqAction = req.getParameter("action");
+        String action = req.getParameter("action");
 
-        return getActionByName(reqAction);
+        return getActionByName(action);
     }
 
-    public static FrontAction getActionByName(String key) {
-        FrontAction action = null;
-        if (key != null) {
-            action = ACTIONS.get(key);
-        }
-        return action != null ? action : ACTIONS.get(ACTION_ERROR);
+    public static FrontAction getActionByName(String action) {
+        return ACTIONS.getOrDefault(action, ACTIONS.get(ACTION_DEFAULT));
     }
 }

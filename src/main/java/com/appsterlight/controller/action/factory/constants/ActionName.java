@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ActionName {
 
-
-
     public static final String ACTION_LOGIN = "login";
     public static final String ACTION_LOGOUT = "logout";
     public static final String ACTION_REGISTRATION = "registration";
@@ -25,5 +23,6 @@ public final class ActionName {
     public static final String ACTION_BOOKING = "booking";
     public static final String ACTION_CABINET = "cabinet";
     public static final String ACTION_ERROR = "error";
+    public static final String ACTION_DEFAULT = "default";
 
 }
