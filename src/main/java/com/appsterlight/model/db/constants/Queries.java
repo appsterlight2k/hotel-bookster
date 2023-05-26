@@ -1,5 +1,9 @@
 package com.appsterlight.model.db.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Queries {
 
     /* QUERIES FOR USER TABLE */
@@ -27,14 +31,17 @@ public final class Queries {
     public static final String SQL_BOOKING_GET_ALL = "SELECT * FROM booking";
     public static final String SQL_BOOKING_INSERT =
             "INSERT INTO booking (user_id, apartment_id, request_class_id, check_in, check_out, adults_number, children_number, " +
-                    "reservation_time, comments, is_approved, is_booked, is_paid, is_canceled) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "reservation_time, comments, is_offered, is_approved, is_booked, is_paid, is_canceled) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String SQL_BOOKING_UPDATE =
             "UPDATE booking SET " +
                     "user_id = ?, apartment_id = ?, request_class_id = ?, check_in = ?, check_out = ?, adults_number = ?, children_number = ?, " +
-                    "reservation_time = ?, comments= ?, is_approved = ?, is_booked = ?, is_paid = ?, is_canceled = ? " +
+                    "reservation_time = ?, comments= ?, is_offered = ?, is_approved = ?, is_booked = ?, is_paid = ?, is_canceled = ? " +
                     "WHERE ID = ?";
+
+    public static final String SQL_BOOKING_SET_IF_OFFERED =
+            "UPDATE booking SET is_offered = ? WHERE ID = ?";
 
     public static final String SQL_BOOKING_GET_ALL_BOOKING_REQUESTS_BASE =
             "SELECT b.*, " +
@@ -80,7 +87,8 @@ public final class Queries {
                     "FROM booking b " +
                     "LEFT JOIN users u ON b.user_id = u.id " +
                     "LEFT JOIN apartment_class c ON b.request_class_id = c.id " +
-                    "WHERE apartment_id IS NULL AND is_approved = false ";
+                    "WHERE apartment_id IS NULL AND is_offered = false AND is_approved = false ";
+
 
     public static final String SQL_BOOKING_GET_ALL_REQUESTS_FOR_BOOKING =
             SQL_BOOKING_GET_ALL_REQUESTS_FOR_BOOKING_BASE + "ORDER BY check_in ASC ";
@@ -106,15 +114,20 @@ public final class Queries {
     public static final String SQL_BOOKING_GET_COUNT_OF_ALL_BOOKING_REQUEST_BY_PERIOD =
             "SELECT COUNT(*) FROM booking WHERE apartment_id IS NOT NULL AND is_approved = false " +
                     "AND check_in >= ? AND check_out <= ?";
+
     public static final String SQL_BOOKING_GET_COUNT_OF_ALL_REQUEST_FOR_BOOKING =
-            "SELECT COUNT(*) FROM booking WHERE apartment_id IS NULL AND is_approved = false";
+            "SELECT COUNT(*) FROM booking WHERE apartment_id IS NULL AND is_offered = false AND is_approved = false";
 
     public static final String SQL_BOOKING_GET_COUNT_OF_ALL_REQUEST_FOR_BOOKING_AFTER_DATE =
-            "SELECT COUNT(*) FROM booking WHERE apartment_id IS NULL AND is_approved = false AND check_in >= ?";
+            "SELECT COUNT(*) FROM booking WHERE apartment_id IS NULL AND is_offered = false AND is_approved = false " +
+                    "AND check_in >= ?";
 
     public static final String SQL_BOOKING_GET_COUNT_OF_ALL_REQUEST_FOR_BOOKING_BY_PERIOD =
-            "SELECT COUNT(*) FROM booking WHERE apartment_id IS NULL AND is_approved = false " +
+            "SELECT COUNT(*) FROM booking WHERE apartment_id IS NULL AND is_offered = false AND is_approved = false " +
                     "AND check_in >= ? AND check_out <= ?";
+
+    public static final String SQL_BOOKING_GET_IS_OFFERED = "SELECT * FROM booking WHERE id = ? " +
+            "is_offered = true AND is_approved = false";
     public static final String SQL_BOOKING_GET_IS_APPROVED = "SELECT * FROM booking WHERE id = ? " +
             "AND check_in > ? AND check_out < ? AND is_approved = ?";
     public static final String SQL_BOOKING_GET_IS_BOOKED = "SELECT * FROM booking WHERE id = ? " +
@@ -123,6 +136,17 @@ public final class Queries {
             "AND check_in > ? AND check_out < ? AND is_paid = ?";
     public static final String SQL_BOOKING_GET_IS_CANCELED = "SELECT * FROM booking WHERE id = ? " +
             "AND check_in > ? AND check_out < ? AND is_canceled = ?";
+
+
+    /* QUERIES FOR OFFERED_APARTMENTS TABLE*/
+    public static final String SQL_OFFERED_APARTMENTS_GET_BY_BOOKING_ID = "SELECT * FROM offered_apartments WHERE booking_id = ?";
+    public static final String SQL_OFFERED_APARTMENTS_GET = "SELECT * FROM offered_apartments WHERE id = ?";
+    public static final String SQL_OFFERED_APARTMENTS_DELETE = "DELETE FROM offered_apartments WHERE id = ?";
+    public static final String SQL_OFFERED_APARTMENTS_GET_ALL = "SELECT * FROM offered_apartments";
+    public static final String SQL_OFFERED_APARTMENTS_INSERT =
+            "INSERT INTO offered_apartments (booking_id, apartment_id, message) VALUES (?, ?, ?)";
+    public static final String SQL_OFFERED_APARTMENTS_UPDATE =
+            "UPDATE offered_apartments SET booking_id = ?, apartment_id = ?, message = ? WHERE ID = ?";
 
 
     /* QUERIES FOR APARTMENT TABLE */
@@ -170,45 +194,8 @@ public final class Queries {
         ") AS subquery " +
         "WHERE subquery.adults_capacity >= ? " +
             "AND (subquery.class_id = ? OR ? IS NULL) " +
-            "AND subquery.status LIKE ? ";
-
-    /*public static final String SQL_APARTMENT_GET_ALL_WITH_STATUS_AND_PAGINATION_FULL =
-            SQL_APARTMENT_GET_ALL_WITH_STATUS_FULL + " LIMIT ?, ?";*/
-
-    //the value for 2nd parameter is check_in of user request, and for 3rd is check_out!
-    /*public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY =
-            "SELECT a.*, c.name as class_name, c.description as class_description " +
-            "FROM apartments a " +
-            "LEFT JOIN booking b " +
-            "ON a.id = b.apartment_id " +
-            "AND b.check_out >= ? AND b.check_in <= ? " +
-            "INNER JOIN apartment_class c ON a.class_id = c.id " +
-            "WHERE a.adults_capacity >= ? AND b.apartment_id IS NULL";*/
-
-    // Parameters:
-    // 1st: checkin; 2nd: checkout; 3rd: guests count; 4th: offset; 5th: count of records;
-   /* public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_WITH_PAGINATION =
-            SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY + " LIMIT ?, ?";*/
-
-    // Parameters:
-    // 1st: checkin; 2nd: checkout; 3rd: guests count; 4th: class id;
-   /* public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS =
-            SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY + " AND a.class_id = ?";*/
-
-
-    // Parameters:
-    // 1st: checkin; 2nd: checkout; 3rd: guests count; 4th: class id; 5th: offset; 6th: count of records;
-   /* public static final String SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS_WITH_PAGINATION =
-            SQL_APARTMENT_GET_ALL_FREE_BY_CAPACITY_AND_CLASS + " LIMIT ?, ?";*/
-
- /*   public static final String SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY =
-            "SELECT COUNT(*)" +
-                    "FROM apartments a " +
-                    "LEFT JOIN booking b ON a.id = b.apartment_id AND b.check_out >= ? AND b.check_in <= ? " +
-                    "WHERE a.adults_capacity >= ? AND b.apartment_id IS NULL";*/
-
-   /* public static final String SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY_AND_CLASS =
-            SQL_APARTMENT_GET_COUNT_OF_ALL_FREE_BY_CAPACITY + " AND a.class_id = ?";*/
+            "AND subquery.status LIKE ? " +
+            "AND subquery.id NOT IN (SELECT apartment_id FROM offered_apartments)";
 
     public static final String SQL_APARTMENT_GET_COUNT_OF_ALL_WITH_STATUS_FULL =
             "SELECT COUNT(*) FROM ( " +
@@ -227,7 +214,8 @@ public final class Queries {
             ") AS subquery " +
             "WHERE subquery.adults_capacity >= ? " +
                     "AND (subquery.class_id = ? OR ? IS NULL) " +
-                    "AND subquery.status LIKE ?";
+                    "AND subquery.status LIKE ? " +
+                    "AND subquery.id NOT IN (SELECT apartment_id FROM offered_apartments)";
 
     /* QUERIES FOR APARTMENT_CLASS TABLE */
     public static final String SQL_APARTMENT_CLASS_GET = "SELECT * FROM apartment_class WHERE id = ?";
@@ -243,7 +231,6 @@ public final class Queries {
     public static final String SQL_APARTMENT_GET_ALL_APARTMENTS_BY_TAG_ID =
             "SELECT a.* FROM apartments a JOIN apartments_tags ON " +
                     "apartments.id = apartments_tags.apartment_id WHERE apartments_tags.tag_id = ? %s";
-
 
     /* QUERIES FOR APARTMENT_PHOTOS TABLE */
     public static final String SQL_APARTMENT_PHOTOS_GET =
@@ -290,8 +277,6 @@ public final class Queries {
     //for editing tags functionality
     public static final String SQL_APARTMENT_TAGS_GET_ALL_APARTMENT_TAGS_BY_TAG_ID =
             "SELECT * FROM apartment_tags WHERE tag_id = ?";
-
-
 
     /* INVOICE CHECKING EVENT QUERY */
     public static final String SQL_BOOKING_CREATE_EVENT_IS_PAID = "CREATE EVENT %s " +

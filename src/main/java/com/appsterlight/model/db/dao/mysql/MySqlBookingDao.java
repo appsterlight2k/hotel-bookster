@@ -7,6 +7,7 @@ import com.appsterlight.model.domain.Booking;
 import com.appsterlight.exception.DaoException;
 import com.appsterlight.model.domain.BookingExtended;
 import com.appsterlight.model.domain.RequestBookingExtended;
+import com.google.protobuf.MapEntry;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -70,7 +71,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         Integer count;
 
         try (Connection connection = dataSource.getConnection();
-                PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_BOOKING_COUNT)) {
+             PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_GET_BOOKING_COUNT)) {
             prst.setLong(1, userId);
             prst.setLong(2, apartmentId);
             prst.setDate(3, Date.valueOf(checkIn));
@@ -86,6 +87,23 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
             throw new DaoException(e);
         }
         return false;
+    }
+
+    @Override
+    public boolean setIsOffered(Long bookingId, Boolean isOffered) throws DaoException {
+        boolean result;
+
+        try (Connection connection = dataSource.getConnection();
+            PreparedStatement prst = connection.prepareStatement(SQL_BOOKING_SET_IF_OFFERED, Statement.NO_GENERATED_KEYS)) {
+            prst.setBoolean(1, isOffered);
+            prst.setLong(2, bookingId);
+            result = prst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            log.error(UPDATE_ERROR, e);
+            throw new DaoException(e);
+        }
+
+        return result;
     }
 
     public List<Booking> getApprovedBookings(Long id, LocalDate checkIn, LocalDate checkOut) throws DaoException {
@@ -129,7 +147,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
     //    SQL_BOOKING_GET_COUNT_OF_ALL_REQUEST_FOR_BOOKING
     @Override
     public Integer getCountOfBookingRequests() throws DaoException {
-         return getCountOfRequest(SQL_BOOKING_GET_COUNT_OF_ALL_BOOKING_REQUEST);
+        return getCountOfRequest(SQL_BOOKING_GET_COUNT_OF_ALL_BOOKING_REQUEST);
     }
 
     @Override
@@ -144,7 +162,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
 
     @Override
     public Integer getCountOfRequestsForBooking() throws DaoException {
-         return getCountOfRequest(SQL_BOOKING_GET_COUNT_OF_ALL_REQUEST_FOR_BOOKING);
+        return getCountOfRequest(SQL_BOOKING_GET_COUNT_OF_ALL_REQUEST_FOR_BOOKING);
     }
 
     @Override
@@ -163,6 +181,7 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement prst = connection.prepareStatement(query)) {
             ResultSet rs = prst.executeQuery();
+
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -178,8 +197,8 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         Integer count = -1;
 
         try (Connection connection = dataSource.getConnection();
-            PreparedStatement prst = connection.prepareStatement(query);
-            Statement st = connection.createStatement();) {
+             PreparedStatement prst = connection.prepareStatement(query);
+             Statement st = connection.createStatement();) {
 
             ResultSet rs;
             if (parameters.length > 0) {
@@ -202,7 +221,6 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
 
         return count;
     }
-
 
     private List<Booking> getAllByQuery(boolean isBookingRequest, String query, Object... parameters) throws DaoException {
         List<Booking> bookings = new ArrayList<>();
@@ -222,8 +240,10 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
             }
 
             Booking booking;
-            while (rs. next()) {
-                booking =  isBookingRequest ? mapEntity(rs) : mapRequestBookingExtendedEntity(rs);
+            while (rs.next()) {
+                booking = isBookingRequest
+                            ? mapBookingExtended(rs)
+                            : mapRequestBookingExtended(rs);
                 bookings.add(booking);
             }
         } catch (SQLException e) {
@@ -262,12 +282,12 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         formatter.format(SQL_BOOKING_CREATE_EVENT_IS_PAID, "isPaidByUser" + id);
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(formatter.toString()) ) {
+             PreparedStatement stmt = connection.prepareStatement(formatter.toString())) {
             stmt.setLong(1, id);
 
             return stmt.execute();
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             log.error(EVENT_OF_PAY_ERROR + ": " + e.getMessage());
             throw new DaoException(EVENT_OF_PAY_ERROR, e);
         }
@@ -275,29 +295,58 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
 
     @Override
     protected Object[] getAllFieldsOfObject(Booking object) throws DaoException {
-        if (object == null) throw new DaoException("Booking object is null! Can't get fields!");
-
-        return new Object[]{
-                object.getUserId(),
-                object.getApartmentId(),
-                object.getRequestClassId(),
-                Date.valueOf(object.getCheckIn()),
-                Date.valueOf(object.getCheckOut()),
-                object.getAdultsNumber(),
-                object.getChildrenNumber(),
-                object.getReservationTime(),
-                object.getComments(),
-                object.getIsApproved(),
-                object.getIsBooked(),
-                object.getIsPaid(),
-                object.getIsCanceled(),
-                object.getId()
-        };
+        try {
+            return new Object[]{
+                    object.getUserId(),
+                    object.getApartmentId(),
+                    object.getRequestClassId(),
+                    Date.valueOf(object.getCheckIn()),
+                    Date.valueOf(object.getCheckOut()),
+                    object.getAdultsNumber(),
+                    object.getChildrenNumber(),
+                    object.getReservationTime(),
+                    object.getComments(),
+                    object.getIsOffered(),
+                    object.getIsApproved(),
+                    object.getIsBooked(),
+                    object.getIsPaid(),
+                    object.getIsCanceled(),
+                    object.getId()
+            };
+        } catch (NullPointerException e) {
+            log.error("Booking object is null! Can't get fields! " + e);
+            throw new DaoException("Booking object is null! Can't get fields!");
+        }
     }
-
 
     @Override
     protected Booking mapEntity(ResultSet rs) throws DaoException {
+         try {
+            return Booking.builder()
+                    .id(rs.getLong(Fields.ID))
+                    .userId(rs.getLong(Fields.BOOKING_USER_ID))
+                    .apartmentId(rs.getLong(Fields.BOOKING_APARTMENT_ID))
+                    .requestClassId(rs.getInt(Fields.BOOKING_REQUEST_CLASS_ID))
+                    .checkIn(rs.getDate(Fields.BOOKING_CHECK_IN).toLocalDate())
+                    .checkOut(rs.getDate(Fields.BOOKING_CHECK_OUT).toLocalDate())
+                    .adultsNumber(rs.getInt(Fields.BOOKING_ADULTS_NUMBER))
+                    .childrenNumber(rs.getInt(Fields.BOOKING_CHILDREN_NUMBER))
+                    .reservationTime(rs.getTimestamp(Fields.BOOKING_RESERVATION_TIME))
+                    .comments(rs.getString(Fields.BOOKING_COMMENTS))
+                    .isOffered(rs.getBoolean(Fields.BOOKING_IS_OFFERED))
+                    .isApproved(rs.getBoolean(Fields.BOOKING_IS_APPROVED))
+                    .isBooked(rs.getBoolean(Fields.BOOKING_IS_BOOKED))
+                    .isPaid(rs.getBoolean(Fields.BOOKING_IS_PAID))
+                    .isCanceled(rs.getBoolean(Fields.BOOKING_IS_CANCELED))
+                    .build();
+        } catch (SQLException e) {
+            log.error(READ_ERROR, e);
+            throw new DaoException(e);
+        }
+    }
+
+
+    private Booking mapBookingExtended(ResultSet rs) throws DaoException {
         try {
             return BookingExtended.builder()
                 .id(rs.getLong(Fields.ID))
@@ -310,18 +359,19 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
                 .childrenNumber(rs.getInt(Fields.BOOKING_CHILDREN_NUMBER))
                 .reservationTime(rs.getTimestamp(Fields.BOOKING_RESERVATION_TIME))
                 .comments(rs.getString(Fields.BOOKING_COMMENTS))
+                .isOffered(rs.getBoolean(Fields.BOOKING_IS_OFFERED))
                 .isApproved(rs.getBoolean(Fields.BOOKING_IS_APPROVED))
                 .isBooked(rs.getBoolean(Fields.BOOKING_IS_BOOKED))
                 .isPaid(rs.getBoolean(Fields.BOOKING_IS_PAID))
                 .isCanceled(rs.getBoolean(Fields.BOOKING_IS_CANCELED))
-                //additional fields:
+                //additional fields for Booking:
                 .firstName(rs.getString(Fields.USER_FIRST_NAME))
                 .lastName(rs.getString(Fields.USER_LAST_NAME))
                 .email(rs.getString(Fields.USER_EMAIL))
                 .userPhoneNumber(rs.getString(Fields.BOOKING_USER_PHONE_NUMBER))
                 .userDescription(rs.getString(Fields.BOOKING_USER_DESCRIPTION))
-                .apartmentNumber(rs.getString(Fields.APARTMENT_NUMBER))
                 .apartmentClass(rs.getString(Fields.BOOKING_APARTMENT_CLASS))
+                .apartmentNumber(rs.getString(Fields.APARTMENT_NUMBER))
                 .roomsCount(rs.getInt(Fields.APARTMENT_ROOMS_COUNT))
                 .capacity(rs.getInt(Fields.APARTMENT_ADULTS_CAPACITY))
                 .price(rs.getInt(Fields.APARTMENT_PRICE))
@@ -332,9 +382,9 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
         }
     }
 
-    private Booking mapRequestBookingExtendedEntity(ResultSet rs) throws DaoException {
+    private Booking mapRequestBookingExtended(ResultSet rs) throws DaoException {
         try {
-            return  RequestBookingExtended.builder()
+            return RequestBookingExtended.builder()
                 .id(rs.getLong(Fields.ID))
                 .userId(rs.getLong(Fields.BOOKING_USER_ID))
                 .apartmentId(rs.getLong(Fields.BOOKING_APARTMENT_ID))
@@ -345,11 +395,12 @@ public class MySqlBookingDao extends AbstractDao<Booking> implements BookingDao 
                 .childrenNumber(rs.getInt(Fields.BOOKING_CHILDREN_NUMBER))
                 .reservationTime(rs.getTimestamp(Fields.BOOKING_RESERVATION_TIME))
                 .comments(rs.getString(Fields.BOOKING_COMMENTS))
+                .isOffered(rs.getBoolean(Fields.BOOKING_IS_OFFERED))
                 .isApproved(rs.getBoolean(Fields.BOOKING_IS_APPROVED))
                 .isBooked(rs.getBoolean(Fields.BOOKING_IS_BOOKED))
                 .isPaid(rs.getBoolean(Fields.BOOKING_IS_PAID))
                 .isCanceled(rs.getBoolean(Fields.BOOKING_IS_CANCELED))
-                //additional fields:
+                //additional fields for Request for Booking:
                 .firstName(rs.getString(Fields.USER_FIRST_NAME))
                 .lastName(rs.getString(Fields.USER_LAST_NAME))
                 .email(rs.getString(Fields.USER_EMAIL))

@@ -22,7 +22,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             return bookingDao.add(booking);
         } catch (DaoException e) {
-            log.error("Can't add booking into table", e);
+            log.error("Can't add booking into table!", e);
             throw new ServiceException(e);
         }
     }
@@ -206,6 +206,16 @@ public class BookingServiceImpl implements BookingService {
             return bookingDao.getCountOfRequestsForBooking(dateFrom, dateTo);
         } catch (DaoException e) {
             log.error("Can't get count of all Requests for Booking! " + e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean setIsOffered(Long bookingId, Boolean isOffered) throws ServiceException {
+        try {
+            return bookingDao.setIsOffered(bookingId, isOffered);
+        } catch (DaoException e) {
+            log.error("Update Error! Can't set isOffered value for Booking with id = " + bookingId + "! " + e.getMessage());
             throw new ServiceException(e);
         }
     }

@@ -29,6 +29,7 @@ public class Booking implements Serializable {
     private Integer childrenNumber;
     private Timestamp reservationTime;
     private String comments;
+    private Boolean isOffered;
     private Boolean isApproved;
     private Boolean isBooked;
     private Boolean isPaid;

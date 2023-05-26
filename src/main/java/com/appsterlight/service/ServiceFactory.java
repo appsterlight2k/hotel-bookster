@@ -8,6 +8,7 @@ import lombok.Getter;
 public class ServiceFactory {
     private final UserService userService;
     private final BookingService bookingService;
+    private final OfferedApartmentsService offeredApartmentsService;
     private final ApartmentService apartmentService;
     private final ApartmentClassService apartmentClassService;
     private final ApartmentPhotosService apartmentPhotosService;
@@ -16,6 +17,7 @@ public class ServiceFactory {
     private ServiceFactory(DaoFactory daoFactory) {
         this.userService = new UserServiceImpl(daoFactory.getUserDao());
         this.bookingService = new BookingServiceImpl(daoFactory.getBookingDao());
+        this.offeredApartmentsService = new OfferedApartmentsServiceImpl(daoFactory.getOfferedApartmentsDao());
         this.apartmentService = new ApartmentServiceImpl(daoFactory.getApartmentDao());
         this.apartmentClassService = new ApartmentClassServiceImpl(daoFactory.getApartmentClassDao());
         this.apartmentPhotosService = new ApartmentPhotosServiceImpl(daoFactory.getApartmentPhotosDao());

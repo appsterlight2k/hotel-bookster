@@ -1,9 +1,7 @@
 package com.appsterlight.model.db.connection;
 
 import com.appsterlight.model.db.constants.Constants;
-import com.appsterlight.model.db.constants.Fields;
 import com.appsterlight.exception.PropertiesException;
-import com.appsterlight.exception.DBException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AccessLevel;
@@ -13,16 +11,20 @@ import lombok.extern.slf4j.Slf4j;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
 
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+
+import static com.appsterlight.model.db.constants.ConnectionConstants.*;
+import static com.appsterlight.model.db.constants.Constants.*;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MySQLDBManager implements DBManager {
+public class MyDataSource {
     private static HikariDataSource dataSource;
-    private static MySQLDBManager instance = null;
+    private static MyDataSource instance = null;
+    private static final Map<String, String> settings = new HashMap<>();
 
     public DataSource getDataSource() {
         if (dataSource == null) {
@@ -40,25 +42,16 @@ public class MySQLDBManager implements DBManager {
         return dataSource;
     }
 
-    public static synchronized MySQLDBManager getInstance() {
+    public static synchronized MyDataSource getInstance() {
         if (instance == null) {
-            instance = new MySQLDBManager();
+            instance = new MyDataSource();
         }
         return instance;
     }
 
-    public Connection getConnection() {
-        try {
-            return getDataSource().getConnection();
-        } catch (SQLException e) {
-            log.error(String.format("Connection Exception: Can't establish connection to database %s", e.getMessage()));
-            throw new DBException("Can't establish connection to database", e);
-        }
-    }
-
     private static Properties getProperties()  {
         try (InputStream propFile = Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream(Constants.APP_SETTINGS_FILE)) {
+                .getResourceAsStream(APP_SETTINGS_FILE)) {
             Properties appProperties = new Properties();
             appProperties.load(propFile);
 
@@ -72,25 +65,30 @@ public class MySQLDBManager implements DBManager {
     private static HikariConfig getHikariConfig(Properties props) {
         HikariConfig hikariConfig = new HikariConfig();
 
-        hikariConfig.setJdbcUrl(props.getProperty(Fields.DB_URL));
-        hikariConfig.setUsername(props.getProperty(Fields.DB_USERNAME));
-        hikariConfig.setPassword(props.getProperty(Fields.DB_PASSWORD));
-        hikariConfig.setDriverClassName(props.getProperty(Fields.DB_DRIVER));
-        hikariConfig.setMaximumPoolSize(Integer.parseInt(props.getProperty(Fields.DB_MAXIMUM_POOL_SIZE)));
-//        hikariConfig.setLeakDetectionThreshold(Integer.parseInt(props.getProperty(Fields.SET_LEAK_DETECTION_THRESHOLD))); //for testing purposes only
+        hikariConfig.setJdbcUrl(props.getProperty(DB_URL));
+        hikariConfig.setUsername(props.getProperty(DB_USERNAME));
+        hikariConfig.setPassword(props.getProperty(DB_PASSWORD));
+        hikariConfig.setDriverClassName(props.getProperty(DB_DRIVER));
+        hikariConfig.setMaximumPoolSize(Integer.parseInt(props.getProperty(DB_MAXIMUM_POOL_SIZE)));
+//        hikariConfig.setLeakDetectionThreshold(Integer.parseInt(props.getProperty(SET_LEAK_DETECTION_THRESHOLD))); //for testing purposes only
 
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit",
-                props.getProperty(Fields.DB_CACHE_PREP_STMTS));
+                props.getProperty(DB_CACHE_PREP_STMTS));
         hikariConfig.addDataSourceProperty("prepStmtCacheSize",
-                props.getProperty(Fields.DB_PREP_STMT_CACHE_SIZE));
+                props.getProperty(DB_PREP_STMT_CACHE_SIZE));
 
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit",
-                props.getProperty(Fields.DB_PREP_STMT_CACHE_SQL_LIMIT));
+                props.getProperty(DB_PREP_STMT_CACHE_SQL_LIMIT));
 
         log.info("Hikari Pool configuration was successfully created!");
+
+        settings.put(MAX_GUESTS_NUMBER, props.getProperty(SETTINGS_MAX_GUESTS_NUMBER));
 
         return hikariConfig;
     }
 
+    public static Map<String, String> getSettings() {
+        return settings;
+    }
 
 }

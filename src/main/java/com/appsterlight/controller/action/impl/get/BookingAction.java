@@ -116,6 +116,7 @@ public class BookingAction extends FrontAction {
                 .childrenNumber(0)
                 .reservationTime(timeStamp)
                 .comments(comments)
+                .isOffered(false)
                 .isApproved(false)
                 .isBooked(false)
                 .isPaid(false)

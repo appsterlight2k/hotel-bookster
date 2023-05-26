@@ -3,10 +3,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
-    <table class="table table-sm table-striped table-hover" id="apartments-table">
+    <c:set var="isHidden" value="d-none" />
+    <table class="table table-sm table-striped table-hover" id="apartments-table" style="cursor: pointer;">
         <thead>
             <tr>
-                <td class="table-primary">#</td>
+                <td class="table-primary ${isHidden}"></td>
+                <td class="table-primary">No.</td>
+                <td class="table-primary d-none">id</td>
                 <td class="table-primary">class</td>
                 <td class="table-primary">rooms</td>
                 <td class="table-primary">capacity</td>
@@ -18,7 +21,9 @@
         <tbody>
             <c:forEach items="${apartments}" var="apartment" varStatus="loop">
                 <tr>
+                   <td class="${isHidden}"><input type="checkbox" name="selected[]" value="${loop.index + 1}"></td>
                    <td>${loop.index + 1 + ((page - 1) * pageSize)}.</td>
+                   <td class="d-none">${apartment.id}</td>
                    <td>${apartment.className}</td>
                    <td>${apartment.roomsCount}</td>
                    <td>${apartment.adultsCapacity}</td>

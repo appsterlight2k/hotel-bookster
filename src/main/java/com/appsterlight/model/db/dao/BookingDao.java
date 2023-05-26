@@ -26,5 +26,6 @@ public interface BookingDao extends Dao<Booking> {
 
     boolean isBookingExists(Long userId, Long apartmentId, LocalDate checkIn, LocalDate checkOut,
                                    Integer guests) throws DaoException;
+    boolean setIsOffered(Long bookingId, Boolean isOffered) throws DaoException;
     boolean createEventIsPaid(Long id) throws DaoException;
 }

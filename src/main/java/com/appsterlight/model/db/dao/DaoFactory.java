@@ -31,6 +31,7 @@ public abstract class DaoFactory {
     public abstract ApartmentDao getApartmentDao();
     public abstract ApartmentClassDao getApartmentClassDao();
     public abstract BookingDao getBookingDao();
+    public abstract OfferedApartmentsDao getOfferedApartmentsDao();
     public abstract ApartmentPhotosDao getApartmentPhotosDao();
     public abstract ApartmentTagsDao getApartmentTagsDao();
 }

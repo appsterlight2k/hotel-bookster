@@ -1,5 +1,6 @@
 package com.appsterlight.service;
 
+import com.appsterlight.exception.DaoException;
 import com.appsterlight.exception.ServiceException;
 import com.appsterlight.model.domain.Booking;
 
@@ -32,6 +33,7 @@ public interface BookingService {
     Integer getCountOfRequestsForBooking(LocalDate dateFrom) throws ServiceException;
     Integer getCountOfRequestsForBooking(LocalDate dateFrom, LocalDate dateTo) throws ServiceException;
 
+    boolean setIsOffered(Long bookingId, Boolean isOffered) throws ServiceException;
     void setIsApprovedState(boolean isApproved, Booking booking) throws ServiceException;
     void setIsBooked(boolean isBooked, Booking booking) throws ServiceException;
     void setIsPaid(boolean isPaid, Booking booking) throws ServiceException;

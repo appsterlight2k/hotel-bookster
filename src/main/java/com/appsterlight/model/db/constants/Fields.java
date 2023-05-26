@@ -1,5 +1,9 @@
 package com.appsterlight.model.db.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Fields {
     /* GENERAL FIELDS */
     public static final String ANY_VALUE_MASK = "%";
@@ -27,16 +31,22 @@ public final class Fields {
     public static final String BOOKING_CHILDREN_NUMBER = "children_number";
     public static final String BOOKING_RESERVATION_TIME = "reservation_time";
     public static final String BOOKING_COMMENTS = "comments";
+    public static final String BOOKING_IS_OFFERED = "is_offered";
     public static final String BOOKING_IS_APPROVED = "is_approved";
     public static final String BOOKING_IS_BOOKED = "is_booked";
     public static final String BOOKING_IS_PAID = "is_paid";
     public static final String BOOKING_IS_CANCELED = "is_canceled";
-
     //additional fields from USERS table:
     public static final String BOOKING_USER_PHONE_NUMBER = "user_phone_number";
     public static final String BOOKING_USER_DESCRIPTION = "user_description";
     //additional fields from APARTMENT_CLASS table:
     public static final String BOOKING_APARTMENT_CLASS = "class";
+
+
+    /* SPECIFIC FIELDS FOR OFFERED_APARTMENTS TABLE */
+    public static final String OFFERED_APARTMENTS_BOOKING_ID = "booking_id";
+    public static final String OFFERED_APARTMENTS_APARTMENT_ID = "apartment_id";
+    public static final String OFFERED_APARTMENTS_MESSAGE = "message";
 
 
     /* SPECIFIC FIELDS FOR APARTMENT TABLE */
@@ -67,17 +77,4 @@ public final class Fields {
     public static final String APARTMENT_PHOTOS_APARTMENT_ID = "apartment_id";
     public static final String APARTMENT_PHOTOS_PATH = "path";
 
-
-    //                           *** CONNETCION ***
-    /* CONNECTION PROPERTIES FIELDS */
-    public static final String DB_URL = "connection.url";
-    public static final String DB_USERNAME = "connection.username";
-    public static final String DB_PASSWORD = "connection.password";
-    public static final String DB_DRIVER = "connection.driver";
-    public static final String DB_MAXIMUM_POOL_SIZE = "connection.maximumPoolSize";
-    //for testing purposes only:
-    public static final String SET_LEAK_DETECTION_THRESHOLD = "connection.setLeakDetectionThreshold";
-    public static final String DB_CACHE_PREP_STMTS = "dataSource.cachePrepStmts";
-    public static final String DB_PREP_STMT_CACHE_SIZE = "dataSource.prepStmtCacheSize";
-    public static final String DB_PREP_STMT_CACHE_SQL_LIMIT = "dataSource.prepStmtCacheSqlLimit";
 }

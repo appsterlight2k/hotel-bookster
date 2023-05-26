@@ -10,6 +10,7 @@ public class MySqlDaoFactory extends DaoFactory {
     private ApartmentDao apartmentDao;
     private ApartmentClassDao apartmentClassDao;
     private BookingDao bookingDao;
+    private OfferedApartmentsDao offeredApartmentsDao;
     private ApartmentPhotosDao apartmentPhotosDao;
     private ApartmentTagsDao apartmentTagsDao;
 
@@ -54,6 +55,15 @@ public class MySqlDaoFactory extends DaoFactory {
         }
 
         return bookingDao;
+    }
+
+    @Override
+    public OfferedApartmentsDao getOfferedApartmentsDao() {
+        if (offeredApartmentsDao == null) {
+            offeredApartmentsDao = new MySqlOfferedApartmentDao(dataSource);
+        }
+
+        return offeredApartmentsDao;
     }
 
     @Override
